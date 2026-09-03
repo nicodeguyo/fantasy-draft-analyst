@@ -1,0 +1,10 @@
+{
+  "name": "fantasy-draft-analyst",
+  "description": "Prepare a fantasy football draft like a league-winning analyst: keeper verdicts, replacement-level surplus math, tiers with cliffs, a Monte Carlo of who'll be there at your picks, pressure tests of your targets, sample drafts, and a draft-day board.",
+  "version": "1.0.0",
+  "author": { "name": "Nico Neugebauer" },
+  "homepage": "https://github.com/nicoandmelissa/fantasy-draft-analyst",
+  "repository": "https://github.com/nicoandmelissa/fantasy-draft-analyst",
+  "license": "MIT",
+  "keywords": ["fantasy-football", "draft", "keeper", "adp", "monte-carlo", "espn", "yahoo", "sleeper"]
+}

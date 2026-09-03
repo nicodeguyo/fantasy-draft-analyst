@@ -1,0 +1,14 @@
+{
+  "name": "fantasy-draft-analyst",
+  "owner": { "name": "Nico Neugebauer" },
+  "plugins": [
+    {
+      "name": "fantasy-draft-analyst",
+      "source": "./",
+      "description": "Prepare a fantasy football draft like a league-winning analyst — keeper verdicts, surplus math, tiers, availability simulation, pressure tests, and a draft-day board.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": ["fantasy-football", "draft", "keeper", "adp"]
+    }
+  ]
+}

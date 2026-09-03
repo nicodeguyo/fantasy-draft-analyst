@@ -1,0 +1,89 @@
+# league.yaml — everything the analyst needs to know about YOUR league.
+# Copy this file to league.yaml, edit it, and hand it to Claude ("here's my league.yaml").
+# Every field is explained. Delete what doesn't apply.
+
+league:
+  name: "Sample League"          # shown on the board
+  team_name: "Your Team Name"    # shown on the board masthead
+  platform: espn                 # espn | yahoo | sleeper | cbs | nfl | underdog | ffpc | other
+  teams: 12
+  draft_type: snake              # snake | linear | auction
+  draft_slot: 5                  # your first-round pick number (1..teams); ignored for auction
+  draft_date: "2026-09-06"       # YYYY-MM-DD, governs data freshness
+  rounds: 15                     # total rounds including K/DEF
+  season: 2026
+
+scoring:
+  # Receiving
+  reception: 0.5                 # 1.0 full PPR, 0.5 half PPR, 0 standard
+  rec_yard: 0.1
+  rec_td: 6
+  # Rushing
+  rush_yard: 0.1
+  rush_td: 6
+  # Passing
+  pass_yard: 0.04                # 1 point per 25 yards
+  pass_td: 4                     # 4 or 6 — this changes the QB answer
+  interception: -2               # -1 or -2
+  # Misc
+  fumble_lost: -2
+  two_point: 2
+  te_premium: 0                  # extra points per TE reception (FFPC: 0.5 → 1.5 PPR for TEs)
+  bonuses: []                    # e.g. [{stat: rec_yard, threshold: 100, points: 3}]
+
+roster:
+  # Starting lineup. The analyst derives replacement level from these counts.
+  QB: 1
+  RB: 2
+  WR: 2
+  TE: 1
+  FLEX: 1                        # RB/WR/TE flex slots
+  SUPERFLEX: 0                   # QB-eligible flex slots (OP). Set 1 for superflex leagues.
+  K: 1
+  DEF: 1
+  bench: 6
+  # Optional: how flex slots tend to be filled league-wide (defaults shown). Override if your league is WR-heavy.
+  flex_share: {RB: 0.55, WR: 0.40, TE: 0.05}
+  # Optional: hard overrides of replacement ranks per position (e.g. RB: 30). Leave empty to derive.
+  replacement_rank: {}
+
+keepers:
+  count: 1                       # 0 for a pure redraft league
+  cost_basis: same_round         # same_round | round_minus_one | round_minus_two | fixed | escalating | auction_value
+  fixed_round: null              # only for cost_basis: fixed
+  escalation_per_year: 0         # rounds the cost rises each additional year kept
+  round_one_keepable: true       # under round_minus_one, are round-1 picks keepable (at round 1) or ineligible?
+  waiver_pickups: not_keepable   # not_keepable | last_round | assigned_round
+  traded_players: inherit_cost   # inherit_cost | repriced
+  max_years_kept: null           # e.g. 2, or null for unlimited
+  declared_before_draft: true    # if true and you know the league's keeper list, add it below
+  league_keeper_list: []         # optional: [{team: "Team A", player: "Jahmyr Gibbs", round: 1}, ...]
+
+my_roster:
+  # Last season's roster with how you got each player. Only matters in keeper leagues.
+  # acquired: draft | waiver | trade   round: the ORIGINAL draft round (the analyst applies cost_basis)
+  - {player: "Drake London",   pos: WR, acquired: draft,  round: 2}
+  - {player: "Chase Brown",    pos: RB, acquired: draft,  round: 6}
+  - {player: "Jayden Daniels", pos: QB, acquired: draft,  round: 7}
+  - {player: "Brock Bowers",   pos: TE, acquired: draft,  round: 3}
+  - {player: "Courtland Sutton", pos: WR, acquired: draft, round: 8}
+  - {player: "Jaylen Warren",  pos: RB, acquired: waiver, round: null}
+  - {player: "Tetairoa McMillan", pos: WR, acquired: draft, round: 5}
+
+my_guys:
+  # Players you like and want pressure-tested. A note on WHY helps the analyst check your premise.
+  - {player: "Bhayshul Tuten",   note: "heard he gets 60% of the Jags carries"}
+  - {player: "Luther Burden III", note: "3rd in YPRR last year"}
+  - {player: "Emeka Egbuka",     note: "Evans gone"}
+  - {player: "Kyle Pitts Sr.",   note: "finished TE2"}
+
+preferences:
+  risk: balanced                 # conservative | balanced | aggressive — shifts tiebreaks toward floor or ceiling
+  qb_strategy: auto              # auto | early | late — auto lets the surplus math decide
+  te_strategy: auto              # auto | elite | punt
+  avoid_players: []              # names you refuse to draft (injury-prone, hated team, whatever)
+  leaguemates: ""                # free text: "two guys always take QBs in round 3", "commissioner is a Cowboys homer"
+
+theme:
+  team: "BUF"                    # any NFL abbreviation for the board's colors, or "custom"
+  custom: {primary: "#00338D", secondary: "#C60C30", accent: "#E8B21A"}   # used when team: custom
