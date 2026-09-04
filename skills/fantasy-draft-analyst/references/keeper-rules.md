@@ -42,7 +42,7 @@ Contents
 
 ## 3. Number and duration
 
-**One keeper.** Pure surplus maximization: keep the biggest points-over-alternative, then draft.
+**One keeper.** Decide it the way you decide a pick: run the whole draft under each scenario — keep A, keep B, keep nobody — and compare the mean projected final starting lineup (`draft_sim.py --keeper-scenarios`). Surplus maximization (keep the biggest points-over-alternative) is the same answer most of the time and is the right way to *explain* it, but the scenario totals are what price the forfeited pick and the inflation it creates.
 
 **Two or three keepers.** The picks you forfeit interact. Keeping a round-2 and a round-3 player removes your two best draft picks; the alternative is one keeper plus a real pick at the other slot. Evaluate combinations, not candidates: for each combination, total surplus of the kept players minus the surplus you'd have drafted with the forfeited picks (after inflation). Often the right answer is one elite keeper plus one cheap late-round hit rather than two mid-round players.
 

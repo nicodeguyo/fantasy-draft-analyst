@@ -29,7 +29,7 @@ import sys
 import urllib.request
 from html.parser import HTMLParser
 
-UA = "Mozilla/5.0 (fantasy-draft-analyst; +https://github.com/nicoandmelissa/fantasy-draft-analyst)"
+UA = "Mozilla/5.0 (fantasy-draft-analyst; +https://github.com/nicodeguyo/fantasy-draft-analyst)"
 
 
 def get(url: str, headers: dict | None = None, timeout: int = 30) -> str:

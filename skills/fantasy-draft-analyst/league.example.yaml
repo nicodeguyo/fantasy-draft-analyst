@@ -7,7 +7,8 @@ league:
   team_name: "Your Team Name"    # shown on the board masthead
   platform: espn                 # espn | yahoo | sleeper | cbs | nfl | underdog | ffpc | other
   teams: 12
-  draft_type: snake              # snake | linear | auction
+  draft_type: snake              # snake | linear. Auction is priced by hand — the simulator will
+                                 # stop and point you at methodology.md § Auction.
   draft_slot: 5                  # your first-round pick number (1..teams); ignored for auction
   draft_date: "2026-09-06"       # YYYY-MM-DD, governs data freshness
   rounds: 15                     # total rounds including K/DEF

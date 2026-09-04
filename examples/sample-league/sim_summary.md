@@ -1,7 +1,44 @@
 # Draft simulation — 12 teams, slot 5, 1500 runs
 Keeper: Chase Brown (round 6)
 
-## Replacement level (position → points of the last weekly starter)
+## The plan — pick value = projected final starting lineup if you take him here
+| Pick | Rd | Target | Pos | Lineup | SE | There | Plan B | Note |
+|---|---|---|---|---|---|---|---|---|
+| 5 | R1 | Jaxon Smith-Njigba | WR | 1,858 | ±1 | 63% | Ja'Marr Chase (-5.6) | Bijan Robinson if he falls (21%) |
+| 20 | R2 | Drake London | WR | 1,861 | ±1 | 62% | Brock Bowers (level) | ≈ tie |
+| 29 | R3 | Zay Flowers | WR | 1,858 | ±0 | 85% | Trey McBride (-3.8) |  |
+| 44 | R4 | Jayden Daniels | QB | 1,852 | ±1 | 81% | Bucky Irving (-3.7) | Breece Hall if he falls (34%) |
+| 53 | R5 | Kyle Pitts Sr. | TE | 1,847 | ±1 | 85% | Tyler Warren (level) | ≈ tie · Josh Jacobs if he falls (27%) |
+| 77 | R7 | Jaylen Warren | RB | 1,843 | ±1 | 90% | Rhamondre Stevenson (-3.7) |  |
+| 92 | R8 | Alec Pierce | WR | 1,842 | ±0 | 55% | Brian Thomas Jr. (level) | ≈ tie |
+| 101 | R9 | Chuba Hubbard | RB | 1,839 | ±1 | 93% | J. Croskey-Merritt (level) | ≈ tie · RJ Harvey if he falls (17%) |
+
+Plan check: pass
+
+## Keeper scenarios — mean projected final starting lineup across full drafts
+| Scenario | Cost | Lineup | SE | Δ | Note |
+|---|---|---|---|---|---|
+| Chase Brown | R6 | 1,864 | ±0.6 | +0 |  |
+| Jayden Daniels | R7 | 1,827 | ±0.8 | -37 |  |
+| Brock Bowers | R3 | 1,824 | ±0.8 | -40 |  |
+| Tetairoa McMillan | R5 | 1,813 | ±1.0 | -51 |  |
+| keep nobody | — | 1,810 | ±0.9 | -54 |  |
+
+## Cost of waiting — points lost at each position by waiting until your next pick
+| Pick | QB | RB | WR | TE | Running out |
+|---|---|---|---|---|---|
+| 5 | 7 | 47 | 38 | 5 | RB |
+| 20 | 2 | 6 | 11 | 22 | TE |
+| 29 | 1 | 10 | 16 | 11 | WR |
+| 44 | 4 | 11 | 8 | 3 | RB |
+| 53 | 16 | 6 | 16 | 17 | TE |
+| 77 | 3 | 27 | 7 | 10 | RB |
+| 92 | 2 | 9 | 12 | 0 | WR |
+| 101 | 6 | 11 | 6 | 2 | RB |
+| 116 | 2 | 15 | 4 | 1 | RB |
+The 'running out' position is the one that costs you most to wait on.
+
+## Replacement level (position → points of the last weekly starter) — explanation, not a decision
 | Pos | Replacement | Who |
 |---|---|---|
 | QB | 312 | QB12 |
@@ -43,7 +80,82 @@ Flex slots league-wide fill as RB 4 / WR 11 / TE 0 (equilibrium: best remaining 
 ## Keeper inflation actually in force (pick p buys roughly the ADP-(p + X) player)
 pick 5: X=+11.2, pick 20: X=+7.9, pick 29: X=+6.1, pick 44: X=+3.9, pick 53: X=+2.9, pick 77: X=+0.5, pick 92: X=+0.1
 
-## Top 5 at each pick (There % = still available across sims)
+## Pick values — top 5 at each pick, ranked by the lineup they leave you with
+Now = points behind the best choice here. Next = how often he is still there at your following pick.
+
+### Pick 5 (R1)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Bijan Robinson | RB | 1,862 | best | 21% | 0% |  |
+| Jaxon Smith-Njigba | WR | 1,858 | -4.4 | 63% | 0% |  |
+| Ja'Marr Chase | WR | 1,852 | -10 | 31% | 0% |  |
+| Puka Nacua | WR | 1,850 | -12 | 40% | 0% |  |
+| Jonathan Taylor | RB | 1,835 | -26.6 | 52% | 0% |  |
+
+### Pick 20 (R2)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Drake London | WR | 1,861 | best | 62% | 1% |  |
+| Brock Bowers | TE | 1,861 | -0.3 | 50% | 8% | ≈ |
+| Trey McBride | TE | 1,856 | -5 | 71% | 20% |  |
+| Rashee Rice | WR | 1,849 | -11.9 | 79% | 12% |  |
+| Nico Collins | WR | 1,847 | -14.1 | 80% | 20% |  |
+
+### Pick 29 (R3)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Zay Flowers | WR | 1,858 | best | 85% | 5% |  |
+| Trey McBride | TE | 1,854 | -3.8 | 20% | 0% |  |
+| Nico Collins | WR | 1,852 | -5.8 | 20% | 0% |  |
+| Breece Hall | RB | 1,850 | -7.7 | 88% | 34% |  |
+| Kyren Williams | RB | 1,850 | -8.1 | 28% | 0% |  |
+
+### Pick 44 (R4)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Breece Hall | RB | 1,858 | best | 34% | 0% |  |
+| Jayden Daniels | QB | 1,852 | -6.3 | 81% | 57% |  |
+| Bucky Irving | RB | 1,848 | -10 | 73% | 13% |  |
+| Josh Jacobs | RB | 1,848 | -10.3 | 57% | 27% |  |
+| Jalen Hurts | QB | 1,847 | -11 | 82% | 64% |  |
+
+### Pick 53 (R5)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Josh Jacobs | RB | 1,847 | best | 27% | 0% |  |
+| Kyle Pitts Sr. | TE | 1,847 | -0.5 | 85% | 18% | ≈ |
+| Tyler Warren | TE | 1,847 | -0.6 | 70% | 0% | ≈ |
+| Bucky Irving | RB | 1,846 | -1.3 | 13% | 0% | ≈ |
+| Emeka Egbuka | WR | 1,846 | -1.6 | 23% | 0% | ≈ |
+
+### Pick 77 (R7)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Jaylen Warren | RB | 1,843 | best | 90% | 13% |  |
+| Rhamondre Stevenson | RB | 1,839 | -3.7 | 49% | 0% |  |
+| TreVeyon Henderson | RB | 1,839 | -3.9 | 64% | 1% |  |
+| Tony Pollard | RB | 1,838 | -4.7 | 80% | 3% |  |
+| Brian Thomas Jr. | WR | 1,836 | -7.1 | 92% | 48% |  |
+
+### Pick 92 (R8)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| Brian Thomas Jr. | WR | 1,842 | best | 48% | 8% |  |
+| Alec Pierce | WR | 1,842 | best | 55% | 11% |  |
+| DK Metcalf | WR | 1,841 | -0.9 | 80% | 40% | ≈ |
+| Courtland Sutton | WR | 1,841 | -0.9 | 12% | 0% | ≈ |
+| Michael Wilson | WR | 1,840 | -2 | 95% | 92% |  |
+
+### Pick 101 (R9)
+| Player | Pos | Lineup | Now | Here | Next |  |
+|---|---|---|---|---|---|---|
+| RJ Harvey | RB | 1,840 | best | 17% | 0% |  |
+| Chuba Hubbard | RB | 1,839 | -0.9 | 93% | 54% | ≈ |
+| J. Croskey-Merritt | RB | 1,839 | -0.9 | 70% | 14% | ≈ |
+| Kenny Gainwell | RB | 1,838 | -1 | 50% | 3% | ≈ |
+| Kyle Monangai | RB | 1,838 | -1 | 83% | 31% | ≈ |
+
+## Top 5 by surplus at each pick (the tiers' column — a value level, not a decision)
 
 ### Pick 5 (R1)
 | Player | Pos | Proj | Surplus | There |
@@ -57,97 +169,97 @@ pick 5: X=+11.2, pick 20: X=+7.9, pick 29: X=+6.1, pick 44: X=+3.9, pick 53: X=+
 ### Pick 20 (R2)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Brock Bowers | TE | 192 | +76 | 52% |
-| Drake London | WR | 227 | +71 | 60% |
-| Trey McBride | TE | 184 | +68 | 72% |
+| Brock Bowers | TE | 192 | +76 | 50% |
+| Drake London | WR | 227 | +71 | 62% |
+| Trey McBride | TE | 184 | +68 | 71% |
 | Zay Flowers | WR | 215 | +59 | 87% |
 | Rashee Rice | WR | 214 | +58 | 79% |
 
 ### Pick 29 (R3)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Trey McBride | TE | 184 | +68 | 15% |
-| Zay Flowers | WR | 215 | +59 | 83% |
-| Nico Collins | WR | 211 | +55 | 22% |
+| Trey McBride | TE | 184 | +68 | 20% |
+| Zay Flowers | WR | 215 | +59 | 85% |
+| Nico Collins | WR | 211 | +55 | 20% |
 | Tetairoa McMillan | WR | 200 | +44 | 88% |
-| Colston Loveland | TE | 159 | +43 | 80% |
+| Colston Loveland | TE | 159 | +43 | 82% |
 
 ### Pick 44 (R4)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Tetairoa McMillan | WR | 200 | +44 | 62% |
-| Colston Loveland | TE | 159 | +43 | 16% |
-| Tee Higgins | WR | 197 | +41 | 24% |
-| Breece Hall | RB | 203 | +39 | 32% |
-| Emeka Egbuka | WR | 192 | +36 | 80% |
+| Tetairoa McMillan | WR | 200 | +44 | 65% |
+| Colston Loveland | TE | 159 | +43 | 15% |
+| Tee Higgins | WR | 197 | +41 | 22% |
+| Breece Hall | RB | 203 | +39 | 34% |
+| Emeka Egbuka | WR | 192 | +36 | 79% |
 
 ### Pick 53 (R5)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Emeka Egbuka | WR | 192 | +36 | 21% |
+| Emeka Egbuka | WR | 192 | +36 | 23% |
 | Garrett Wilson | WR | 191 | +35 | 35% |
-| Jayden Daniels | QB | 347 | +35 | 50% |
-| Tyler Warren | TE | 151 | +35 | 68% |
-| Kyle Pitts Sr. | TE | 150 | +34 | 86% |
+| Tyler Warren | TE | 151 | +35 | 70% |
+| Jayden Daniels | QB | 347 | +35 | 57% |
+| Kyle Pitts Sr. | TE | 150 | +34 | 85% |
 
 ### Pick 77 (R7)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Kyle Pitts Sr. | TE | 150 | +34 | 16% |
+| Kyle Pitts Sr. | TE | 150 | +34 | 18% |
 | Parker Washington | WR | 176 | +20 | 46% |
-| Harold Fannin Jr. | TE | 133 | +17 | 23% |
+| Tucker Kraft | TE | 136 | +20 | 17% |
+| Harold Fannin Jr. | TE | 133 | +17 | 24% |
 | Brian Thomas Jr. | WR | 171 | +15 | 92% |
-| Mike Evans | WR | 171 | +15 | 41% |
 
 ### Pick 92 (R8)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Brian Thomas Jr. | WR | 171 | +15 | 47% |
-| Patrick Mahomes | QB | 326 | +14 | 67% |
+| Brian Thomas Jr. | WR | 171 | +15 | 48% |
+| Patrick Mahomes | QB | 326 | +14 | 82% |
 | Alec Pierce | WR | 165 | +9 | 55% |
 | DK Metcalf | WR | 164 | +8 | 80% |
-| Travis Kelce | TE | 122 | +6 | 96% |
+| Jaxson Dart | QB | 318 | +6 | 93% |
 
 ### Pick 101 (R9)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Patrick Mahomes | QB | 326 | +14 | 45% |
-| DK Metcalf | WR | 164 | +8 | 33% |
-| Travis Kelce | TE | 122 | +6 | 89% |
-| Jaxson Dart | QB | 318 | +6 | 76% |
+| Patrick Mahomes | QB | 326 | +14 | 53% |
+| DK Metcalf | WR | 164 | +8 | 40% |
+| Travis Kelce | TE | 122 | +6 | 88% |
+| Jaxson Dart | QB | 318 | +6 | 77% |
 | Isaiah Likely | TE | 118 | +2 | 97% |
 
 ### Pick 116 (R10)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
+| Jaxson Dart | QB | 318 | +6 | 36% |
 | Travis Kelce | TE | 122 | +6 | 49% |
-| Jaxson Dart | QB | 318 | +6 | 35% |
-| Isaiah Likely | TE | 118 | +2 | 81% |
-| Kyler Murray | QB | 312 | +0 | 99% |
-| Mark Andrews | TE | 116 | +0 | 58% |
+| Isaiah Likely | TE | 118 | +2 | 79% |
+| Kyler Murray | QB | 312 | +0 | 100% |
+| Mark Andrews | TE | 116 | +0 | 55% |
 
 ### Pick 125 (R11)
 | Player | Pos | Proj | Surplus | There |
 |---|---|---|---|---|
-| Travis Kelce | TE | 122 | +6 | 28% |
-| Jaxson Dart | QB | 318 | +6 | 17% |
-| Isaiah Likely | TE | 118 | +2 | 67% |
+| Travis Kelce | TE | 122 | +6 | 27% |
+| Isaiah Likely | TE | 118 | +2 | 62% |
 | Kyler Murray | QB | 312 | +0 | 98% |
-| Mark Andrews | TE | 116 | +0 | 37% |
+| Mark Andrews | TE | 116 | +0 | 35% |
+| Jake Ferguson | TE | 114 | +-2 | 66% |
 
-## Sample drafts: projected starter points 1785–1912 (mean 1864)
-- Draft 1 (1892): 5 Bijan Robinson, 20 Brock Bowers, 29 Zay Flowers, 44 Emeka Egbuka, 53 Jayden Daniels, 77 Jaylen Warren, 92 Alec Pierce, 101 Michael Pittman Jr.
-- Draft 2 (1860): 5 Puka Nacua, 20 Brock Bowers, 29 Zay Flowers, 44 Tetairoa McMillan, 53 Jayden Daniels, 77 Jaylen Warren, 92 Brian Thomas Jr., 101 Chuba Hubbard
-- Draft 3 (1859): 5 Jaxon Smith-Njigba, 20 Justin Jefferson, 29 Zay Flowers, 44 Colston Loveland, 53 Jalen Hurts, 77 Jaylen Warren, 92 Alec Pierce, 101 J. Croskey-Merritt
-- Draft 4 (1816): 5 Ja'Marr Chase, 20 Zay Flowers, 29 Colston Loveland, 44 Jayden Daniels, 53 Jameson Williams, 77 Jaylen Warren, 92 Brian Thomas Jr., 101 J. Croskey-Merritt
-- Draft 5 (1854): 5 Jaxon Smith-Njigba, 20 Brock Bowers, 29 Zay Flowers, 44 Jayden Daniels, 53 Emeka Egbuka, 77 TreVeyon Henderson, 92 Brian Thomas Jr., 101 J. Croskey-Merritt
-- Draft 6 (1875): 5 Jahmyr Gibbs, 20 Trey McBride, 29 Zay Flowers, 44 Tetairoa McMillan, 53 Jayden Daniels, 77 TreVeyon Henderson, 92 DK Metcalf, 101 Michael Pittman Jr.
-- Draft 7 (1859): 5 Jaxon Smith-Njigba, 20 Trey McBride, 29 Zay Flowers, 44 Tetairoa McMillan, 53 Jayden Daniels, 77 Jaylen Warren, 92 Brian Thomas Jr., 101 J.K. Dobbins
-- Draft 8 (1865): 5 Jaxon Smith-Njigba, 20 Trey McBride, 29 Zay Flowers, 44 Breece Hall, 53 Jayden Daniels, 77 Jaylen Warren, 92 Alec Pierce, 101 DK Metcalf
-- Draft 9 (1848): 5 Jaxon Smith-Njigba, 20 Trey McBride, 29 Nico Collins, 44 Tetairoa McMillan, 53 Josh Jacobs, 77 Patrick Mahomes, 92 DK Metcalf, 101 J. Croskey-Merritt
-- Draft 10 (1872): 5 Bijan Robinson, 20 Trey McBride, 29 Zay Flowers, 44 Tetairoa McMillan, 53 Emeka Egbuka, 77 Patrick Mahomes, 92 Courtland Sutton, 101 DK Metcalf
+## Sample drafts: projected starter points 1763–1877 (mean 1839)
+- Draft 1 (1867): 5 Bijan Robinson, 20 Brock Bowers, 29 Zay Flowers, 44 Jayden Daniels, 53 Josh Jacobs, 77 Jaylen Warren, 92 Brian Thomas Jr., 101 Chuba Hubbard
+- Draft 2 (1830): 5 Puka Nacua, 20 Brock Bowers, 29 Zay Flowers, 44 Jayden Daniels, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 Brian Thomas Jr., 101 Chuba Hubbard
+- Draft 3 (1854): 5 Jaxon Smith-Njigba, 20 Drake London, 29 Zay Flowers, 44 Jayden Daniels, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 Alec Pierce, 101 RJ Harvey
+- Draft 4 (1839): 5 Ja'Marr Chase, 20 Rashee Rice, 29 Zay Flowers, 44 Jayden Daniels, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 Alec Pierce, 101 RJ Harvey
+- Draft 5 (1844): 5 Jaxon Smith-Njigba, 20 Drake London, 29 Zay Flowers, 44 Jayden Daniels, 53 Kyle Pitts Sr., 77 TreVeyon Henderson, 92 Alec Pierce, 101 Chuba Hubbard
+- Draft 6 (1838): 5 Jaxon Smith-Njigba, 20 Trey McBride, 29 Zay Flowers, 44 Breece Hall, 53 Kyle Pitts Sr., 77 Rhamondre Stevenson, 92 Brian Thomas Jr., 101 Chuba Hubbard
+- Draft 7 (1852): 5 Jaxon Smith-Njigba, 20 Drake London, 29 Zay Flowers, 44 Jayden Daniels, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 Brian Thomas Jr., 101 RJ Harvey
+- Draft 8 (1852): 5 Jaxon Smith-Njigba, 20 Drake London, 29 Zay Flowers, 44 Breece Hall, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 DK Metcalf, 101 Chuba Hubbard
+- Draft 9 (1832): 5 Jaxon Smith-Njigba, 20 Drake London, 29 Nico Collins, 44 Jayden Daniels, 53 Josh Jacobs, 77 Jaylen Warren, 92 Alec Pierce, 101 J. Croskey-Merritt
+- Draft 10 (1814): 5 Bijan Robinson, 20 Trey McBride, 29 Zay Flowers, 44 Bucky Irving, 53 Kyle Pitts Sr., 77 Jaylen Warren, 92 DK Metcalf, 101 J. Croskey-Merritt
 
 ## Most-owned across runs
-Zay Flowers 82%, Jaylen Warren 71%, Jayden Daniels 63%, Brock Bowers 52%, Tetairoa McMillan 51%, Brian Thomas Jr. 45%, Jaxon Smith-Njigba 42%, Trey McBride 31%, Breece Hall 26%, Alec Pierce 24%
+Jaylen Warren 87%, Zay Flowers 85%, Drake London 61%, Jayden Daniels 58%, Kyle Pitts Sr. 57%, Jaxon Smith-Njigba 52%, Brian Thomas Jr. 46%, Breece Hall 38%, Josh Jacobs 33%, Alec Pierce 32%
 
 Wrote sim.json and sim_availability.csv

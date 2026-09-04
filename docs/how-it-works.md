@@ -4,15 +4,38 @@ This is the explainer for anyone who wants to know *why* the skill says what it 
 
 ## 1. The draft is a market, and most people mis-price it in the same direction
 
-Every fantasy draft has the same shape. Everyone has a ranking (usually their platform's default), everyone drafts roughly in that order with some noise, and the winners are the people who understood two things the ranking doesn't show: **what a player is worth relative to the alternative** and **what a player will actually cost in this room**.
+Every fantasy draft has the same shape. Everyone has a ranking (usually their platform's default), everyone drafts roughly in that order with some noise, and the winners are the people who understood two things the ranking doesn't show: **which available player leaves them with the best team when the draft ends** and **what a player will actually cost in this room**.
 
 The skill is built to compute those two things well, then to be honest about what it doesn't know.
 
-## 2. Replacement level: the number that decides the draft
+## 2. Ask the question you actually have: simulate the rest of the draft
 
-Suppose your league has 12 teams that each start 2 RB, 2 WR, and a flex. Every week 24 running backs and 24 receivers start in dedicated slots, and 12 flex slots go to *whoever is better* among the backs, receivers, and tight ends left over. Add a few slots for byes and injuries. The last back and the last receiver to get a slot are the worst players anyone *has to* start. Their projected totals are the **replacement level** at each position — and because the flex goes to the better player, the marginal back and the marginal receiver end up worth roughly the same.
+You are on the clock. Four names are plausible. What you want to know is not which of them is "worth more" in the abstract — it is which one leaves you with the best starting lineup in January, after the other eleven managers have taken another hundred players.
 
-In the example league those numbers are 164 (RB, the 28th back) and 156 (WR, the 35th receiver): the 15 flex-and-pad slots fill 4 RB / 11 WR because the receiver pool is deeper this year.
+That is a question you can answer directly, and it's a strange thing that most tools don't:
+
+```
+For each candidate at your pick:
+  1. Play the draft up to your pick — keepers gone, everyone else drafting off ADP with noise.
+  2. Put this candidate on your roster.
+  3. Play the rest of the draft out.
+  4. Add up your best legal starting lineup.
+Do that 200 times. The average is that player's PICK VALUE.
+```
+
+The board shows the difference between the best candidate and each of the others. Take Brock Bowers at pick 20 and your projected lineup is 1,859. Take Nico Collins instead and it's 1,845. That "−14" is the whole message: fourteen points across a season, under one a week, is a real but small cost — and knowing it's small is as useful as knowing which one is bigger.
+
+Three details keep the numbers honest.
+
+**Every candidate faces the same draft.** The draft up to your pick is played *once* per simulation and then branched — the same keepers gone, the same managers making the same reaches. So the differences between candidates are about the players and not about which simulation each happened to land in.
+
+**A player is only judged against what you'd have done otherwise.** A stud who falls to you one time in five only falls in the drafts where the *whole board* fell — the ones where you were going to do well anyway. Compare raw averages and he gets credit for the good luck that delivered him. So every simulation is also played out with nobody forced in, and each candidate is scored on the *difference* he makes in his own simulations. The luck sits in both numbers and cancels.
+
+**Noise is reported, not hidden.** Every value comes with a standard error, and two candidates within about two of them are simply level. The board says "best" on both rows rather than inventing a 1.4-point winner.
+
+## 2b. Replacement level: still useful, no longer in charge
+
+The older idea — and the one almost every fantasy tool still runs on — is **value-based drafting**. Suppose your league has 12 teams that each start 2 RB, 2 WR, and a flex. Every week 24 running backs and 24 receivers start in dedicated slots, and 12 flex slots go to *whoever is better* among the backs, receivers, and tight ends left over. The last back and the last receiver to get a slot are the worst players anyone *has to* start. Their projected totals are the **replacement level**, and a player's **surplus** is his projection minus that:
 
 ```
 surplus = projection − replacement[position]
@@ -21,19 +44,25 @@ Zay Flowers  (WR)  215 − 156 = +59
 Breece Hall  (RB)  203 − 164 = +39
 ```
 
-Every board in the skill is ranked by surplus, never by projection.
+That is a genuinely good way to see *which pools are deep* — in the example league the flex-and-pad slots fill 4 RB / 11 WR, which tells you the receiver pool is the deeper one this year. It is still the column on the skill's tier boards.
 
-Why this is the right frame and not just a clever one: your final score is the sum of your starters. Drafting a player only changes that sum by the difference between him and whoever would have filled that slot. Everything else is noise. Replacement level makes the "whoever" explicit.
+**Here is why it stopped ranking the picks.** Replacement level is not measured, it's chosen — and this year the choice lands on a cliff. RB37 projects 132 and RB40 projects 111. Move the line three ranks, which is well inside honest disagreement between two careful analysts, and every running back on the board gains or loses twenty points of surplus at once.
 
-**The mistake we made first, which is worth knowing about.** The first version of the simulator assumed a fixed split of the flex — 55% of flex slots to running backs. In a 14-team, two-flex league that priced the "replacement" back at the 47th RB (95 points) and the replacement receiver at the 43rd WR (143 points). It implied managers flex a 95-point back over a 143-point receiver, which nobody does, and it made every depth running back look like +80 of surplus even when he'd sit on the bench behind a better receiver. The model drafted eight running backs and one starting receiver. Computing replacement by flex *equilibrium* — every flex slot to the best remaining player — fixed it at the root: same league, the marginal RB and WR came out at 132 and 130, the drafts balanced, and projected starter totals went up by about 35 points. When a model gives you a roster you'd never actually start, the model is wrong, not the roster.
+That is not a hypothetical. Two defensible versions of this skill produced opposite plans for the same league from the same projections: v1.0 drafted eight running backs, v1.1 took receivers in rounds 2 and 3. Nothing about the players changed between them. When the answer moves that far on a parameter nobody can pin down, the parameter is doing the deciding — and the honest response is to stop needing it.
 
-Scoring bends it. Four-point passing touchdowns with −2 per interception compress the difference between QB1 and QB8 to under two points a week, which is why the correct quarterback round is usually seven or later. Full PPR lifts pass-catching backs. TE-premium makes the second tight-end tier startable. A superflex slot roughly doubles the number of quarterbacks started league-wide and makes QB the scarcest position. The skill re-derives replacement level from *your* lineup and scoring rather than remembering last year's conclusion.
+Simulated pick values need no such number anywhere. They compare final lineups, and a lineup total is a fact about a roster.
+
+(The receipt for the earlier bug, since it's instructive: v1.0 assumed a fixed 55% share of flex slots for running backs, which in a 14-team league priced replacement at RB47 — 95 points — against WR43 at 143. It implied managers flex a 95-point back over a 143-point receiver, which nobody does. Computing the flex by *equilibrium* — every slot to the best remaining player — fixed that at the root and added about 35 points to projected starter totals. But it only moved the cliff; it didn't remove the dependence on where you draw the line. That took v2.)
+
+Scoring bends all of it. Four-point passing touchdowns with −2 per interception compress the difference between QB1 and QB8 to under two points a week, which is why the correct quarterback round is usually seven or later. Full PPR lifts pass-catching backs. TE-premium makes the second tight-end tier startable. A superflex slot roughly doubles the number of quarterbacks started league-wide and makes QB the scarcest position — and the simulation finds that on its own, without being told, because an empty superflex slot is worth so little in the final lineup.
 
 ## 3. Points, not picks
 
 "He's a round-3 value in round 6" is the most common way keepers get evaluated, and it's wrong more often than it's right. Points per pick are steepest at the top of the board: the gap between the third and twelfth receiver is far bigger than the gap between the 25th and 35th back. So a keeper who saves you four picks on a top-five player can be worth more than one who saves you twenty picks in round eight.
 
-The skill measures keeper surplus in points: the keeper's surplus minus the surplus of the player realistically available with the pick he costs. In the example, two keepers showed the same "+14 picks" of value — a QB costing pick 77 and a WR costing pick 92 — and were worth 0 and −26 points respectively; the keeper that was actually worth +54 points was a running back costing pick 68, because points-per-pick is steepest at the top and the 68th and 92nd picks are different currencies.
+The skill measures keeper surplus in points: the keeper's surplus minus the surplus of the player realistically available with the pick he costs. In the example, two keepers showed the same "+14 picks" of value — a QB costing pick 77 and a WR costing pick 92 — and were worth 0 and −26 points respectively; the keeper actually worth keeping was a running back costing pick 68, because points-per-pick is steepest at the top and the 68th and 92nd picks are different currencies.
+
+The verdict itself is now decided the same way the picks are: run the whole draft under each scenario — keep him, keep the other guy, keep nobody — and compare the mean projected starting lineup. In the example that reads 1,864 / 1,824 / 1,810, with standard errors under a point, which puts the keeper call in the same units as everything else on the board. The surplus table stays underneath as the explanation of *why* the gap is that size.
 
 ## 4. Keeper inflation is front-loaded (this surprised us)
 
@@ -63,21 +92,31 @@ Without the simulator, the same estimate comes from a normal distribution: `P(av
 
 Real leaguemates are less rational than ADP bots. Value falls further than the model predicts, so when a tier-3 back is somehow there two rounds late, believe the board and take him.
 
-## 5b. When to take which position — read it off a table, not a slogan
+## 5b. When to take which position — cost of waiting
 
-"RB early, WR late" is advice for a league that may not be yours. The simulator reports, for each of your picks, the expected best surplus still available at each position. In one 14-team, two-flex league it looked like this:
+"RB early, WR late" is advice for a league that may not be yours. The measured version asks a narrower question with a much better answer: **what does one more turn of waiting cost me at each position?**
+
+```
+cost_of_waiting[your pick][position] = best value expected on the board now
+                                     − best value expected at your next pick
+```
+
+In the example 12-team league:
 
 | Pick | QB | RB | WR | TE |
 |---|---|---|---|---|
-| 20 | +44 | +74 | **+95** | +76 |
-| 37 | +42 | +59 | **+70** | +41 |
-| 48 | +39 | +44 | **+58** | +38 |
-| 65 | +24 | +44 | **+45** | +28 |
-| 76 | +22 | +34 | **+41** | +14 |
-| 93 | +19 | +9 | **+32** | +10 |
-| 121 | +9 | −12 | **+19** | +5 |
+| 5 | 7 | **47** | 38 | 5 |
+| 20 | 2 | 6 | 11 | **22** |
+| 29 | 1 | 10 | **16** | 11 |
+| 44 | 4 | **11** | 8 | 3 |
+| 53 | 16 | 6 | 16 | **17** |
+| 77 | 3 | **27** | 7 | 10 |
 
-Running-back surplus collapses after pick 76 — at 93 there is nothing above replacement — while receiver surplus holds into the 100s. So the plan that falls out is: receiver or elite tight end at 20, fill both running-back slots by 65–76 while backs still clear replacement, and treat WR2 and WR3 as picks you can make later without paying. Change the league and the table changes: in a superflex league the QB column dominates the first three rows; in TE-premium the TE column does. The draft-day board draws this table as a heatmap so you can see it at a glance.
+Read the bold cell in each row: that is the position about to run out. Waiting one turn on a back at pick 5 costs 47 points; by pick 44 it costs 11. Tight end has two windows, at 20 and again at 53. Quarterback never costs more than seven until round 5, which is the numerical version of "QB can wait."
+
+The reason this table is trustworthy while the surplus *levels* it's built from are not: both terms carry the same replacement level, so it cancels. Shift the RB baseline by twenty ranks and every cell in the RB column stays exactly where it is. It is the one position-timing view the argument in §2b can't touch.
+
+Change the league and the table changes: superflex puts QB on top, TE-premium puts TE there. And when cost of waiting and the pick values disagree, the pick values win — cost of waiting says which shelf is emptying, the rollouts say which player to take.
 
 ## 6. Price the room you're in
 
@@ -113,11 +152,15 @@ A reach is earned by exactly one thing: role certainty in a tier that's about to
 
 ## 9. Sample drafts and the target build
 
-Ten simulated drafts from your slot usually land within about 45 points of each other — under three points a week. That's the message: **structure matters more than any single mid-round name.** The skill reports the range, what happened in essentially every draft ("QB always waited"), the players the math kept choosing, and one roster to aim for in which every pick is realistically reachable. It does not present a build that depends on a 30%-likely fall as the plan; that's the upside case.
+Ten simulated drafts from your slot usually land within about 45 points of each other — under three points a week. That's the message: **structure matters more than any single mid-round name.** The skill reports the range, what happened in essentially every draft ("QB always waited"), the players the math kept choosing, and one roster to aim for — the plan path, built pick by pick by taking the best pick value at each turn.
+
+A plan target has to be someone you can realistically expect to be there; the floor is 50%. A better player who falls to you one draft in five is *upside*, not a plan, and the board says so in as many words: "Jaxon Smith-Njigba — Bijan Robinson if he falls (21%)." A build that depends on a 21% fall is not a build.
 
 ## 10. The assumption that flips the board
 
-Every analysis ends with the estimate everything else depends on. It is usually the RB-versus-WR replacement gap: if receiver projections are systematically 8–10% low, the correct pick at your early turns shifts toward WR. Other common flips: a keeper's eligibility, a superflex slot the user forgot to mention, an injury designation announced draft morning, and the platform's default rankings pulling a quarterback up a round.
+Every analysis ends with the estimate everything else depends on. It used to be the RB-versus-WR replacement gap; simulating lineups took that one off the table. What's left is more honest: **the projections themselves.** The rollouts take them as given, so if receiver projections are systematically 8–10% low, the simulation will cheerfully build you the wrong roster and report a tight standard error while doing it. Precision is not accuracy, and the skill says which one it is offering.
+
+Other common flips: a keeper's eligibility, a superflex slot the user forgot to mention, an injury designation announced draft morning, and the platform's default rankings pulling a quarterback up a round.
 
 Naming that assumption is the difference between a model you can argue with and a hot take.
 

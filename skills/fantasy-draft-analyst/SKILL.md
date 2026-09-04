@@ -1,27 +1,27 @@
 ---
 name: fantasy-draft-analyst
-description: Prepares a fantasy football draft the way a league-winning analyst does — keeper decisions, replacement-level surplus math for the league's exact scoring, tiers with cliffs, a Monte Carlo of who will actually be available at each of the user's picks, pressure-tests of the players they like (usage data + Vegas), sample drafts, and a tap-to-cross-off draft-day board. Use this whenever someone mentions a fantasy football draft, keeper or keepers, draft slot or pick number, ADP, "who should I keep", "who should I target", tiers, sleepers, a mock draft, a cheat sheet, or asks what to do at a specific pick — even if they don't say "analysis" or "strategy". Also use it for redraft leagues with no keepers, superflex, PPR/half-PPR/standard, and any platform (ESPN, Yahoo, Sleeper, CBS, NFL.com, Underdog, FFPC).
+description: Prepares a fantasy football draft the way a league-winning analyst does — keeper decisions, every pick ranked by simulating the rest of the draft after each candidate and scoring the final starting lineup, cost of waiting by position, tiers with cliffs, a Monte Carlo of who will actually be available at each of the user's picks, pressure-tests of the players they like (usage data + Vegas), sample drafts, and a tap-to-cross-off draft-day board. Use this whenever someone mentions a fantasy football draft, keeper or keepers, draft slot or pick number, ADP, "who should I keep", "who should I target", tiers, sleepers, a mock draft, a cheat sheet, or asks what to do at a specific pick — even if they don't say "analysis" or "strategy". Also use it for redraft leagues with no keepers, superflex, PPR/half-PPR/standard, and any platform (ESPN, Yahoo, Sleeper, CBS, NFL.com, Underdog, FFPC).
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   author: "Nico Neugebauer"
-  homepage: "https://github.com/nicoandmelissa/fantasy-draft-analyst"
+  homepage: "https://github.com/nicodeguyo/fantasy-draft-analyst"
 ---
 
 # Fantasy Draft Analyst
 
-You are the manager who wins the league at the draft table. Not because you know more player names than everyone else, but because you do three things the table doesn't: you measure every pick in **points over the alternative** rather than raw projection, you price the **market you are actually drafting in** (this platform, this many teams, these keepers gone), and you say the honest bear case out loud before you commit.
+You are the manager who wins the league at the draft table. Not because you know more player names than everyone else, but because you do three things the table doesn't: you judge a pick by **the starting lineup it leaves you with** rather than by the player's raw projection, you price the **market you are actually drafting in** (this platform, this many teams, these keepers gone), and you say the honest bear case out loud before you commit.
 
-Everything below serves those three habits. Read `references/methodology.md` before the first real analysis — it is the reasoning this skill is built on — and use the other references when the workflow points to them.
+Read `references/methodology.md` before the first real analysis — it is the reasoning this skill is built on — and use the other references when the workflow points to them.
 
 ## What the user gets
 
-One complete package, in this order (the full contract with templates is in `references/output-spec.md`):
+One package, in this order (the full contract with templates is in `references/output-spec.md`):
 
 1. **The keeper verdict** (keeper leagues only) — who to keep, the surplus math for every candidate, what keeping nobody would cost, and the one thing to confirm before committing.
-2. **The one number** — replacement level per position for this exact league, and the surplus gap that decides the whole draft.
+2. **Cost of waiting** — for every one of the user's picks, what one more turn of waiting costs at each position, and which position is about to run out. Replacement level and surplus come with it as the explanation of *why* a position is deep.
 3. **Pick geometry** — the user's actual pick numbers, the turn structure, and what the keeper removals do to the board.
-4. **The board** — top five at each of the user's picks, ranked by surplus, with projected points and "There %" (how often the player is still available at that pick).
+4. **The board** — top five at each of the user's picks, ranked by **pick value**: the projected final starting lineup if they take that player and draft sensibly afterwards. Each row shows how far behind the best choice it is, and how often the player is still there at their next pick.
 5. **Tiers with cliffs** — by position, grouped by real scoring gaps, with the point drop marked at every cliff.
 6. **Your guys, pressure-tested** — every player the user flagged: the case for, the honest risk, what the betting market implies, and a verdict with a price ("take at 48, not before").
 7. **Sample drafts and the target build** — several simulated drafts, the roster to aim for, its projected total, and its known weakness.
@@ -68,27 +68,36 @@ Write the player pool to `players.csv` (`name,pos,team,adp,adp_sd,proj`) — thi
 
 ### Step 3 — Build projections in the league's scoring
 
-Start from consensus stat lines, then apply your own adjustments where you have a reason: a role change, a new coordinator, an injury discount expressed as expected games, a coaching quote about usage. Every adjustment gets a one-line reason. Projections are season totals, not per-game.
+Start from consensus stat lines, then adjust where you have a reason: a role change, a new coordinator, an injury discount expressed as expected games, a coaching quote about usage. Every adjustment gets a one-line reason. Projections are season totals, not per-game. Run `python3 scripts/scoring.py --league league.yaml --stats stats.csv --out players.csv` when scripts are available; otherwise score by hand and show the formula once.
 
-Run `python3 scripts/scoring.py --league league.yaml --stats stats.csv --out players.csv` when scripts are available. Otherwise score by hand and show the formula once.
+### Step 4 — Run the rollout engine
 
-### Step 4 — Replacement level, surplus, and pick geometry
+This is the step that makes you different from the table. The question at a pick is not "who is worth more" — it is **which of these players leaves me with the best starting lineup once the draft finishes**. Answer it by simulating: draft up to the user's pick, take each candidate in turn, play the rest of the draft out, and score the lineup. That is **pick value**, and it needs no replacement-level assumption anywhere in the decision.
 
-This is the step that makes you different from the table. Replacement level at a position is the projection of the last player who still has to start for someone every week. Fill the dedicated slots by position, then give every flex slot league-wide to the best remaining player regardless of position (flex equilibrium — the marginal RB and marginal WR end up priced the same, which is how real lineups work), find that last player at each position, and every player's **surplus = projection − replacement**. Never assume a fixed RB/WR split of the flex: it can price one position's depth as gold and produce a roster with eight running backs.
+```
+python3 scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 \
+    --pick-values --keeper-scenarios --out sim.json
+```
 
-`python3 scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --out sim.json` computes replacement levels, the user's pick numbers (with keeper-forfeited rounds removed), the keeper inflation actually in force at each pick, availability at each pick (the user's own players and "my guys" are always included), a full name × pick availability matrix (`sim_availability.csv`), sample drafts, and — for keeper leagues — the surplus of every keeper candidate against what that pick would otherwise return. Re-run it whenever `players.csv` changes; a stale `sim.json` in the folder is worse than none. Without scripts, do the math by hand using the formulas in `references/methodology.md` and the analytical availability shortcut there (a normal-distribution estimate from ADP and its spread). Say which method you used.
+Defaults: 200 rollouts per candidate, 8 candidates a pick, through round 9, and a plan target must be available at least half the time (`--rollouts`, `--candidates`, `--through-round`, `--plan-min-avail`). Budget four to six minutes; `--rollouts 60` is a rough answer in under two, `--no-pick-values` skips the rollouts. It writes `pick_values`, `plan_path` (the greedy plan with a Plan B and an "if he falls" upside per pick), `cost_of_waiting` and `keeper_scenarios`, plus everything v1 produced: the pick ladder with keeper rounds removed, inflation in force at each pick, availability (the user's own players and "my guys" always included), the full name × pick matrix (`sim_availability.csv`), replacement levels and sample drafts.
+
+Three things to read before writing anything. `plan_check` — if it failed the plan doesn't fill a legal lineup and isn't a plan yet. The standard errors — candidates within about two of them are level, and saying otherwise is inventing precision. And the scale: a pick value is the lineup projected **at that pick**, measured against a control arm that already assumes the plan was followed to get there, so the column drifts down. Compare candidates within a pick, never across picks, and never against a keeper-scenario total.
+
+Re-run whenever `players.csv` changes; a stale `sim.json` is worse than none. Without scripts, use dynamic VBD and the availability shortcut in `references/methodology.md` §6. Say which method you used.
 
 ### Step 5 — The keeper verdict
 
-For each candidate: cost (the pick number they'd consume), market value (their ADP on this platform), the keeper inflation at that pick (front-loaded when keepers cost picks: the simulator measures it; roughly +8 at a 12-team round-2 pick fading to zero by round 6), and the surplus **in points**, because points-per-pick is steepest at the top of the board. A +4-pick surplus on a top-5 player is worth more than +20 picks on a round-8 player.
+Lead with `keeper_scenarios`: the mean projected final starting lineup across full drafts under each scenario — keep X, keep Y, keep nobody — with standard errors. That is the verdict, in the same units as every other number on the board. When two scenarios are within two standard errors, say "close" and let the bear case break the tie.
+
+Then explain it with the per-candidate table: cost (the pick number they'd consume), market value (their ADP on this platform), the keeper inflation at that pick (front-loaded when keepers cost picks: the simulator measures it; roughly +8 at a 12-team round-2 pick fading to zero by round 6), and the surplus **in points**, because points-per-pick is steepest at the top of the board. A +4-pick surplus on a top-5 player is worth more than +20 picks on a round-8 player.
 
 Then check the things that flip the answer: waiver-pickup eligibility, superflex (a QB keeper's value roughly doubles), escalating costs, the option to keep nobody. State the verdict first, the math second, the bear case third, and "the one thing you must confirm" last.
 
 ### Step 6 — Board, tiers, and the plan by pick
 
-Start with the **position plan**: the simulator's `position_plan` table (expected best surplus still available at each of your picks, by position). Read it aloud in two sentences — which position has the most value left at each turn, and the pick after which each position has nothing above replacement ("RB collapses after 76; WR holds value into the 100s; TE windows at 20 and 65; QB is flat, so round 7"). That is the answer to "when do I take which position," and it changes with the league — superflex puts QB on top, TE premium puts TE on top — so never hard-code a position order.
+Start with **cost of waiting** (`cost_of_waiting`): for each of the user's picks and each position, the points lost by waiting one more turn. Read it aloud in two sentences — which position is about to run out at each turn, and where the columns go flat ("waiting on a back costs 47 points at pick 5 and nothing by 44; TE has windows at 20 and 53; QB never costs more than six until round 5"). That is the answer to "when do I take which position," it changes with the league — superflex puts QB on top, TE premium puts TE on top — so never hard-code a position order, and unlike a surplus heatmap it does not move when replacement level does.
 
-Then present the top five at each pick ranked by surplus with There %. Write one decision sentence per pick ("Running back. Saquon if he fell; otherwise Hampton.") and a Plan B ("If he's gone: McMillan, 82% there"). Build tiers from projection gaps, not rounds; mark each cliff with the point drop. Note where a tier spans many rounds — that's where the value is ("Irving and Tuten are in the same tier as Derrick Henry, four rounds later").
+Then present the top five at each pick **ranked by pick value**, with each row's gap against the player you're recommending and the "still there next pick" number. Write one decision sentence per pick ("Running back. Saquon if he fell; otherwise Hampton.") and a Plan B ("If he's gone: McMillan, 82% there"). Where two candidates are within two standard errors, say they're level and break the tie on scarcity or role certainty rather than on the decimal. Build tiers from projection gaps, not rounds; mark each cliff with the point drop. The tiers keep the surplus column — labeled "vs. free" — because it is the clearest view of which positions are deep; it is explanation, not the ranking. Note where a tier spans many rounds — that's where the value is ("Irving and Tuten are in the same tier as Derrick Henry, four rounds later").
 
 Reach rules: a reach is earned by **role certainty in a scarce tier**, never by upside in the first three rounds; cap a reach at one round; and don't reach at all for a player whose There % at your next pick is above ~80%.
 
@@ -108,7 +117,7 @@ Close with the assumption that could flip the board (usually the RB-vs-WR replac
 
 ### Step 10 — The draft-day board (optional)
 
-`python3 scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html` renders the board. Write `notes.json` first (schema in `references/output-spec.md`): the plan (target at every pick with a Plan B), the roadmap sentence, the decision sentence and Plan B per pick, tier commentary and cliffs, shortlist verdicts, Vegas notes, and the assumptions. The board opens with a four-step "how to use this on draft day" strip and the plan; it tracks the user's lineup as they tap ✓ on their picks, and saves state in the browser so a reload mid-draft loses nothing. The board uses the user's team colors (`theme` in league.yaml, any NFL team or custom hex), prints to about four pages, and lets the user tap players to cross them off during the draft.
+`python3 scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html` renders the board. Write `notes.json` first (schema in `references/output-spec.md`): the plan (target at every pick with a Plan B — the renderer fills in the values from `plan_path`), the cost-of-waiting sentence (`waiting_note`), the decision sentence and Plan B per pick, tier commentary and cliffs, shortlist verdicts, Vegas notes, and the assumptions. The pick tables come straight from `pick_values`, so the board and the analysis cannot disagree. The board opens with a four-step "how to use this on draft day" strip and the plan; it tracks the user's lineup as they tap ✓ on their picks, and saves state in the browser so a reload mid-draft loses nothing. The board uses the user's team colors (`theme` in league.yaml, any NFL team or custom hex), prints to about four pages, and lets the user tap players to cross them off during the draft.
 
 ## How to write it
 
@@ -122,11 +131,11 @@ Close with the assumption that could flip the board (usually the RB-vs-WR replac
 
 ## When scripts can't run
 
-The methodology doesn't need the scripts; they just make it faster and the availability numbers more precise. In a chat-only environment: compute pick numbers and replacement level by hand, estimate availability with the normal-distribution shortcut in `references/methodology.md`, reason through three sample drafts explicitly, and skip the HTML board (offer a printable markdown board instead).
+The reasoning doesn't need the scripts; they make it more accurate. In a chat-only environment use **dynamic VBD** — the same idea as the rollouts, one pick ahead, by hand: a player's take-now value is his projection minus the projection of the best player *at his own position* you expect to still be there at your next pick, then filtered by which of your lineup slots are still open. Estimate "still be there" with the normal-distribution shortcut in `references/methodology.md` §6. Compute pick numbers and replacement level by hand for the tiers and the explanation, reason through three sample drafts explicitly, and skip the HTML board (offer a printable markdown board instead). Say that the scripted rollouts are more accurate and that this is the by-hand version.
 
 ## Reference files
 
-- `references/methodology.md` — the reasoning: keeper math and inflation, replacement level, surplus, scarcity, tiers and cliffs, pick geometry, reach rules, auction and superflex notes, the analytical availability shortcut. **Read first.**
+- `references/methodology.md` — the reasoning: pick value by rollout, cost of waiting, keeper math and inflation, replacement level and surplus (what they still explain), scarcity, tiers and cliffs, pick geometry, reach rules, auction and superflex notes, the availability shortcut and dynamic VBD. **Read first.**
 - `references/metrics.md` — which player metrics predict, which don't, how to weight them, how to use Vegas lines.
 - `references/data-sources.md` — verified URLs by platform, fetch order, freshness rules, platform ADP quirks.
 - `references/keeper-rules.md` — a taxonomy of keeper rules and exactly how each changes the math.
@@ -140,7 +149,7 @@ The methodology doesn't need the scripts; they just make it faster and the avail
 - `scripts/fetch_adp.py` — ADP from FantasyFootballCalculator (with spread), ESPN's API, the Footballguys cross-platform table, or Sleeper trending. Needs network from the shell; when that's unavailable, fetch the pages yourself and write `adp.csv`.
 - `scripts/scoring.py` — stat lines → points in the league's scoring, merged with ADP into `players.csv`.
 - `scripts/merge_adp.py` — reprice `players.csv` with a platform's ADP, keeping projections and spread.
-- `scripts/draft_sim.py` — the Monte Carlo: replacement levels, keeper surplus, inflation, availability, sample drafts.
+- `scripts/draft_sim.py` — the Monte Carlo: pick values by rollout, the plan path, cost of waiting, keeper scenarios, replacement levels, inflation, availability, sample drafts. Flags worth knowing: `--pick-values` / `--no-pick-values`, `--rollouts`, `--candidates`, `--through-round`, `--keeper-scenarios`, `--watch`, `--seed`.
 - `scripts/build_board.py` — the draft-day board HTML from `sim.json` + `notes.json`.
 
 All are standard library plus PyYAML. Run them with `${CLAUDE_SKILL_DIR}/scripts/...` in Claude Code.

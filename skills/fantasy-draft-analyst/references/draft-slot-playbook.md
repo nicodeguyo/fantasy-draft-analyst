@@ -44,7 +44,7 @@ Compute the user's exact ladder every time; then remove the round(s) their keepe
 
 ## 3. Early slot, turn by turn (12-team shape)
 
-- **R1**: the best player on your surplus board. If a true tier-1 RB is there, take him; the RB replacement gap is the reason. If the board starts WR-heavy, the elite receiver is fine — but then your R2/R3 turn must be RB + RB.
+- **R1**: the top row of your pick-value table. If a true tier-1 RB is there, take him; the cost of waiting on a back at your first pick is the reason. If the board starts WR-heavy, the elite receiver is fine — but then your R2/R3 turn must be RB + RB.
 - **R2/R3 turn (24/25)**: this decides your season. Twenty-three players are gone. Take the last two players of the tier that is about to end — almost always two starting backs, or a back plus the last elite TE.
 - **R4/R5 turn (48/49)**: the WR band is deep here; two receivers with locked route shares.
 - **R6/R7 (72/73)**: best available at RB/WR, plus your first look at the QB tier if the scoring is QB-friendly.
@@ -54,7 +54,7 @@ Compute the user's exact ladder every time; then remove the round(s) their keepe
 
 - **R1**: tier-1 if available; otherwise the top of tier 2 at the scarcer position.
 - **R2 (~17–20)**: the best remaining bell-cow. The middle-slot R2 pick is where keeper inflation bites hardest — expect an ADP-25-to-30 player here in a keeper league.
-- **R3 (~29–32)**: RB again unless an elite TE or a tier-2 WR clearly out-surpluses the backs. This is your only realistic elite-TE window in most years.
+- **R3 (~29–32)**: RB again unless an elite TE or a tier-2 WR is clearly ahead on pick value. This is your only realistic elite-TE window in most years.
 - **R4 (~41–44)**: the reach window. If a role-certain RB sits in the dead zone at a committee price, this is where you take him — one round early, not two.
 - **R5–R6 (~53–68)**: receivers. The band is flat and deep; take the highest route share.
 - **R7 (~77)**: QB window in 4-point-TD leagues. Don't let it slide two more rounds in leagues with 14 teams.
@@ -84,7 +84,7 @@ With K keepers removed (K ≈ teams in a one-keeper league):
 ## 7. The universal rules
 
 1. The first three picks must be weekly starters with locked roles. Upside is for round 6 and later.
-2. Draft the position that is about to run out, not the best player in a vacuum — unless the surplus gap says otherwise.
+2. Draft the position that is about to run out (the outlined cell in the cost-of-waiting row), not the best player in a vacuum — unless the pick values say otherwise. They are the ones that measured a lineup.
 3. Between two targets, take the one with the lower There % at your next pick.
 4. Don't reach for anyone whose There % at your next pick is above ~80%.
 5. QB and TE have windows, not rounds: take them when the tier is about to end, and never in between tiers.

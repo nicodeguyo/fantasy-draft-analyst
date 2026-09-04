@@ -5,8 +5,8 @@
     {
       "name": "fantasy-draft-analyst",
       "source": "./",
-      "description": "Prepare a fantasy football draft like a league-winning analyst — keeper verdicts, surplus math, tiers, availability simulation, pressure tests, and a draft-day board.",
-      "version": "1.0.0",
+      "description": "Prepare a fantasy football draft like a league-winning analyst — keeper verdicts, picks ranked by simulated final lineup, cost of waiting, tiers, availability simulation, pressure tests, and a draft-day board.",
+      "version": "2.0.0",
       "license": "MIT",
       "keywords": ["fantasy-football", "draft", "keeper", "adp"]
     }

@@ -21,6 +21,18 @@ Contents
 
 <One sentence on why it isn't close, or why it is.>
 
+### The verdict in lineup points
+Full drafts simulated under each scenario (`keeper_scenarios`):
+
+| Scenario | Cost | Projected starting lineup | SE |
+|---|---|---|---|
+| Keep <A> | R6 | 1,864 | ±0.6 |
+| Keep <B> | R3 | 1,824 | ±0.8 |
+| Keep nobody | — | 1,810 | ±0.9 |
+
+<Scenarios within two standard errors of each other are "close" — say so plainly and break the
+tie on the bear case, not the decimal.>
+
 ### The keeper math
 Your picks at slot <s> in a <T>-team snake: <ladder>.
 
@@ -44,38 +56,46 @@ Your picks at slot <s> in a <T>-team snake: <ladder>.
 <Who you'd lose that you can't re-draft at the same price.>
 ```
 
-### 2. The one number
+### 2. How the picks were valued
 
 ```
-## The number that drives everything
-Replacement level in a <T>-team, <flex> league, in your scoring:
+## How every number on this page was produced
+For each of your picks, each candidate was planted at that pick and the rest of the draft was
+simulated <R> times — the room drafting off ADP, you drafting sensibly afterwards — and the
+resulting starting lineup scored. **Pick value** is that projected lineup. The player with the
+highest one is the pick; the gap below him is what the alternative costs you.
+
+Replacement level, for context rather than for decisions:
 
 | Pos | Replacement | Who that is |
 |---|---|---|
 | QB | 312 | QB12 |
-| RB | 137 | RB34 |
-| WR | 165 | WR32 |
-| TE | 114 | TE14 |
+| RB | 164 | RB28 |
+| WR | 156 | WR35 |
+| TE | 116 | TE13 |
 
-That <gap>-point gap between RB and WR replacement is the entire draft. <One example of a higher-projection WR being the worse pick.>
+<One sentence on what the RB/WR gap says about which pool is deeper — and one on why that number
+is an explanation and not the ranking: move it three ranks and every back gains twenty points of
+surplus, which is exactly why the pick tables are simulated instead.>
 ```
 
-### 3. Pick geometry and the position plan
+### 3. Pick geometry and the cost of waiting
 
-Ladder with keeper-forfeited rounds removed; turn structure; the measured inflation at your early picks. Then the position plan:
+Ladder with keeper-forfeited rounds removed; turn structure; the measured inflation at your early picks. Then the cost of waiting:
 
 ```
-### Where the value is at each of your picks
-Expected best surplus still available, by position (from 1,500 simulated drafts):
+### What waiting costs at each of your picks
+Points of value lost by waiting until your next turn (from `cost_of_waiting`):
 
 | Pick | QB | RB | WR | TE |
 |---|---|---|---|---|
-| 20 | +44 | +74 | **+95** | +76 |
-| 37 | +42 | +59 | **+70** | +41 |
+| 5 | 7 | **47** | 38 | 5 |
+| 20 | 2 | 6 | 11 | **22** |
 | ... |
 
-Reading: <two sentences — which position carries the most value at each turn, and the pick after
-which each position has nothing left above replacement. Then the plan that follows from it.>
+Reading: <two sentences — which position is about to run out at each turn, and where the columns
+go flat so a position can wait. Then the plan that follows from it.> This table is unaffected by
+where replacement level is drawn: the same baseline sits in both terms and cancels.
 ```
 
 ### 4. The board — top five at each pick
@@ -84,14 +104,19 @@ For each pick:
 
 ```
 ### Pick 20 (R2) — <decision sentence>
-| Player | Pos | Proj | Surplus | There % |
-|---|---|---|---|---|
-| Brock Bowers | TE | 192 | +78 | 52% |
+| Player | Pos | Proj | Pick value | Now | Here | Next |
+|---|---|---|---|---|---|---|
+| Drake London | WR | 215 | 1,861 | TAKE | 62% | 1% |
+| Brock Bowers | TE | 192 | 1,861 | level | 50% | 8% |
+| Trey McBride | TE | 188 | 1,856 | −5 | 71% | 20% |
 | ... five rows ...
-<One sentence naming the sixth option and why it lost.>
+<One sentence naming the sixth option and why it lost. Where the top rows are within two standard
+errors, say they are level and name the tiebreak you used.>
 ```
 
-"There %" is the availability at that pick across the simulations (or the analytical estimate — say which).
+Pick values are comparable **within** a pick and not across picks (each is measured against that pick's own control arm, which assumes you followed the plan to get there) and not against a keeper-scenario total. Say so once in §2 rather than letting a reader subtract one from another.
+
+"Now" is `row.value − plan_path[pick].value` — the gap against the player the pick actually recommends, **not** against `delta_vs_best`, which is measured from the highest raw value and can sit on a player who reaches you one draft in five. Use the same subtraction in the analysis as the board does, or the two will disagree at exactly the picks where it matters. It reads: `TAKE` on his row, a positive number on anyone worth more if he happened to fall to you, a negative number on anyone worth less, and `level` inside the noise. There is exactly one `TAKE` per table and it is the top row, so the table can never disagree with the decision sentence above it. "Here"/"Next" are availability at that pick and at the following one, measured across the simulations with your own seat drafting off ADP so the number is about the room, not about your plan (or the analytical estimate — say which).
 
 ### 5. Tiers with cliffs
 
@@ -103,7 +128,16 @@ Per player, the five-part template from `references/metrics.md` §6, ending with
 
 ### 7. Sample drafts and the target build
 
-Range of projected totals; most-owned players; "what happened in every draft"; the target build as a table (KEEP / pick → player → proj); why this one; the honest weakness and the hedge.
+Range of projected totals; most-owned players; "what happened in every draft". Then the target build, which is `plan_path` — one row per pick with the target, the projected lineup, how often he's actually there, the Plan B and what it costs, and the "if he falls" upside:
+
+```
+| Pick | Target | Projected lineup | There | If he's gone | If he falls |
+|---|---|---|---|---|---|
+| 5 | Jaxon Smith-Njigba | 1,858 | 63% | Jonathan Taylor (−22) | Bijan Robinson (21%) |
+| 20 | Brock Bowers | 1,859 | 50% | Drake London (level) | — |
+```
+
+Then why this one, the honest weakness, and the hedge. If `plan_check` did not pass, say so and fix the plan before publishing it.
 
 ### 8. The late-round plan
 
@@ -135,17 +169,17 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
   "plan_sub": "Your target at every pick, with the fallback if he's gone.",
   "plan": [
     {"pick": "KEEP", "player": "Chase Brown", "alt": ""},
-    {"pick": "5", "player": "Jaxon Smith-Njigba", "alt": "Bijan Robinson if he fell (21%); Jonathan Taylor as the tiebreak loser", "note": "WR1 — the tier ends here"},
-    {"pick": "20", "player": "Brock Bowers", "alt": "Trey McBride (72%); Kyren Williams only if both TEs are gone"}
+    {"pick": "5", "player": "Jaxon Smith-Njigba", "alt": "Jonathan Taylor (−22); Bijan Robinson if he falls (21%)", "note": "WR1 — the tier ends here"},
+    {"pick": "20", "player": "Brock Bowers", "alt": "Drake London — level, take whichever is there"}
   ],
-  "plan_total": "1,858 projected starters",
+  "plan_total": "1,856 projected starting lineup",
   "target_note": "Across ten simulated drafts the range was 1,772 to 1,906...",
-  "roadmap_note": "Tight end carries the most value at 20 and again at 53; running back surplus is gone after 77; receivers hold value into the 100s, so WR2 can wait until 53–77.",
+  "waiting_note": "Waiting on a back costs 47 points at pick 5 and almost nothing after 44; tight end has windows at 20 and 53; quarterback never costs more than six until round 5, so it waits.",
   "headline_rule": {
-    "heading": "The only number you need to remember: replacement level",
+    "heading": "What replacement level tells you, and what it doesn't",
     "paragraphs": [
       "In a 12-team league with one flex, the 28th running back and the 35th receiver are the worst players anyone has to start...",
-      "So draft the biggest surplus, not the biggest projection..."
+      "That gap is why the receiver pool is the deeper one. It is not what ranks your picks — move it three ranks and every back gains twenty points of surplus, which is exactly why the tables above are simulated instead..."
     ]
   },
   "pick_notes": {
@@ -180,22 +214,22 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
     "flip_warning": "The one assumption that could flip this whole board: ...",
     "gold_warning": "The simulated opponents draft rationally off ADP. Your actual leaguemates don't..."
   },
-  "repo": "nicoandmelissa/fantasy-draft-analyst"
+  "repo": "nicodeguyo/fantasy-draft-analyst"
 }
 ```
 
 Field notes:
 
-- `plan` is the target build, one row per pick plus the keeper. `alt` is the Plan B shown in the "If he's gone" column — name the fallback and his There %. `note` (optional) is a short label under the name. `plan_total` is a display string; if omitted the renderer computes the projected starter total from the plan's players. The older `target_build` shape is still accepted.
-- `roadmap_note` is the two-sentence reading of the position-plan heatmap (the renderer draws the heatmap from `sim.json`'s `position_plan` and appends the league's flex fill).
+- `plan` is the target build, one row per pick plus the keeper. It should be `sim.json`'s `plan_path` wearing your prose; omit it entirely and the renderer builds it from `plan_path` alone. Each row may carry `value` and `plan_b_value`, but you rarely need to: the renderer reads both from `plan_path` when they're absent, which is what keeps the board and the analysis from ever disagreeing. `alt` is the Plan B shown in the "If he's gone" column — name the fallback and what it costs; leave it out and the renderer writes it from `plan_path` (including the "if he falls" upside line). `note` (optional) is a short label under the name. `plan_total` (or `plan_total_label`) is a display string; if omitted the renderer uses the plan path's final projected lineup. The older `target_build` shape is still accepted.
+- `shortlist_sub` overrides the one-line subtitle above the shortlist table. `waiting_note` is the two-sentence reading of the cost-of-waiting table (the renderer draws the table from `sim.json`'s `cost_of_waiting`). The old key name `roadmap_note` still works.
 - `pick_notes` values may be a string or `{"note": ..., "plan_b": ...}`; the Plan B renders under the decision sentence and its players are always shown in that pick's table.
 - `howto` may override the four "how to use this on draft day" steps as `[[heading, body], ...]`; leave it `null` to use the defaults, which are right for almost everyone.
 - `headline_rule.paragraphs` should quote the league's actual replacement numbers and the flex fill from `sim.json`.
 - Player names in `plan`, `pick_notes`, `tiers`, `mine`, and `shortlist` must match `players.csv` exactly (full names).
 
-`tiers.*.bands[].players` are names that must match `players.csv`; the renderer looks up team, ADP, and projection. `mine` marks rows gold. `shortlist[].tag` is one of `take`, `ok`, `pass`. Every key is optional: a pick without a `pick_notes` entry shows "Best surplus on the board.", and a missing `tiers`, `shortlist`, `vegas`, or `target_build` leaves that section empty, so fill them all in. `headline_rule.hot`/`cool` default to the RB and WR replacement numbers from `sim.json`. `repo` (the GitHub `owner/name` in the footer credit) may also live under `appendix`.
+`tiers.*.bands[].players` are names that must match `players.csv`; the renderer looks up team, ADP, and projection. `mine` marks rows gold. `shortlist[].tag` is one of `take`, `ok`, `pass`. Every key is optional: a pick without a `pick_notes` entry shows "Take the top row.", and a missing `tiers`, `shortlist`, `vegas`, or `target_build` leaves that section empty, so fill them all in. `headline_rule` now lives in the appendix, where replacement level belongs. `repo` (the GitHub `owner/name` in the footer credit) may also live under `appendix`.
 
-Renderer flags worth knowing: `--top N` sets rows per pick (default 7); `--max-pick` sets the last pick that gets its own table (default: through round 9). Any player named in a `pick_notes` entry, the shortlist, or the target build is always shown in that pick's table if he was available there at all, so the decision sentence never names someone the table hides. Any pick with a `pick_notes` entry is rendered even past `--max-pick`.
+Renderer flags worth knowing: `--top N` sets rows per pick (default 5); `--max-pick` sets the last pick that gets its own table (default: through round 9). Any player named in a `pick_notes` entry, the shortlist, or the target build is always shown in that pick's table if he was available there at all, so the decision sentence never names someone the table hides. Any pick with a `pick_notes` entry is rendered even past `--max-pick` — past the rollout horizon (`--through-round`, default 9) those tables fall back to the "vs. free" surplus ranking, because no pick values were computed that deep.
 
 ## 4. The board itself
 
@@ -204,23 +238,22 @@ One HTML file, no external dependencies except a Google Font, in the user's team
 1. Masthead — team name, subtitle, setting chips.
 2. Sticky pick ladder — PLAN first, then every pick number, then TIERS / CALLS / NOTES.
 3. **How to use this on draft day** — four numbered steps: before the draft, on the clock, when someone else drafts a player (tap him), when you draft a player (tap ✓).
-4. **The plan** — the target at every pick with round, projection, surplus, There %, and "If he's gone"; the projected starter total; the target note.
-5. **Where the value is at each of your picks** — the position-plan heatmap (QB/RB/WR/TE × your picks), the outlined cell marking the best position at each pick, and the roadmap sentence.
-6. **Your lineup** — every starting slot, filled in as the user taps ✓; open slots show the replacement number; a running projected total and a bench line.
-7. The replacement-level rule — four numbers and two short paragraphs.
-8. Your picks in order — one block per pick: decision sentence, Plan B, and the surplus-ranked table with There % bars and a ✓ button per row.
-9. Late rounds block.
-10. Tier boards by position with cliffs (each row shows projection and surplus).
-11. Your shortlist, scored — verdict tags; the Vegas list.
-12. Appendix — terms, how the numbers were built, assumptions, the two warnings.
-13. Toolbar — taken / mine counters, Hide taken, Reset, Print.
+4. **The plan** — the target at every pick with round, the projected starting lineup it produces, how often he's there, "If he's gone", and the "if he falls" upside; the plan total; the target note.
+5. **Cost of waiting** — points lost per position by waiting one more turn (QB/RB/WR/TE × your picks), the outlined cell marking the position about to run out, and the waiting sentence.
+6. **Your lineup** — every starting slot, filled in as the user taps ✓; a running projected total and a bench line.
+7. Your picks in order — one block per pick: decision sentence, Plan B, and the table ranked by pick value with **Now** (`TAKE` on the recommended player, signed points against him below) and **Next** (availability at the following pick, amber under 50%), plus a ✓ button per row.
+8. Late rounds block.
+9. Tier boards by position with cliffs (each row shows projection and "vs. free").
+10. Your shortlist, scored — verdict tags; the Vegas list.
+11. Appendix — terms, **replacement level and what it explains**, how the numbers were built, assumptions, the two warnings.
+12. Toolbar — taken / mine counters, Hide taken, Reset, Print.
 
 Behaviors: tap any player row to mark him taken (greys out everywhere); tap ✓ to mark him yours (gold, fills the lineup); state persists in the browser's localStorage under a key derived from the title, so a reload mid-draft keeps everything; Hide taken collapses crossed-off rows; print hides the ladder, toolbar, and ✓ buttons and breaks pages before picks, tiers, shortlist, and appendix.
 
 ## 5. Style rules
 
 - Decision sentence per pick: position first, then the name, then the contingency. "Running back. Saquon if he fell. Otherwise Hampton."
-- Every table sorted by surplus, never by projection.
+- Every pick table sorted by pick value, never by projection and never by surplus. Surplus ("vs. free") appears on the tier boards and in the appendix only — two rankings on one page is how a reader stops trusting both.
 - Numbers as integers for projections and surplus; percentages without decimals.
 - Sources and dates in the appendix, not inline, except when correcting the user's premise.
 - Length: sections 1–4 and 7–9 together should read in under ten minutes (roughly 2,500 words). The pressure tests (≤200 words each), the tier boards, and the appendix are on top of that; a full one-keeper analysis with six flagged players lands around 4,000–5,000 words plus tables. Cut repetition, not sections.

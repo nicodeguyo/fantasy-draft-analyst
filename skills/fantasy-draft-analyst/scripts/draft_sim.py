@@ -25,6 +25,7 @@ import math
 import random
 import statistics
 import sys
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -167,7 +168,10 @@ def replacement_levels(pool: list[dict], ranks: dict) -> dict:
     return out
 
 
-def pick_number(round_no: int, slot: int, teams: int) -> int:
+def pick_number(round_no: int, slot: int, teams: int, snake: bool = True) -> int:
+    """Your overall pick in a given round. Snake reverses every other round; linear doesn't."""
+    if not snake:
+        return (round_no - 1) * teams + slot
     return (round_no - 1) * teams + slot if round_no % 2 == 1 else round_no * teams - slot + 1
 
 
@@ -235,6 +239,14 @@ class Sim:
         self.teams = int(cfg["league"]["teams"])
         self.rounds = int(cfg["league"].get("rounds", 15))
         self.slot = int(cfg["league"].get("draft_slot", 1))
+        dtype = str(cfg["league"].get("draft_type", "snake")).strip().lower()
+        if dtype == "auction":
+            sys.exit("draft_type: auction — this simulator drafts picks, not dollars. "
+                     "See references/methodology.md § Auction for the surplus-to-dollars conversion, "
+                     "and run the rest of the workflow by hand.")
+        if dtype not in ("snake", "linear"):
+            sys.exit(f"draft_type: {dtype} is not supported (use snake or linear).")
+        self.snake = dtype != "linear"
         self.starters = starters(cfg)
         self.flex = self.starters["FLEX"]
         self.superflex = self.starters["SUPERFLEX"]
@@ -270,7 +282,7 @@ class Sim:
         order = []
         overall = 0
         for r in range(1, self.rounds + 1):
-            slots = range(1, self.teams + 1) if r % 2 == 1 else range(self.teams, 0, -1)
+            slots = range(1, self.teams + 1) if (not self.snake or r % 2 == 1) else range(self.teams, 0, -1)
             for t in slots:
                 overall += 1
                 if r in forfeits.get(t, set()):
@@ -280,7 +292,8 @@ class Sim:
 
     def my_ladder(self) -> list[tuple[int, int]]:
         forfeit = {self.keeper_round} if self.keeper_round else set()
-        return [(pick_number(r, self.slot, self.teams), r) for r in range(1, self.rounds + 1) if r not in forfeit]
+        return [(pick_number(r, self.slot, self.teams, self.snake), r)
+                for r in range(1, self.rounds + 1) if r not in forfeit]
 
     # ---- keepers ----
     def draw_keepers(self, rng: random.Random):
@@ -395,11 +408,17 @@ class Sim:
         return best or avail[0]
 
     # ---- me ----
-    def my_pick(self, avail, roster, rnd, rng, next_pick=None):
+    def pick_scores(self, avail, roster, rnd, next_pick=None):
+        """Heuristic value of taking each available player right now, as (value, player) pairs.
+
+        This is the policy the simulated "you" drafts by — inside a rollout it plays out the rest
+        of the draft after a candidate, and outside one it picks the candidates worth rolling out.
+        It is a *policy*, not the decision: the decision is the final lineup the rollout produces.
+        """
         c = Counter(p["pos"] for p in roster)
         base, _ = self.lineup_pts(roster, fill_replacement=True)
         left = self.rounds - rnd
-        best, bv = None, -1e9
+        out = []
         for p in avail:
             if p["name"] in self.avoid:
                 continue
@@ -445,22 +464,77 @@ class Sim:
                 backups = c[p["pos"]] - self.starters[p["pos"]]
                 if backups >= 2:
                     v -= 10 * (backups - 1)
+            out.append((v, p))
+        return out
+
+    def my_pick(self, avail, roster, rnd, rng, next_pick=None):
+        best, bv = None, -1e9
+        for v, p in self.pick_scores(avail, roster, rnd, next_pick):
             if v > bv:
                 best, bv = p, v
         return best or avail[0]
 
-    # ---- one draft ----
-    def run(self, seed: int, collect=None, best_avail=None, pos_best=None, min_adp=None):
+    # ---- draft state: play, pause, branch, resume ----
+    # A rollout needs to draft up to one of your picks, then try each candidate from that same
+    # position and finish the draft separately for each. So the draft is a state you can stop,
+    # copy and resume, rather than one loop that runs start to finish.
+    def start(self, seed: int) -> dict:
+        """Draw the keepers and return a state parked before the very first pick."""
         rng = random.Random(seed)
         kept, forfeits = self.draw_keepers(rng)
         avail = [p for p in self.pool if p["name"] not in kept]
         rosters = defaultdict(list)
         if self.keeper and self.keeper in self.byname:
             rosters[self.slot].append(self.byname[self.keeper])
-        picks = []
         order = self.pick_order(forfeits)
-        my_overall = [ov for ov, r, t in order if t == self.slot]
-        for overall, rnd, t in order:
+        return {"rng": rng, "avail": avail, "rosters": rosters, "order": order, "i": 0,
+                "my_overall": [ov for ov, r, t in order if t == self.slot], "picks": []}
+
+    @staticmethod
+    def copy_state(st: dict) -> dict:
+        """A branch of the same draft. `order` is immutable and shared; the player dicts are shared
+        too (nothing ever mutates them) — only the lists that track who is left and who owns whom."""
+        rng = random.Random()
+        rng.setstate(st["rng"].getstate())
+        rosters = defaultdict(list)
+        for t, v in st["rosters"].items():
+            rosters[t] = list(v)
+        return {"rng": rng, "avail": list(st["avail"]), "rosters": rosters, "order": st["order"],
+                "i": st["i"], "my_overall": st["my_overall"], "picks": list(st["picks"])}
+
+    @staticmethod
+    def at_pick(st: dict):
+        """The overall pick this state is parked before, or None when the draft is over."""
+        return st["order"][st["i"]][0] if st["i"] < len(st["order"]) else None
+
+    def take(self, st: dict, player: dict) -> dict:
+        """Force `player` in at the current pick (used to plant a rollout candidate)."""
+        overall, rnd, t = st["order"][st["i"]]
+        st["rosters"][t].append(player)
+        st["avail"].remove(player)
+        st["picks"].append((overall, rnd, player))
+        st["i"] += 1
+        return st
+
+    def play(self, st: dict, stop_at=None, targets=None,
+             collect=None, best_avail=None, pos_best=None, min_adp=None, market=False) -> dict:
+        """Draft on until `stop_at` (stopping *before* that pick) or the board runs out.
+
+        `targets` is the plan path: {overall pick: [names, best first]}. At one of your picks the
+        state takes the first name still on the board and falls back to the heuristic only when none
+        of them is — which is exactly what you would do on the day. It has to be a list: a plan that
+        pins one name per pick walks past the better player who occasionally falls to you, and that
+        costs more than the plan gains.
+
+        `market=True` drafts your seat off ADP like everyone else. That is how "still there at
+        your next pick" is measured: the question is whether the *room* lets a player last, and
+        the answer must not depend on whether your own plan already took him.
+        """
+        avail, rosters, my_overall = st["avail"], st["rosters"], st["my_overall"]
+        while st["i"] < len(st["order"]):
+            overall, rnd, t = st["order"][st["i"]]
+            if stop_at is not None and overall == stop_at:
+                return st
             if not avail:
                 break
             if t == self.slot:
@@ -483,14 +557,245 @@ class Sim:
                     min_adp[overall].append(gone - (overall - 1))
                 idx = my_overall.index(overall)
                 nxt = my_overall[idx + 1] if idx + 1 < len(my_overall) else None
-                p = self.my_pick(avail, rosters[t], rnd, rng, next_pick=nxt)
-                picks.append((overall, rnd, p))
+                p = None
+                if market:
+                    p = self.opp_pick(avail, rosters[t], rnd, st["rng"])
+                if p is None and targets:
+                    for nm in targets.get(overall) or ():
+                        p = next((x for x in avail if x["name"] == nm), None)
+                        if p is not None:
+                            break
+                if p is None:
+                    p = self.my_pick(avail, rosters[t], rnd, st["rng"], next_pick=nxt)
+                st["picks"].append((overall, rnd, p))
             else:
-                p = self.opp_pick(avail, rosters[t], rnd, rng)
+                p = self.opp_pick(avail, rosters[t], rnd, st["rng"])
             rosters[t].append(p)
             avail.remove(p)
-        total, start = self.lineup_pts(rosters[self.slot])
-        return picks, rosters[self.slot], total, start
+            st["i"] += 1
+        return st
+
+    # ---- one draft ----
+    def run(self, seed: int, collect=None, best_avail=None, pos_best=None, min_adp=None,
+            targets=None, market=False):
+        st = self.start(seed)
+        self.play(st, None, targets, collect, best_avail, pos_best, min_adp, market)
+        total, start = self.lineup_pts(st["rosters"][self.slot])
+        return st["picks"], st["rosters"][self.slot], total, start
+
+
+# ----------------------------------------------------------------------------
+# Pick values by rollout
+# ----------------------------------------------------------------------------
+
+def _mean_se(vals: list[float]) -> tuple[float, float]:
+    m = statistics.mean(vals)
+    se = statistics.stdev(vals) / math.sqrt(len(vals)) if len(vals) > 1 else 0.0
+    return m, se
+
+
+def rollout_pick_values(sim: Sim, ladder: list[tuple[int, int]], *, rollouts: int, candidates: int,
+                        through_round: int, seed: int, extra_names: set[str] | None = None,
+                        plan_min_avail: float = 0.50, avail_pct_at: dict | None = None, progress=True):
+    """For each of your picks, the projected final starting lineup after taking each candidate.
+
+    The question at a pick is not "who has the most surplus" — that is a value *level* and it
+    depends on where you put replacement level. It is "which player leaves me with the best
+    starting lineup in January". So: play the draft up to the pick, take the candidate, play the
+    rest out with the heuristic policy, and score the lineup. No baseline anywhere in the decision.
+
+    Two things make the numbers comparable:
+
+    * **Common random numbers.** One prefix draft per sample, branched once per candidate, so every
+      candidate faces the same opponents doing the same things. The prefix is carried forward from
+      pick to pick, so the sample cost is paid once for the whole draft, not once per pick.
+    * **A matched control arm.** A candidate is only scored on the samples where he was actually
+      there, and a rare faller is only there in the drafts where the whole board fell — which would
+      make him look good for reasons that have nothing to do with him. So each sample is also played
+      out with no forced pick, and a candidate is measured by the *difference* he makes on his own
+      samples. The luck of the board cancels; what is left is the player.
+    """
+    extra_names = extra_names or set()
+    picks = [(ov, rd) for ov, rd in ladder if rd <= through_round]
+    states = [sim.start(seed + 200000 + s) for s in range(rollouts)]
+    targets: dict[int, list[str]] = {}
+    pick_values: dict[str, list[dict]] = {}
+    plan_path: list[dict] = []
+    plan_b_names: set[str] = set()
+    plan_roster = [sim.byname[sim.keeper]] if (sim.keeper and sim.keeper in sim.byname) else []
+
+    for pi, (ov, rd) in enumerate(picks):
+        for st in states:
+            sim.play(st, stop_at=ov, targets=targets)
+        live = [st for st in states if Sim.at_pick(st) == ov]
+        if not live:
+            continue
+        live_names = [{p["name"] for p in st["avail"]} for st in live]
+        seen = Counter()
+        for names in live_names:
+            seen.update(names)
+        n_live = len(live)
+        # The big availability pass is the better estimate (it has many more runs); the prefixes
+        # only decide which samples a candidate can actually be scored on.
+        avail_pct = (avail_pct_at or {}).get(ov) or {nm: c / n_live for nm, c in seen.items()}
+
+        # --- who is worth rolling out ---
+        c_plan = Counter(p["pos"] for p in plan_roster)
+        planned = {p["name"] for p in plan_roster}
+        # How many at a position the plan may hold by round `through_round`. A backup quarterback in
+        # a one-QB league is a wasted pick, so QB is capped at what actually starts.
+        def plan_cap(pos):
+            if pos in SKILL_POS:
+                return min(sim.maxc[pos], sim.starters.get(pos, 0) + 3)
+            if pos == "QB":
+                return sim.starters["QB"] + sim.superflex
+            return sim.starters.get(pos, 1)
+        nxt = picks[pi + 1][0] if pi + 1 < len(picks) else None
+        pool_now = [sim.byname[nm] for nm in avail_pct if avail_pct[nm] >= 0.15]
+        pool_now = [p for p in pool_now
+                    if p["name"] not in sim.avoid and p["name"] not in planned
+                    and c_plan[p["pos"]] < plan_cap(p["pos"])
+                    and not (p["pos"] in LATE_POS and rd < sim.rounds - 1)]
+        ranked = sorted(sim.pick_scores(pool_now, plan_roster, rd, next_pick=nxt), key=lambda t: -t[0])
+        cands = [p["name"] for _, p in ranked[:candidates]]
+        # Players the user named, and the previous pick's Plan B, are always worth evaluating — but
+        # only if they turn up often enough to measure. A value averaged over four drafts is noise
+        # with a decimal point on it; the availability tables already say "he won't be there".
+        for nm in sorted(extra_names | plan_b_names):
+            if nm in cands or nm not in sim.byname or nm == sim.keeper:
+                continue
+            if avail_pct.get(nm, 0) >= 0.10 and nm not in sim.avoid and nm not in planned:
+                cands.append(nm)
+
+        # --- the control arm: the same drafts with nobody forced in ---
+        control = []
+        for st in live:
+            br = Sim.copy_state(st)
+            sim.play(br)
+            control.append(sim.lineup_pts(br["rosters"][sim.slot])[0])
+        control_mean = statistics.mean(control)
+
+        # --- roll each candidate out from the same prefixes ---
+        rows = []
+        for nm in cands:
+            pl = sim.byname[nm]
+            diffs = []
+            for k, (st, names) in enumerate(zip(live, live_names)):
+                if nm not in names:
+                    continue
+                br = Sim.copy_state(st)
+                sim.take(br, pl)
+                sim.play(br)
+                diffs.append(sim.lineup_pts(br["rosters"][sim.slot])[0] - control[k])
+            if not diffs:
+                continue
+            m, se = _mean_se(diffs)
+            rows.append({"name": nm, "pos": pl["pos"], "value": round(control_mean + m, 1),
+                         "vs_control": round(m, 1),
+                         "se": round(se, 1), "n": len(diffs),
+                         "avail_pct": round(avail_pct.get(nm, 0) * 100), "rare": len(diffs) < 25})
+        if not rows:
+            continue
+        rows.sort(key=lambda r: -r["value"])
+        # A candidate measured on a handful of drafts must not become the yardstick every other
+        # row's "Now" is measured against — that turns a whole column into noise.
+        best = next((r for r in rows if not r["rare"]), rows[0])
+        for r in rows:
+            r["delta_vs_best"] = round(r["value"] - best["value"], 1)
+            noise = 2 * math.sqrt(r["se"] ** 2 + best["se"] ** 2)
+            r["within_noise"] = abs(r["value"] - best["value"]) <= noise
+        for r in rows:
+            r["control"] = round(control_mean, 1)
+        pick_values[str(ov)] = rows
+
+        tie = [r["name"] for r in rows if r["within_noise"]]
+        if len(tie) < 2:
+            tie = []
+        # The plan target has to be someone you can realistically expect to be there. A better
+        # player who falls to you one draft in five is upside, not a plan — he goes in the row as
+        # "if he falls", which is what a human would write.
+        real = [r for r in rows if r["avail_pct"] >= plan_min_avail * 100] or rows[:1]
+        # Dead heat on value: plan for the one you are more likely to actually get.
+        real.sort(key=lambda r: (-r["value"], -r["avail_pct"]))
+        target = real[0]
+        # Plan B is "he's gone, now what" — the next best row on the board, not the next one that
+        # happens to clear the availability floor. Anyone *above* the target is the upside line
+        # instead: "if he's gone, take someone better" is not advice.
+        second = next((r for r in rows
+                       if r["name"] != target["name"] and r["value"] <= target["value"]), None)
+        # "If he falls" is for a player who beats the plan but can't be counted on — and only when
+        # we measured him on enough drafts to mean it.
+        upside = next((r for r in rows
+                       if r["avail_pct"] < plan_min_avail * 100
+                       and not r["rare"]
+                       and r["value"] > target["value"]), None)
+        # The plan is an order of preference, not one name. The board's instruction is "take the top
+        # row still on the board", so that is what the plan path has to be — the whole ranked list,
+        # best first. Pinning one name per pick walks past the better player who fell to you, and
+        # measurably costs more than the plan gains.
+        pref = [r["name"] for r in rows]
+        plan_path.append({
+            "pick": ov, "round": rd, "player": target["name"], "pos": target["pos"],
+            "value": target["value"], "se": target["se"], "avail_pct": target["avail_pct"],
+            "control": round(control_mean, 1), "vs_control": target["vs_control"],
+            "plan_b": second["name"] if second else None,
+            "plan_b_value": second["value"] if second else None,
+            "plan_b_delta": round(second["value"] - target["value"], 1) if second else None,
+            "within_noise": bool(second and abs(second["value"] - target["value"])
+                                 <= 2 * math.sqrt(second["se"] ** 2 + target["se"] ** 2)),
+            "take_order": pref[:4], "level_with_best": tie,
+            "upside": upside["name"] if upside else None,
+            "upside_value": upside["value"] if upside else None,
+            "upside_pct": upside["avail_pct"] if upside else None,
+        })
+        targets[ov] = pref
+        plan_roster = plan_roster + [sim.byname[target["name"]]]
+        if second:
+            plan_b_names.add(second["name"])
+        if progress:
+            tag = " ≈ tie with " + second["name"] if (second and plan_path[-1]["within_noise"]) else ""
+            up = f" (upside {upside['name']} at {upside['avail_pct']}%)" if upside else ""
+            print(f"  pick {ov} (R{rd}): {target['name']} {target['value']:.0f} ±{target['se']:.0f}"
+                  f" · {target['avail_pct']}% there · {len(rows)} candidates{tag}{up}",
+                  file=sys.stderr, flush=True)
+
+    return pick_values, plan_path, targets
+
+
+def cost_of_waiting(pos_horizon: dict, ladder: list[tuple[int, int]], max_pick: int) -> dict:
+    """Points of value you give up at each position by waiting one more turn.
+
+    `pos_horizon[p][pos]` is the best surplus expected to still be there at pick p. Waiting costs
+    the difference between this pick and your next one. Both terms carry the same replacement
+    level, so it cancels: cost of waiting is the one position-timing number the baseline argument
+    cannot touch.
+    """
+    out = {}
+    for i, (ov, _rd) in enumerate(ladder):
+        if ov > max_pick or i + 1 >= len(ladder):
+            continue
+        here, later = pos_horizon.get(ov), pos_horizon.get(ladder[i + 1][0])
+        if not here or not later:
+            continue
+        cells = {pos: round(here[pos] - later[pos]) for pos in ("QB", "RB", "WR", "TE")
+                 if pos in here and pos in later}
+        if cells:
+            out[str(ov)] = cells
+    return out
+
+
+def scenario_totals(cfg: dict, pool: list[dict], keeper: str | None, keeper_round: int | None,
+                    sims: int, seed: int) -> dict:
+    """Mean projected final starting lineup across full drafts under one keeper scenario."""
+    s = Sim(cfg, [dict(p) for p in pool], keeper, keeper_round)
+    pos_best = defaultdict(lambda: defaultdict(list))
+    for i in range(min(150, sims)):
+        s.run(seed + 70000 + i, pos_best=pos_best)
+    s.pos_horizon = {ov: {pos: statistics.mean(v) for pos, v in d.items()} for ov, d in pos_best.items()}
+    totals = [s.run(seed + 300000 + i)[2] for i in range(sims)]
+    m, se = _mean_se(totals)
+    return {"keeper": keeper, "keeper_round": keeper_round, "mean": round(m), "se": round(se, 1),
+            "sims": sims, "min": round(min(totals)), "max": round(max(totals))}
 
 
 # ----------------------------------------------------------------------------
@@ -514,6 +819,19 @@ def main():
     ap.add_argument("--keeper", default=None, help="override: the player you are keeping")
     ap.add_argument("--keeper-round", type=int, default=None, help="override: the round that keeper costs")
     ap.add_argument("--no-keeper", action="store_true", help="simulate keeping nobody")
+    ap.add_argument("--pick-values", dest="pick_values", action="store_true", default=True,
+                    help="rank each pick's candidates by simulated final lineup (default)")
+    ap.add_argument("--no-pick-values", dest="pick_values", action="store_false",
+                    help="skip the rollouts and report the fast v1 surplus view only")
+    ap.add_argument("--rollouts", type=int, default=200, help="rollouts per candidate per pick")
+    ap.add_argument("--candidates", type=int, default=8, help="candidates rolled out at each pick")
+    ap.add_argument("--through-round", type=int, default=9, help="last round to compute pick values for")
+    ap.add_argument("--plan-min-avail", type=float, default=0.50, metavar="P",
+                    help="a plan target must be available at least this often (default 0.50); better but rarer players are reported as upside")
+    ap.add_argument("--keeper-scenarios", nargs="?", const="auto", default=None, metavar="A,B",
+                    help="compare keeper scenarios on full-draft lineup totals ('auto' = the four best eligible candidates by surplus, plus keeping nobody)")
+    ap.add_argument("--watch", default=None, metavar="A,B", help="extra names to always evaluate as candidates")
+    ap.add_argument("--strict", action="store_true", help="exit non-zero if a plan check fails")
     ap.add_argument("--out", default="sim.json")
     ap.add_argument("--seed", type=int, default=1000)
     args = ap.parse_args()
@@ -521,10 +839,15 @@ def main():
     cfg = load_league(args.league)
     pool = load_players(args.players)
     byname = {p["name"]: p for p in pool}
+    if float((cfg.get("scoring") or {}).get("te_premium", 0) or 0):
+        print("Note: scoring.te_premium is applied when scoring.py builds players.csv, not here. "
+              "If this players.csv was not scored with the premium, the tight ends are under-priced "
+              "and the tight-end timing on this board will be wrong.", file=sys.stderr)
 
     # --- keeper evaluation (before choosing) ---
     teams = int(cfg["league"]["teams"])
     slot = int(cfg["league"].get("draft_slot", 1))
+    snake = str(cfg["league"].get("draft_type", "snake")).strip().lower() != "linear"
     cands = keeper_candidates(cfg, byname)
 
     # Choose keeper: override > best surplus among eligible candidates > none
@@ -545,7 +868,7 @@ def main():
         if elig:
             # provisional: pick by ADP-vs-pick surplus; refined below with the sim
             def surplus_picks(c):
-                return pick_number(c["cost_round"], slot, teams) - byname[c["player"]]["adp"]
+                return pick_number(c["cost_round"], slot, teams, snake) - byname[c["player"]]["adp"]
             best = max(elig, key=surplus_picks)
             keeper, keeper_round = best["player"], best["cost_round"]
 
@@ -562,7 +885,7 @@ def main():
         pl = byname.get(c["player"])
         row = {**c}
         if pl and c["cost_round"]:
-            pk = pick_number(c["cost_round"], slot, teams)
+            pk = pick_number(c["cost_round"], slot, teams, snake)
             vor = pl["proj"] - base_sim.repl[pl["pos"]]
             alt = exp_best_vor.get(pk)
             if alt is None:  # nearest simulated pick
@@ -594,13 +917,39 @@ def main():
         sim.run(args.seed + 70000 + s, pos_best=pos_best)
     sim.pos_horizon = {ov: {pos: statistics.mean(v) for pos, v in d.items()} for ov, d in pos_best.items()}
 
-    # --- availability ---
+    ladder = sim.my_ladder()
+
+    # --- availability: how often the room leaves each player on the board at each of your picks.
+    # Your own seat drafts off ADP here on purpose. "Still there at your next pick" has to be a
+    # fact about the other managers, not about what your own plan already took.
     coll = defaultdict(Counter)
     min_adp = defaultdict(list)
+    for s in range(args.sims):
+        sim.run(args.seed + s, collect=coll, min_adp=min_adp, market=True)
+    avail_pct_at = {ov: {nm: c / args.sims for nm, c in coll[ov].items()} for ov, _ in ladder if ov in coll}
+
+    # --- pick values: simulate the rest of the draft after each candidate ---
+    pick_values, plan_path, targets = {}, [], {}
+    if args.pick_values:
+        extra = set(sim.watch) | {c["player"] for c in cands if c.get("in_pool")}
+        if args.watch:
+            extra |= {n.strip() for n in args.watch.split(",") if n.strip()}
+        extra.discard(keeper)
+        t0 = time.time()
+        print(f"Pick values: {args.rollouts} rollouts × up to {args.candidates} candidates, "
+              f"through round {args.through_round}…", file=sys.stderr, flush=True)
+        pick_values, plan_path, targets = rollout_pick_values(
+            sim, ladder, rollouts=args.rollouts, candidates=args.candidates,
+            through_round=args.through_round, seed=args.seed, extra_names=extra,
+            plan_min_avail=args.plan_min_avail, avail_pct_at=avail_pct_at)
+        print(f"  {time.time() - t0:.0f}s", file=sys.stderr, flush=True)
+
+    # --- what the draft is worth when you actually follow the plan ---
+    n_out = min(args.sims, 600)
     totals = []
     owned = Counter()
-    for s in range(args.sims):
-        picks, roster, total, start = sim.run(args.seed + s, collect=coll, min_adp=min_adp)
+    for s in range(n_out):
+        picks, roster, total, start = sim.run(args.seed + 400000 + s, targets=targets)
         totals.append(total)
         for _, r, p in picks:
             if r <= 8:
@@ -609,12 +958,24 @@ def main():
     # to it; the picks forfeited for keepers subtract from it. Pick p effectively buys the ADP-(p + X) player.
     inflation = {ov: round(max(0.0, statistics.mean(v)), 1) for ov, v in min_adp.items() if ov <= teams * 9}
 
-    ladder = sim.my_ladder()
+    # "Will he still be there at my next pick" — measured on the same pass the board reads.
+    for ov_s, rows in pick_values.items():
+        i = next((j for j, (o, _r) in enumerate(ladder) if o == int(ov_s)), None)
+        nxt = ladder[i + 1][0] if (i is not None and i + 1 < len(ladder)) else None
+        for r in rows:
+            r["next_pct"] = round(coll[nxt].get(r["name"], 0) / args.sims * 100) if nxt else None
+    for r in plan_path:
+        rows = pick_values.get(str(r["pick"])) or []
+        hit = next((x for x in rows if x["name"] == r["player"]), None)
+        r["next_pct"] = hit.get("next_pct") if hit else None
+
+    cow = cost_of_waiting(sim.pos_horizon, ladder, teams * 10)
+
     avail = {}
     for overall, rnd in ladder:
         if overall not in coll:
             continue
-        late = rnd >= sim.rounds - 2
+        late = rnd >= sim.rounds - 3  # K/DEF start appearing in the tables the round before people take them
         rows = [(nm, c / args.sims) for nm, c in coll[overall].items()
                 if c / args.sims >= 0.15 and (late or sim.byname[nm]["pos"] not in LATE_POS)]
         rows.sort(key=lambda x: -sim.byname[x[0]]["vor"])
@@ -629,7 +990,7 @@ def main():
             if len(keep) >= 24:
                 break
         # Always report the user's own players and targets, even when they aren't top-5 at the position.
-        for nm in sorted(sim.watch):
+        for nm in sorted(set(sim.watch) | {r["player"] for r in plan_path}):
             if nm in sim.byname and nm not in kept_names and nm != keeper:
                 pr = coll[overall].get(nm, 0) / args.sims
                 keep.append((nm, pr))
@@ -637,10 +998,76 @@ def main():
                            "proj": round(sim.byname[nm]["proj"]), "surplus": round(sim.byname[nm]["vor"]),
                            "there": round(pr * 100), "watch": nm in sim.watch} for nm, pr in keep]
 
+    # --- keeper scenarios: the verdict in the same units as the draft ---
+    scenarios = []
+    if args.keeper_scenarios:
+        if args.keeper_scenarios == "auto":
+            elig = [c for c in cands if c.get("cost_round") and c.get("in_pool")]
+            elig.sort(key=lambda c: -(next((r.get("surplus_points") or -999 for r in keeper_eval
+                                            if r["player"] == c["player"]), -999)))
+            want = [(c["player"], c["cost_round"]) for c in elig[:4]]
+        else:
+            want = []
+            for nm in [n.strip() for n in args.keeper_scenarios.split(",") if n.strip()]:
+                rd = next((c["cost_round"] for c in cands if c["player"] == nm), None)
+                if nm not in byname:
+                    sys.exit(f"Keeper scenario '{nm}' is not in players.csv")
+                want.append((nm, rd))
+        want.append((None, None))
+        n_sc = min(args.sims, 1000)
+        for nm, rd in want:
+            print(f"Keeper scenario: {nm or 'nobody'}…", file=sys.stderr, flush=True)
+            scenarios.append(scenario_totals(cfg, pool, nm, rd, n_sc, args.seed))
+        scenarios.sort(key=lambda s: -s["mean"])
+        top = scenarios[0]
+        for s in scenarios:
+            s["delta_vs_best"] = round(s["mean"] - top["mean"], 1)
+            s["within_noise"] = (s is not top and
+                                 abs(s["mean"] - top["mean"]) <= 2 * math.sqrt(s["se"] ** 2 + top["se"] ** 2))
+
+    # What the plan is worth against simply drafting well. The control arm at your first pick is
+    # exactly "play this out with nobody forced in", so it is the free-policy baseline.
+    first_pv = pick_values.get(str(plan_path[0]["pick"])) if plan_path else None
+    policy = {}
+    if first_pv:
+        base = first_pv[0]["control"]
+        policy = {"free_policy_mean": round(base), "plan_mean": round(statistics.mean(totals)),
+                  "plan_minus_free_policy": round(statistics.mean(totals) - base, 1),
+                  "note": "Following the plan against letting the same simulated drafter choose "
+                          "freshly at every pick. A negative number is the cost of committing to a "
+                          "plan, plus a known bias: the rest-of-draft policy inside a rollout is the "
+                          "same heuristic, so a forced pick leaves it repairing a roster it did not "
+                          "plan. See methodology.md §2."}
+
+    # --- does the plan actually build a legal, above-replacement starting lineup? (US-4) ---
+    plan_names = ([keeper] if keeper else []) + [r["player"] for r in plan_path]
+    plan_roster = [sim.byname[n] for n in plan_names if n in sim.byname]
+    issues = []
+    if plan_path:
+        cpos = Counter(p["pos"] for p in plan_roster)
+        for pos in ("QB", "RB", "WR", "TE"):
+            need = sim.starters.get(pos, 0)
+            if cpos[pos] < need:
+                issues.append(f"{pos}: {cpos[pos]} of {need} starters by round {args.through_round}")
+            if cpos[pos] > need + 3:
+                issues.append(f"{pos}: {cpos[pos]} drafted, more than starters + 3 ({need + 3})")
+        spare = sum(max(0, cpos[p] - sim.starters.get(p, 0)) for p in SKILL_POS)
+        if spare < sim.flex + sim.superflex:
+            issues.append(f"FLEX: {spare} of {sim.flex + sim.superflex} filled")
+        # Only the players who actually fill a starting slot have to clear replacement level; the
+        # rest of the plan is bench, where being below it is the whole point of a late pick.
+        for p in sim.lineup_pts(plan_roster)[1]:
+            if p["pos"] not in LATE_POS and p["proj"] < sim.repl.get(p["pos"], 0):
+                issues.append(f"{p['name']} starts but projects below {p['pos']} replacement")
+    plan_check = {"ok": not issues, "issues": issues,
+                  "largest_runner_up_gap": round(max((abs(r["plan_b_delta"]) for r in plan_path
+                                                      if r.get("plan_b_delta") is not None), default=0.0), 1),
+                  "runner_up_within_noise_everywhere": all(r.get("within_noise") for r in plan_path) if plan_path else None}
+
     # --- sample drafts ---
     samples = []
     for i in range(args.samples):
-        picks, roster, total, start = sim.run(args.seed + 500000 + i)
+        picks, roster, total, start = sim.run(args.seed + 500000 + i, targets=targets)
         samples.append({"draft": i + 1, "total": round(total),
                         "picks": [{"pick": ov, "round": r, "name": p["name"], "pos": p["pos"], "proj": round(p["proj"])} for ov, r, p in picks],
                         "starters": [{"name": p["name"], "pos": p["pos"], "proj": round(p["proj"])} for p in start]})
@@ -648,6 +1075,17 @@ def main():
     out = {
         "league": {"teams": teams, "slot": slot, "rounds": sim.rounds, "keeper": keeper, "keeper_round": keeper_round,
                    "platform": cfg["league"].get("platform"), "name": cfg["league"].get("name"), "team_name": cfg["league"].get("team_name")},
+        "pick_values": pick_values,
+        "plan_path": plan_path,
+        "cost_of_waiting": cow,
+        "plan_check": plan_check,
+        "plan_vs_policy": policy,
+        "keeper_scenarios": scenarios,
+        "rollout_settings": {"enabled": bool(args.pick_values), "rollouts": args.rollouts,
+                             "candidates": args.candidates, "through_round": args.through_round,
+                             "seed": args.seed, "noise_threshold": "2 standard errors",
+                             "plan_min_avail": args.plan_min_avail,
+                             "control": "matched no-forced-pick arm on the same samples"},
         "replacement_rank": sim.ranks,
         "replacement": {k: round(v) for k, v in sim.repl.items()},
         "flex_fill": sim.flex_fill,
@@ -659,11 +1097,13 @@ def main():
         "inflation_at_pick": {str(k): v for k, v in sorted(inflation.items())},
         "watch": sorted(sim.watch),
         "availability": {str(k): v for k, v in avail.items()},
-        "most_owned": [{"name": n, "pct": round(c / args.sims * 100)} for n, c in owned.most_common(15)],
+        "most_owned": [{"name": n, "pct": round(c / n_out * 100)} for n, c in owned.most_common(15)],
         "totals": {"mean": round(statistics.mean(totals)), "min": round(min(totals)), "max": round(max(totals)),
                    "sd": round(statistics.pstdev(totals), 1)},
         "samples": samples,
-        "settings": {"sims": args.sims, "seed": args.seed, "keeper_model": "published list" if sim.published_keepers else "weighted draw"},
+        "settings": {"sims": args.sims, "seed": args.seed, "outcome_sims": n_out,
+                     "keeper_model": "published list" if sim.published_keepers else "weighted draw",
+                     "availability_model": "your seat drafts off ADP so availability measures the room, not your plan"},
     }
     Path(args.out).write_text(json.dumps(out, indent=1), encoding="utf-8")
 
@@ -680,7 +1120,38 @@ def main():
     # --- console summary (markdown) ---
     print(f"# Draft simulation — {teams} teams, slot {slot}, {args.sims} runs")
     print(f"Keeper: {keeper or 'none'}" + (f" (round {keeper_round})" if keeper_round else ""))
-    print("\n## Replacement level (position → points of the last weekly starter)")
+
+    if plan_path:
+        print("\n## The plan — pick value = projected final starting lineup if you take him here")
+        rows = []
+        for r in plan_path:
+            pb = (f"{r['plan_b']} (level)" if r["plan_b"] and round(r["plan_b_delta"] or 0) == 0
+                  else f"{r['plan_b']} ({r['plan_b_delta']:+g})" if r["plan_b"] else "—")
+            note = "≈ tie" if r["within_noise"] else ""
+            if r.get("upside"):
+                note = (note + " · " if note else "") + f"{r['upside']} if he falls ({r['upside_pct']}%)"
+            rows.append((r["pick"], f"R{r['round']}", r["player"], r["pos"], f"{r['value']:,.0f}",
+                         f"±{r['se']:.0f}", f"{r['avail_pct']}%", pb, note))
+        print(fmt_table(rows, ["Pick", "Rd", "Target", "Pos", "Lineup", "SE", "There", "Plan B", "Note"]))
+        print(f"\nPlan check: {'pass' if plan_check['ok'] else 'FAIL — ' + '; '.join(plan_check['issues'])}")
+    if scenarios:
+        print("\n## Keeper scenarios — mean projected final starting lineup across full drafts")
+        print(fmt_table([(s["keeper"] or "keep nobody", f"R{s['keeper_round']}" if s["keeper_round"] else "—",
+                          f"{s['mean']:,}", f"±{s['se']}", f"{s['delta_vs_best']:+g}",
+                          "within noise" if s["within_noise"] else "") for s in scenarios],
+                        ["Scenario", "Cost", "Lineup", "SE", "Δ", "Note"]))
+    if cow:
+        print("\n## Cost of waiting — points lost at each position by waiting until your next pick")
+        rows = []
+        for ov, _ in ladder:
+            d = cow.get(str(ov))
+            if not d:
+                continue
+            worst = max(d, key=d.get)
+            rows.append((ov, d.get("QB", ""), d.get("RB", ""), d.get("WR", ""), d.get("TE", ""), worst))
+        print(fmt_table(rows, ["Pick", "QB", "RB", "WR", "TE", "Running out"]))
+        print("The 'running out' position is the one that costs you most to wait on.")
+    print("\n## Replacement level (position → points of the last weekly starter) — explanation, not a decision")
     print(fmt_table([(k, v, f"{k}{sim.ranks[k]}") for k, v in out["replacement"].items()], ["Pos", "Replacement", "Who"]))
     ff = sim.flex_fill
     print(f"Flex slots league-wide fill as RB {ff['RB']} / WR {ff['WR']} / TE {ff['TE']} (equilibrium: best remaining player takes the flex).")
@@ -708,7 +1179,21 @@ def main():
     print(", ".join(f"{ov} (R{r})" for ov, r in ladder))
     print("\n## Keeper inflation actually in force (pick p buys roughly the ADP-(p + X) player)")
     print(", ".join(f"pick {ov}: X={inflation[ov]:+}" for ov, _ in ladder if ov in inflation and ov <= teams * 8))
-    print(f"\n## Top {args.top} at each pick (There % = still available across sims)")
+    if pick_values:
+        print(f"\n## Pick values — top {args.top} at each pick, ranked by the lineup they leave you with")
+        print("Now = points behind the best choice here. Next = how often he is still there at your following pick.")
+        for ov, r in ladder:
+            rows = pick_values.get(str(ov))
+            if not rows:
+                continue
+            print(f"\n### Pick {ov} (R{r})")
+            print(fmt_table([(x["name"], x["pos"], f"{x['value']:,.0f}",
+                              "best" if x["delta_vs_best"] == 0 else f"{x['delta_vs_best']:+g}",
+                              f"{x['avail_pct']}%", "—" if x["next_pct"] is None else f"{x['next_pct']}%",
+                              ("≈" if x["within_noise"] and x["delta_vs_best"] != 0 else "") + (" rare" if x["rare"] else ""))
+                             for x in rows[: args.top]],
+                            ["Player", "Pos", "Lineup", "Now", "Here", "Next", ""]))
+    print(f"\n## Top {args.top} by surplus at each pick (the tiers' column — a value level, not a decision)")
     for ov, r in ladder:
         if str(ov) not in out["availability"] or ov > 130:
             continue
@@ -722,6 +1207,13 @@ def main():
     print("\n## Most-owned across runs")
     print(", ".join(f"{m['name']} {m['pct']}%" for m in out["most_owned"][:10]))
     print(f"\nWrote {args.out} and {mpath.name}")
+    if not plan_check["ok"]:
+        print("\n**Plan check failed:** " + "; ".join(plan_check["issues"]) +
+              " — the plan does not fill a legal starting lineup by round "
+              f"{args.through_round}. Widen --through-round or --candidates.")
+        print("Plan check failed: " + "; ".join(plan_check["issues"]), file=sys.stderr)
+        if args.strict:
+            sys.exit(2)
 
 
 if __name__ == "__main__":

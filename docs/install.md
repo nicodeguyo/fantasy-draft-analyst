@@ -18,7 +18,7 @@ Plan notes as of September 2026: Anthropic's support docs say skills are availab
 Personal (every project):
 
 ```bash
-git clone https://github.com/nicoandmelissa/fantasy-draft-analyst.git
+git clone https://github.com/nicodeguyo/fantasy-draft-analyst.git
 mkdir -p ~/.claude/skills
 cp -r fantasy-draft-analyst/skills/fantasy-draft-analyst ~/.claude/skills/
 pip install pyyaml
@@ -31,7 +31,7 @@ Invoke with `/fantasy-draft-analyst`, or just describe your league — Claude re
 As a plugin (so updates come through `/plugin update`):
 
 ```
-/plugin marketplace add nicoandmelissa/fantasy-draft-analyst
+/plugin marketplace add nicodeguyo/fantasy-draft-analyst
 /plugin install fantasy-draft-analyst@fantasy-draft-analyst
 ```
 
@@ -45,11 +45,11 @@ Everything is standard-library Python plus PyYAML.
 
 ```bash
 cd examples/sample-league
-python3 ../../skills/fantasy-draft-analyst/scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --out sim.json
+python3 ../../skills/fantasy-draft-analyst/scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --pick-values --keeper-scenarios --out sim.json
 python3 ../../skills/fantasy-draft-analyst/scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html
 ```
 
-`draft_sim.py` prints a markdown summary (replacement levels, keeper table, the top players at each of your picks with There %, sample drafts) and writes `sim.json` plus `sim_availability.csv`, a full name × pick availability matrix. `fetch_adp.py` pulls current ADP from FantasyFootballCalculator, ESPN, the Footballguys cross-platform table, or Sleeper trending; `scoring.py` turns stat-line projections into points in your scoring; `merge_adp.py` reprices a player pool with your platform's ADP.
+`draft_sim.py` prints a markdown summary (the plan path with its projected lineups, keeper scenarios, cost of waiting, the pick-value table at each of your picks, replacement levels, sample drafts) and writes `sim.json` plus `sim_availability.csv`, a full name × pick availability matrix. Budget five to six minutes for a 12-team league; `--rollouts 60` gives a rough answer in under two, and `--no-pick-values` skips the rollouts entirely. `fetch_adp.py` pulls current ADP from FantasyFootballCalculator, ESPN, the Footballguys cross-platform table, or Sleeper trending; `scoring.py` turns stat-line projections into points in your scoring; `merge_adp.py` reprices a player pool with your platform's ADP.
 
 ## Updating
 

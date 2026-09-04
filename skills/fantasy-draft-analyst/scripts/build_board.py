@@ -8,16 +8,19 @@ Usage:
       --players players.csv --out draft-board.html
 
 notes.json schema: see references/output-spec.md §3. Everything in it is prose you wrote;
-the renderer fills in projections, surplus, ADP, and availability from sim.json / players.csv
+the renderer fills in projections, pick values, ADP, and availability from sim.json / players.csv
 (and sim_availability.csv next to sim.json, for "still there at your NEXT pick").
 
 The board is built for a phone on the clock. Top to bottom: one-line instructions (full steps behind a
-disclosure) · the plan — your target at every pick with a Plan B · the position roadmap (where surplus
-lives at each of your picks) · the four replacement numbers · your picks in order, five rows each with
-"Next" (how often he's still there at your next pick; under 50% = take him now) · tier boards with
-cliffs · shortlist verdicts · appendix. Tap a row when someone else takes a player; tap ✓ when you take
-him — the footer lineup strip fills in, the nav advances to your next pick, and everything is saved in
-the browser so a reload loses nothing.
+disclosure) · the plan — your target at every pick with a Plan B · cost of waiting (what each position
+costs you per turn of delay) · your picks in order, five rows each ranked by pick value with "Now"
+(points of final starting lineup behind the best choice here) and "Next" (how often he's still there at
+your next pick; under 50% = take him now) · tier boards with cliffs · shortlist verdicts · appendix,
+where replacement level lives as an explanation. Tap a row when someone else takes a player; tap ✓ when
+you take him — the footer lineup strip fills in, the nav advances to your next pick, and everything is
+saved in the browser so a reload loses nothing.
+
+A sim.json built with --no-pick-values still renders: the pick tables fall back to the surplus ranking.
 """
 from __future__ import annotations
 
@@ -25,6 +28,7 @@ import argparse
 import csv
 import html
 import json
+import math
 import re
 from pathlib import Path
 
@@ -48,7 +52,7 @@ TEAM_COLORS = {
     "WSH": ("#5A1414", "#FFB612", "#FFB612"), "JAC": ("#006778", "#101820", "#D7A22A"),
 }
 POS_NAMES = {"RB": "Running back", "WR": "Wide receiver", "TE": "Tight end", "QB": "Quarterback", "K": "Kicker", "DEF": "Defense"}
-AMBER = "#B7791F"
+AMBER = "#8A5A00"  # darkened from #B7791F: this pill carries the "take him now" signal and has to pass 4.5:1
 
 
 def hex_to_rgb(h):
@@ -183,6 +187,10 @@ def main():
     my_picks = [l["pick"] for l in ladder]
     round_of = {str(l["pick"]): l["round"] for l in ladder}
     avail = sim.get("availability", {})
+    pick_values = sim.get("pick_values") or {}
+    plan_path = sim.get("plan_path") or []
+    plan_path_by_pick = {str(r["pick"]): r for r in plan_path}
+    cow = sim.get("cost_of_waiting") or {}
 
     def pinfo(name):
         p = players.get(name, {})
@@ -219,19 +227,26 @@ def main():
     for r in notes.get("plan") or []:
         if r.get("player"):
             plan_pick_of[r["player"]] = str(r.get("pick", ""))
+    for r in plan_path:
+        plan_pick_of.setdefault(r["player"], str(r["pick"]))
 
     def target_tag(name):
         if name in plan_pick_of and name != keeper:
             pk = plan_pick_of[name]
             return f'<span class="ttag">TARGET{(" · " + esc(pk)) if pk and pk.upper() != "KEEP" else ""}</span>'
         if name in targets and name != keeper:
-            return '<span class="ttag">TARGET</span>'
+            return '<span class="ttag liked">ON YOUR LIST</span>'
         return ""
 
     # ---------- plan ----------
+    # The plan is the simulator's plan path (greedy by pick value) wearing the prose from
+    # notes.json. Numbers come from sim.json so the board can never disagree with the analysis.
     plan = notes.get("plan")
     if not plan:
         plan = [{"pick": r.get("pick"), "player": r.get("player"), "alt": r.get("alt", "")} for r in ((notes.get("target_build") or {}).get("rows") or [])]
+    if not plan and plan_path:
+        plan = ([{"pick": "KEEP", "player": keeper}] if keeper else []) + \
+               [{"pick": str(r["pick"]), "player": r["player"]} for r in plan_path]
     plan_rows = []
     for r in plan:
         name = r.get("player") or ""
@@ -239,35 +254,54 @@ def main():
         pos, proj, vor, team, adp = pinfo(name)
         rd = round_of.get(pk)
         is_keep = pk.upper() == "KEEP"
-        th_ = there_at(name, int(pk)) if pk.isdigit() else None
+        pp_row = plan_path_by_pick.get(pk)
+        th_ = (pp_row or {}).get("avail_pct")
+        if th_ is None:
+            th_ = there_at(name, int(pk)) if pk.isdigit() else None
+        val = r.get("value", (pp_row or {}).get("value"))
+        pb_val = r.get("plan_b_value", (pp_row or {}).get("plan_b_value"))
         alt = r.get("alt") or ""
+        if not alt and pp_row and pp_row.get("plan_b"):
+            d = pp_row.get("plan_b_delta")
+            alt = f'{pp_row["plan_b"]}' + (f' ({d:+.0f})' if d is not None else "")
+        if pp_row and pp_row.get("upside") and pp_row["upside"] not in alt:
+            alt += f'{" · " if alt else ""}{pp_row["upside"]} if he falls ({pp_row["upside_pct"]}%)'
         note = r.get("note") or ""
+        vhtml = (f'<span class="pval" title="Projected final starting lineup if you take him here">'
+                 f'{round(val):,}</span>') if val is not None else (
+                 f'<span class="psur" title="Points over a free agent at his position">{vor:+d}'
+                 f'<s>vs. free</s></span>')
         plan_rows.append(
             f'<div class="prow" data-name="{esc(name)}">'
             f'<div class="ppick"><b>{"KEEP" if is_keep else esc(pk)}</b>{f"<s>rd {rd}</s>" if rd else ""}</div>'
             f'<div class="pmain"><div class="pname">{badge(pos)}<span class="nm">{esc(name)}</span>'
-            f'<span class="psur">{vor:+d}</span>{pct(th_, big=True) if th_ is not None else ""}</div>'
+            f'{vhtml}{pct(th_, big=True) if th_ is not None else ""}</div>'
             f'{"<div class=palt><b>If gone:</b> " + esc(alt) + "</div>" if alt else ""}'
             f'{"<div class=pnote>" + esc(note) + "</div>" if note else ""}</div>'
             f'</div>')
     plan_players = [(pinfo(r.get("player") or "")[0], pinfo(r.get("player") or "")[1]) for r in plan if (r.get("player") or "") in players]
     plan_total = lineup_total(plan_players, slots)
     mean = (sim.get("totals") or {}).get("mean")
-    plan_total_lbl = notes.get("plan_total_label") or (f"{round(plan_total):,} projected starting points" + (f" · sim average {mean:,}" if mean else "") if plan_total else "")
+    plan_total_lbl = notes.get("plan_total_label") or notes.get("plan_total") or (
+        (f"{round(plan_path[-1]['value']):,} projected lineup at your last planned pick" if plan_path
+         else f"{round(plan_total):,} projected starting points" if plan_total else "")
+        + (f" · {mean:,} average across simulated drafts" if mean else ""))
 
-    # ---------- roadmap ----------
-    pp = sim.get("position_plan") or {}
+    # ---------- cost of waiting ----------
+    # Replaces v1's surplus heatmap. A heatmap of value *levels* moves when you move replacement
+    # level; the drop between two of your own picks does not, because the same baseline sits in
+    # both terms and cancels. So this is the position-timing view that survives the argument.
     hm_rows, allvals = [], []
     for l in ladder:
-        d = pp.get(str(l["pick"]))
+        d = cow.get(str(l["pick"]))
         if d:
             allvals += [v for v in d.values() if isinstance(v, (int, float))]
     vmax = max(allvals) if allvals else 1
     for l in ladder:
-        d = pp.get(str(l["pick"]))
+        d = cow.get(str(l["pick"]))
         if not d or l["pick"] > max_pick:
             continue
-        best = max(d, key=lambda k: d[k])
+        worst = max(d, key=lambda k: d[k])
         cells = []
         for pos in ("QB", "RB", "WR", "TE"):
             v = d.get(pos)
@@ -275,8 +309,8 @@ def main():
                 cells.append("<td></td>")
                 continue
             a = max(0.0, min(1.0, v / vmax)) if v > 0 else 0
-            style = f'background:rgba({th["rgb"]},{0.07 + 0.5 * a:.2f})' if v > 0 else "background:#F2F4F8;color:#9AA5B8"
-            cells.append(f'<td class="hm{" best" if pos == best else ""}" style="{style}">{v:+d}</td>')
+            style = f'background:rgba({th["rgb"]},{0.07 + 0.5 * a:.2f})' if v > 0 else "background:#F2F4F8;color:#5A6B85"
+            cells.append(f'<td class="hm{" best" if pos == worst else ""}" style="{style}">{max(v, 0)}</td>')
         hm_rows.append(f'<tr><th>{l["pick"]}</th>{"".join(cells)}</tr>')
     ff = sim.get("flex_fill") or {}
 
@@ -292,22 +326,66 @@ def main():
     def show_pick(pk):
         return pk <= max_pick or bool(note_of(pk)[0])
 
+    def named_from(*texts):
+        """Full names from players.csv that appear in a decision sentence or Plan B."""
+        blob = " ".join(t for t in texts if t)
+        return [n for n in players if n and n in blob]
+
+    def synth_row(name, pk):
+        """A table row for a player sim.json's trimmed availability list left out. The full
+        name x pick matrix has him, so the board can still show the number that matters."""
+        pos, proj, vor, team, adp = pinfo(name)
+        return {"name": name, "pos": pos, "proj": round(proj), "surplus": vor,
+                "there": there_at(name, pk) or 0, "watch": True}
+
     named = set(targets) | set(plan_pick_of)
     shortlisted = {s["player"] for s in (notes.get("shortlist") or []) if s.get("player")}
 
-    def row_html(r, pk, nxt):
+    def row_html(r, pk, nxt, target=None, target_val=None, target_se=0.0, allow_amber=True):
+        """One row of a pick table. `r` is a pick_values row when the rollouts ran, otherwise the
+        old surplus row — the board still renders from a --no-pick-values sim."""
         name = r["name"]
         pos, proj, vor, team, adp = pinfo(name)
-        nx = there_at(name, nxt) if nxt else None
-        dim = " dim" if r["surplus"] <= 6 else ""
-        hot = nx is not None and nx < 50 and r["there"] >= 50  # available now, probably gone by your next turn
+        val = r.get("value")
+        here = r.get("avail_pct", r.get("there"))
+        nx = r.get("next_pct") if "next_pct" in r else (there_at(name, nxt) if nxt else None)
+        dim = " dim" if (r.get("rare") if val is not None else False) else ""
+        # amber = meaningfully more likely to be here now than at your next turn
+        hot = allow_amber and nx is not None and nx < 50 and (here or 0) >= nx + 20
+        nx_lbl = "gone" if nx == 0 else f"{nx}%"
         nx_html = ('<span class="pct">—</span>' if nx is None else
-                   f'<span class="pct {"hot" if hot else "big"}">{nx}%</span>')
-        return (f'<tr data-name="{esc(name)}" class="{dim.strip()}"><td class="pl"><div class="pcell">{badge(r["pos"])}<div class="pcol"><span class="nm">{esc(name)}</span>'
+                   f'<span class="pct {"hot" if hot else "big"}">{nx_lbl}</span>')
+        mine_row = name == target
+        if mine_row:
+            now_html = ('<span class="now take" title="The pick'
+                        + (f'. Projected final starting lineup {round(val):,}' if val is not None else '')
+                        + '">TAKE</span>')
+            if val is None:  # vs-free table: keep his number visible beside the alternatives
+                now_html += f'<s class="iff num">{r.get("surplus", 0):+d}</s>' 
+        elif val is None:
+            now_html = f'<span class="sur{" strong" if r.get("surplus", 0) >= 60 else ""}">{r.get("surplus", 0):+d}</span>'
+        elif target_val is None:
+            d = r.get("delta_vs_best", 0)  # no rollouts this deep; fall back to the raw ranking
+            now_html = (f'<span class="now" title="Projected final starting lineup {round(val):,}">'
+                        f'{"—" if round(d) == 0 else f"{d:+.0f}"}</span>')
+        else:
+            d = val - target_val
+            band = 2 * math.sqrt((r.get("se") or 0) ** 2 + (target_se or 0) ** 2)
+            tie = abs(d) <= max(band, 0.5)
+            if tie:
+                now_html = (f'<span class="now tie" title="Level with {esc(target or "")} — within the '
+                            f'simulation\'s noise. Projected lineup {round(val):,}">level</span>')
+            else:
+                now_html = (f'<span class="now{" up" if d > 0 else ""}" title="Projected final starting '
+                            f'lineup {round(val):,}, {"better" if d > 0 else "worse"} than {esc(target or "the pick")} '
+                            f'by {abs(d):.0f}">{d:+.0f}</span>')
+        if (not mine_row) and val is not None and target_val is not None and (val - target_val) > 0:
+            now_html += '<s class="iff">if he falls</s>'
+        title = f' title="on the board at this pick in {here}% of drafts"' if here is not None else ""
+        return (f'<tr data-name="{esc(name)}" class="{(dim + (" take" if mine_row else "")).strip()}"{title}><td class="pl"><div class="pcell">{badge(r["pos"])}<div class="pcol"><span class="nm">{esc(name)}</span>'
                 f'<span class="meta">{esc(team)} · adp {adp}{target_tag(name)}</span></div></div></td>'
-                f'<td class="n"><span class="sur{" strong" if r["surplus"] >= 60 else ""}">{r["surplus"]:+d}</span></td>'
-                f'<td class="n"><span class="pct faint">{r["there"]}%</span></td>'
-                f'<td class="n">{nx_html}</td>'
+                f'<td class="n nowcell">{now_html}</td>'
+                f'<td class="n nextcell">{nx_html}</td>'
                 f'<td class="act">{me_btn(name)}</td></tr>')
 
     blocks = []
@@ -316,47 +394,87 @@ def main():
         if not show_pick(pk):
             continue
         nxt = next_pick_of(pk)
-        all_rows = avail.get(str(pk), [])
-        rows = [r for r in all_rows if not r.get("watch") or r["there"] >= 1][: args.top + 5]
         note, plan_b = note_of(pk)
-        shown = {r["name"] for r in rows}
-        extras = []
-        for r in all_rows:
-            if r["name"] in shown:
-                continue
-            in_note = r["name"] in note or r["name"] in plan_b
-            adp = float(players.get(r["name"], {}).get("adp", 0) or 0)
-            in_play = 5 <= r["there"] <= 92 and adp <= pk + 1.5 * teams
-            if in_note or ((r["name"] in named or r["name"] in shortlisted) and in_play):
-                extras.append((0 if in_note else 1, -r["surplus"], r))
-        extras.sort(key=lambda t: (t[0], t[1]))
-        for _, _, r in extras[:4]:
-            rows.append(r)
-        rows.sort(key=lambda r: -r["surplus"])
-        # named players (decision sentence / plan B) must be inside the visible top-N
-        top, rest = rows[: args.top], rows[args.top:]
-        promote = [r for r in rest if r["name"] in note or r["name"] in plan_b or r["name"] in plan_pick_of]
-        for r in promote:
-            rest.remove(r)
-            top.append(r)
-        top.sort(key=lambda r: -r["surplus"])
+        pv = pick_values.get(str(pk))
+        pp_here = plan_path_by_pick.get(str(pk)) or {}
+        t_name, t_val, t_se = pp_here.get("player"), pp_here.get("value"), pp_here.get("se") or 0.0
+        if not t_name:  # past the rollout horizon — the written plan still names a pick
+            t_name = next((nm for nm, q in plan_pick_of.items() if q == str(pk)), None)
+        if pv:
+            # Already ranked by pick value. Keep the order; only make sure anyone the prose names
+            # is visible rather than hidden behind the expander.
+            rows = list(pv)
+            named_here = {n for n in list(named) + list(shortlisted) if n in note or n in plan_b} \
+                | {n for n in plan_pick_of if n in note or n in plan_b}
+            top, rest = rows[: args.top], rows[args.top:]
+            for r in [x for x in rest if x["name"] in named_here or x["name"] in plan_pick_of]:
+                rest.remove(r)
+                top.append(r)
+            top.sort(key=lambda r: (r["name"] != t_name, -r["value"]))
+            # Anyone the prose names who never showed up as a candidate still gets a row.
+            have = {r["name"] for r in rows}
+            for r in avail.get(str(pk), []):
+                if r["name"] not in have and (r["name"] in note or r["name"] in plan_b):
+                    top.append(r)
+                    have.add(r["name"])
+            for nm in named_from(note, plan_b):
+                if nm not in have:
+                    top.append(synth_row(nm, pk))
+                    have.add(nm)
+        else:
+            all_rows = avail.get(str(pk), [])
+            rows = [r for r in all_rows if not r.get("watch") or r["there"] >= 1][: args.top + 5]
+            shown = {r["name"] for r in rows}
+            extras = []
+            for r in all_rows:
+                if r["name"] in shown:
+                    continue
+                in_note = r["name"] in note or r["name"] in plan_b
+                adp = float(players.get(r["name"], {}).get("adp", 0) or 0)
+                in_play = 5 <= r["there"] <= 92 and adp <= pk + 1.5 * teams
+                if in_note or ((r["name"] in named or r["name"] in shortlisted) and in_play):
+                    extras.append((0 if in_note else 1, -r["surplus"], r))
+            extras.sort(key=lambda t: (t[0], t[1]))
+            for _, _, r in extras[:4]:
+                rows.append(r)
+            already = {x.get("player") for x in plan_path if x.get("pick") and int(x["pick"]) < pk}
+            rows = [r for r in rows if r["name"] not in already]
+            rows.sort(key=lambda r: (r["name"] != t_name, -r["surplus"]))
+            top, rest = rows[: args.top], rows[args.top:]
+            promote = [r for r in rest if r["name"] in note or r["name"] in plan_b or r["name"] in plan_pick_of]
+            for r in promote:
+                rest.remove(r)
+                top.append(r)
+            have = {r["name"] for r in top} | {r["name"] for r in rest}
+            for nm in named_from(note, plan_b):
+                if nm not in have:
+                    top.append(synth_row(nm, pk))
+            top.sort(key=lambda r: (r["name"] != t_name, -r["surplus"]))
         if not top:
             continue
-        trs = "".join(row_html(r, pk, nxt) for r in top)
+        def _next_of(r):
+            return r.get("next_pct") if "next_pct" in r else (there_at(r["name"], nxt) if nxt else None)
+        # Amber means "he'll be gone, the others won't". When the whole table is gone by your next
+        # turn — every early-round table — it marks everything and therefore says nothing.
+        nexts = [_next_of(r) for r in top]
+        allow_amber = any((n or 0) >= 20 for n in nexts if n is not None)
+        trs = "".join(row_html(r, pk, nxt, t_name, t_val, t_se, allow_amber) for r in top)
         more = ""
         if rest:
-            more = (f'<tbody class="more" hidden>{"".join(row_html(r, pk, nxt) for r in rest)}</tbody>'
-                    f'<tbody><tr class="morerow"><td colspan="5"><button type="button" class="morebtn">{len(rest)} more</button></td></tr></tbody>')
+            more = (f'<tbody class="more" hidden>{"".join(row_html(r, pk, nxt, t_name, t_val, t_se, allow_amber) for r in rest)}</tbody>'
+                    f'<tbody><tr class="morerow"><td colspan="4"><button type="button" class="morebtn">{len(rest)} more</button></td></tr></tbody>')
         pb = f'<div class="planb"><b>If he\'s gone:</b> {esc(plan_b)}</div>' if plan_b else ""
         nxt_lbl = f'Next: {nxt}' if nxt else "Last pick"
+        now_hd = ('<th class="n nowcell" title="Points of final starting lineup against the player this pick recommends">Now</th>'
+                  if pv else '<th class="n nowcell" title="Points over the worst player at his position anyone has to start">vs. free</th>')
         blocks.append(f'''
     <div class="pick" id="p{pk}" data-pick="{pk}">
       <div class="pickhd">
         <div class="jersey"><b>{pk}</b><s>RD {l["round"]}</s></div>
-        <div class="picknote"><div class="decision">{esc(note) or "Best surplus on the board."}</div>{pb}</div>
+        <div class="picknote"><div class="decision">{esc(note) or ("Take the top row." if pv else "Best surplus on the board.")}</div>{pb}</div>
       </div>
       <table>
-        <thead><tr><th>Player</th><th class="n">Surplus</th><th class="n" title="Still there at this pick">Here</th><th class="n" title="Still there at your next pick">{esc(nxt_lbl)}</th><th class="act"></th></tr></thead>
+        <thead><tr><th>Player</th>{now_hd}<th class="n nextcell" title="Still there at your next pick">{esc(nxt_lbl)}</th><th class="act" title="Tap when you draft him">Got</th></tr></thead>
         <tbody>{trs}</tbody>{more}
       </table>
       <div class="tierlink">Nothing you like? <a href="#tiers">Tier boards →</a></div>
@@ -388,7 +506,7 @@ def main():
                     lis.append(f'<li data-name="{esc(n)}"><span class="pn">{esc(n)}{"<span class=ktag>KEEPER</span>" if n == keeper else target_tag(n)}</span>'
                                f'<span class="pa">{esc(team)} · adp {adp}</span><span class="pp">{round(proj)}</span><span class="ps{" strong" if vor >= 60 else ""}">{vor:+d}</span>{me_btn(n)}</li>')
                 bands.append(f'<div class="bandhd">{lbl}{bnote}</div><ul class="plist">{"".join(lis)}</ul>')
-        sub = tdata.get("subtitle") or f'replacement {repl.get(pos, "")} · {sim["replacement_rank"].get(pos, "")} start weekly'
+        sub = tdata.get("subtitle") or f'vs. free = points over {pos}{sim["replacement_rank"].get(pos, "")} ({repl.get(pos, "")}), the last {pos} anyone has to start'
         tier_html.append(f'<div class="tier" id="tier-{esc(pos)}"><div class="th"><span>{POS_NAMES.get(pos, pos)}</span><em>{esc(sub)}</em></div><div class="band">{"".join(bands)}</div></div>')
 
     # ---------- shortlist / vegas ----------
@@ -410,10 +528,10 @@ def main():
     settings_line = " · ".join(c for c in notes.get("chips", []) if not re.search(r"sims?\b|replacement|ADP", c, re.I))
     title = notes.get("title") or cfg["league"].get("team_name", "Draft board")
     subtitle = notes.get("subtitle") or f'{cfg["league"].get("season", "")} draft board · pick {sim["league"]["slot"]} of {teams}'
-    repo = notes.get("repo") or ax.get("repo") or "nicoandmelissa/fantasy-draft-analyst"
+    repo = notes.get("repo") or ax.get("repo") or "nicodeguyo/fantasy-draft-analyst"
     howto = notes.get("howto") or [
-        ("Before the draft", "Read the plan once: your target at every pick and the fallback if he's gone. The roadmap under it shows which position still has value at each of your turns."),
-        ("On the clock", "Tap your pick in the top bar. Take the highest surplus still on the board, not the biggest name. <b>Next</b> is how often a player is still there at your following pick — under 50% (amber) means take him now or lose him."),
+        ("Before the draft", "Read the plan once: your target at every pick and the fallback if he's gone. The cost-of-waiting table under it shows which position is about to run out at each of your turns."),
+        ("On the clock", "Tap your pick in the top bar and take the top row still on the board. <b>Now</b> is how many points of final starting lineup you give up by taking that row instead of the best one — <b>best</b> means take him. <b>Next</b> is how often a player is still there at your following pick; under 50% (amber) means take him now or lose him."),
         ("Someone else drafts a player", "Tap his row. He greys out on every list. Undo is in the footer for a few seconds."),
         ("You draft a player", "Tap ✓ on his row. The footer lineup fills in, and the top bar moves to your next pick."),
     ]
@@ -452,7 +570,9 @@ def main():
   .mast .club span{{display:inline-block;color:var(--gold);font-size:13px;font-weight:500;letter-spacing:.05em;margin-left:10px;vertical-align:middle}}
   .settings{{font-size:12px;opacity:.85;margin-top:6px}}
   .stripe{{height:4px;background:var(--red)}}
-  .ladwrap{{position:sticky;top:0;z-index:40;background:var(--field);border-bottom:3px solid var(--red);display:flex}}
+  .ladwrap{{position:sticky;top:0;z-index:40;background:var(--field);border-bottom:3px solid var(--red);display:flex;position:sticky}}
+  .ladder{{padding-right:10px}}
+  .ladwrap::after{{content:"";position:absolute;right:56px;top:0;bottom:0;width:14px;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,0),var(--field))}}
   .ladder{{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}}
   .ladder::-webkit-scrollbar{{display:none}}
   .ladder a,.ladpin{{flex:0 0 auto;color:var(--ladder);text-decoration:none;font-family:var(--disp);font-weight:600;font-size:17px;padding:7px 11px 6px;border-right:1px solid rgba(255,255,255,.12);scroll-snap-align:start;line-height:1.1}}
@@ -462,9 +582,11 @@ def main():
   .ladder a:hover,.ladder a:focus{{background:rgba(255,255,255,.1);color:#fff}}
   .ladpin{{background:var(--royal);color:#fff;border-left:1px solid rgba(255,255,255,.2);box-shadow:-18px 0 14px -6px rgba(0,0,0,.45)}}
   /* one-line instructions */
+  .jump{{display:block;background:#0E7C6B;color:#fff;text-decoration:none;font-weight:700;font-size:13.5px;padding:10px 16px;text-align:center;letter-spacing:.01em}}
+  .jump:hover{{background:#0B6455}}
   .quick{{background:var(--ice);border-bottom:1px solid var(--ice-line);padding:8px 16px;font-size:12.5px;color:#243654}}
   .quick summary{{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}} .quick summary::-webkit-details-marker{{display:none}}
-  .quick summary b{{color:var(--ink)}} .quick summary em{{font-style:normal;color:var(--royal);font-weight:600;white-space:nowrap}}
+  .quick summary b{{color:var(--ink)}} .quick summary b.lg{{background:#0E7C6B;color:#fff;border-radius:3px;padding:1px 5px;font-size:10px;letter-spacing:.05em}} .quick summary em{{font-style:normal;color:var(--royal);font-weight:600;white-space:nowrap}}
   .quick ol{{list-style:none;margin:10px 0 2px;padding:0;display:grid;grid-template-columns:1fr;gap:8px}}
   .quick li{{display:flex;gap:9px;align-items:flex-start}}
   .quick li > b{{flex:0 0 22px;height:22px;border-radius:50%;background:var(--royal);color:var(--mast-text);font-family:var(--disp);font-size:13px;display:flex;align-items:center;justify-content:center}}
@@ -479,11 +601,15 @@ def main():
   .plan{{border:2px solid var(--royal);border-radius:3px;overflow:hidden;margin-bottom:8px}}
   .plan .rh{{background:var(--royal);color:var(--mast-text);padding:8px 12px;font-family:var(--disp);font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:8px}}
   .plan .rh em{{font-style:normal;font-size:12px;font-weight:500;opacity:.9;font-family:var(--body);text-align:right}}
+  .rhead{{display:flex;justify-content:space-between;gap:10px;padding:4px 10px;background:var(--ice);border-bottom:1px solid var(--ice-line);font-size:9.5px;font-weight:700;letter-spacing:.07em;color:var(--slate);text-transform:uppercase}}
+  .rhead span:nth-child(2){{flex:1;margin-left:6px}}
   .prow{{display:flex;gap:10px;padding:8px 10px;border-bottom:1px solid #EDF1F8;align-items:flex-start}} .prow:last-child{{border-bottom:none}}
   .ppick{{flex:0 0 46px;font-family:var(--disp);font-weight:700;font-size:20px;color:var(--royal);line-height:1}} .ppick s{{display:block;text-decoration:none;font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--slate);margin-top:2px;text-transform:uppercase}}
   .pmain{{flex:1;min-width:0}}
   .pname{{display:flex;align-items:center;gap:8px;flex-wrap:wrap}} .pname .nm{{font-weight:600}}
-  .psur{{font-family:var(--disp);font-weight:600;font-size:15px;color:var(--royal);margin-left:auto}}
+  .psur{{font-family:var(--disp);font-weight:600;font-size:15px;color:var(--royal);margin-left:auto;text-align:right}}
+  .psur s{{display:block;text-decoration:none;font-family:var(--body);font-size:8.5px;font-weight:700;letter-spacing:.04em;color:var(--slate);text-transform:uppercase}}
+  .pval{{position:relative}}
   .palt{{font-size:12px;color:#243654;margin-top:2px;line-height:1.35}} .palt b{{color:var(--red-tx)}}
   .pnote{{font-size:11.5px;color:var(--slate);margin-top:1px}}
   /* roadmap */
@@ -522,12 +648,28 @@ def main():
   .pos{{display:inline-block;min-width:26px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 4px;border-radius:2px;margin-right:7px;color:#fff;vertical-align:1px}}
   .pos.RB{{background:var(--red-tx)}} .pos.WR{{background:var(--royal)}} .pos.TE{{background:#0E7C6B}} .pos.QB{{background:#5B3E9E}} .pos.K,.pos.DEF{{background:var(--slate)}}
   .sur{{font-family:var(--disp);font-weight:500;font-size:16px;color:#38507A}} .sur.strong{{font-weight:700;color:var(--royal)}}
+  /* "Now" — points of final starting lineup against the player this pick actually recommends */
+  .now{{font-family:var(--disp);font-weight:800;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}}
+  .now.up{{color:#0E7C6B}}
+  .now.take{{font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;background:#0E7C6B;border-radius:3px;padding:3px 9px;display:inline-block}}
+  .now.tie{{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--royal);text-transform:uppercase}}
+  .iff.num{{color:var(--slate);font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none}}
+  .iff{{display:block;text-decoration:none;font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.04em;color:#0E7C6B;text-transform:uppercase;margin-top:2px;line-height:1.1;white-space:nowrap}}
+  .ttag.liked{{color:var(--slate);border-color:var(--ice-line)}}
+  tr.take{{background:#F0FAF7;box-shadow:inset 3px 0 0 #0E7C6B}}
+  td.nowcell,th.nowcell{{width:76px;text-align:right;border-left:1px solid var(--ice-line);padding-right:8px}}
+  .pval{{font-family:var(--disp);font-weight:600;font-size:15px;color:var(--royal);margin-left:auto;font-variant-numeric:tabular-nums}}
+  .appx .axp{{font-size:13.5px;color:#C6D5EE;margin:10px 0 0;font-weight:700}}
+  .appx .rnums{{color:#A9BEE0;margin:6px 0 2px}} .appx .rnums b{{color:var(--gold)}} .appx .rnums .lbl{{color:#fff}}
   .pct{{font-size:12px;color:var(--slate);font-variant-numeric:tabular-nums;white-space:nowrap}}
-  .pct.big{{font-size:14.5px;font-weight:700;color:var(--ink)}}
+  .pct.big{{font-size:15px;font-weight:600;color:var(--slate)}}
+  td.nextcell,th.nextcell{{width:58px;text-align:right}}
   td.pl .nm{{overflow-wrap:anywhere}}
-  @media (max-width:420px){{ tbody td{{padding:7px 4px}} .sur{{font-size:15px}} .me{{width:34px;height:32px}} td.act,th.act{{width:38px}} }}
-  .pct.hot{{background:var(--amber-wash);color:var(--amber);border:1px solid #F1D9A4;border-radius:10px;padding:1px 7px;font-weight:700}}
-  .ttag{{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--royal);border:1px solid var(--royal);border-radius:2px;padding:0 4px;margin-left:6px;vertical-align:2px}}
+  @media (max-width:420px){{ tbody td{{padding:7px 3px}} .sur{{font-size:15px}} .me{{width:32px;height:32px}} td.act,th.act{{width:34px}}
+    td.nowcell,th.nowcell{{width:62px;padding-right:5px}} td.nextcell,th.nextcell{{width:46px}} .now{{font-size:20px}}
+    .meta{{font-size:10.5px}} .nm{{font-size:14px}} }}
+  .pct.hot{{background:var(--amber-wash);color:var(--amber);border:1px solid #E0BC74;border-radius:10px;padding:2px 8px;font-weight:700;font-size:14px}}
+  .ttag{{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--royal);border:1px solid var(--royal);border-radius:2px;padding:0 4px;margin-left:6px;vertical-align:2px;white-space:nowrap}}
   .ktag{{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;color:#101C33;background:var(--gold);border-radius:2px;padding:1px 4px;margin-left:6px;vertical-align:2px}}
   .me{{font:inherit;width:40px;height:34px;border-radius:17px;border:1.5px solid var(--ice-line);background:#fff;color:var(--slate);cursor:pointer;font-size:15px;line-height:1;padding:0}}
   .me:hover{{border-color:var(--gold)}} [data-mine="1"] .me{{background:var(--gold);border-color:var(--gold);color:#101C33;font-weight:700}}
@@ -538,8 +680,11 @@ def main():
   /* tiers */
   .tiertabs{{position:sticky;top:44px;z-index:30;background:#fff;display:flex;gap:6px;padding:4px 0;border-bottom:1px solid var(--ice-line);margin-bottom:10px}}
   .tiertabs a{{font-family:var(--disp);font-weight:600;font-size:13px;color:var(--royal);text-decoration:none;border:1px solid var(--ice-line);border-radius:12px;padding:1px 10px;line-height:1.6}}
-  .tier{{border:1px solid var(--ice-line);border-radius:3px;margin:0 0 16px;overflow:hidden;scroll-margin-top:96px}}
-  .tier > .th{{background:var(--field);color:#fff;padding:7px 12px;font-family:var(--disp);font-weight:600;font-size:15px;display:flex;justify-content:space-between;align-items:baseline}}
+  .tier{{border:1px solid var(--ice-line);border-radius:3px;margin:0 0 16px;scroll-margin-top:104px}}
+  .bandhd{{scroll-margin-top:104px}}
+  .tier > .th{{background:var(--field);color:#fff;padding:7px 12px;font-family:var(--disp);font-weight:600;font-size:15px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}}
+  .tier > .th em{{flex:1 1 100%;line-height:1.35}}
+  @media (min-width:560px){{ .tier > .th em{{flex:0 1 auto}} }}
   .tier > .th em{{font-family:var(--body);font-style:normal;font-size:11px;color:var(--ladder);font-weight:400}}
   .band{{padding:4px 12px 2px}}
   .bandhd{{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--royal);padding:8px 0 3px;text-transform:uppercase}}
@@ -568,9 +713,10 @@ def main():
   /* footer */
   .tools{{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--field);border-top:3px solid var(--red);display:flex;align-items:center;gap:8px;padding:6px 10px;color:#fff;font-size:12px}}
   .strip{{flex:1;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}} .strip::-webkit-scrollbar{{display:none}}
-  .lslot{{flex:0 0 auto;text-align:center;min-width:34px;padding:2px 4px;border-radius:3px;border:1px solid rgba(255,255,255,.18);line-height:1.1}}
-  .lslot s{{display:block;text-decoration:none;font-size:8.5px;font-weight:700;letter-spacing:.06em;color:var(--ladder-sub)}} .lslot b{{display:block;font-size:11px;color:#fff;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
-  .lslot.filled{{background:var(--gold);border-color:var(--gold)}} .lslot.filled s,.lslot.filled b{{color:#101C33}}
+  .lslot{{flex:0 0 auto;text-align:center;min-width:0;width:calc((100% - 32px) / 9);padding:2px 1px;border-radius:3px;border:1px solid rgba(255,255,255,.18);line-height:1.1;overflow:hidden}}
+  .lslot s{{display:block;text-decoration:none;font-size:8px;font-weight:700;letter-spacing:.02em;color:var(--ladder-sub)}} .lslot b{{display:block;font-size:10px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+  .tools{{flex-wrap:wrap}} .strip{{flex:1 1 100%;order:-1;margin-bottom:4px}}
+  .lslot.filled{{background:var(--gold);border-color:var(--gold)}} .lslot.filled s{{color:#5A4A10}} .lslot.filled b{{color:#101C33;font-weight:700}}
   .tools button{{font:inherit;font-weight:600;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:2px;padding:5px 9px;cursor:pointer;white-space:nowrap}}
   .tools button:hover,.tools button.on{{background:var(--red);border-color:var(--red)}}
   .tools details{{position:relative}} .tools summary{{list-style:none;cursor:pointer;font-weight:700;padding:4px 9px;border:1px solid rgba(255,255,255,.4);border-radius:2px}} .tools summary::-webkit-details-marker{{display:none}}
@@ -594,53 +740,52 @@ def main():
   <div class="stripe"></div>
   <div class="ladwrap"><nav class="ladder" aria-label="Jump to a pick">{ladder_links}</nav><a class="ladpin" href="#tiers">TIERS</a></div>
 
+  <a class="jump" id="jump" href="#picks">On the clock? Jump to your pick →</a>
   <details class="quick">
-    <summary><span>Tap a row when he's <b>taken</b> · tap ✓ when he's <b>yours</b> · <b>amber %</b> = take him now</span><em>How this works</em></summary>
+    <summary><span><b class="lg">TAKE</b> = the pick · <b>+6</b> = better if he fell to you · <b>level</b> = same thing · <b>amber %</b> = gone by your next turn · <b>vs. free</b> = points over a free agent, used once the plan runs out</span><em>How this works</em></summary>
     <ol>{howto_html}</ol>
   </details>
 
   <section id="plan">
     <h2>The plan</h2>
-    <p class="sub">{esc(notes.get("plan_sub", "Your target at every pick, the surplus he adds, how often he's still there, and the fallback if he's gone."))}</p>
+    <p class="sub">{esc(notes.get("plan_sub", "Your target at every pick, the starting lineup it projects, how often he's still there, and the fallback if he's gone."))}</p>
     <div class="plan">
       <div class="rh"><span>Target build</span><em>{esc(plan_total_lbl)}</em></div>
+      <div class="rhead"><span>Pick</span><span>Player</span><span>Projected lineup · there</span></div>
       {"".join(plan_rows)}
     </div>
     {"<details class=notes><summary>Why this build</summary><p>" + esc(notes.get("target_note", "")) + "</p></details>" if notes.get("target_note") else ""}
 
     <div class="road">
-      <div class="th"><span>Where the value is at each of your picks</span><em>best surplus still available, by position</em></div>
+      <div class="th"><span>Cost of waiting</span><em>points lost by waiting until your next pick</em></div>
       <table>
         <thead><tr><th style="text-align:left">Pick</th><th>QB</th><th>RB</th><th>WR</th><th>TE</th></tr></thead>
         <tbody>{"".join(hm_rows)}</tbody>
       </table>
-      <p class="cap">Outlined = best position at that pick · grey = nothing above replacement{(" · flex slots fill RB " + str(ff.get("RB", 0)) + " / WR " + str(ff.get("WR", 0)) + " / TE " + str(ff.get("TE", 0))) if ff else ""}</p>
-      {"<p class=read>" + esc(notes.get("roadmap_note", "")) + "</p>" if notes.get("roadmap_note") else ""}
+      <p class="cap">The outlined position is the one about to run out — it costs you the most to wait on it. It says which shelf is emptying, not who to take: when it disagrees with a pick table, the pick table wins.</p>
+      {"<p class=read>" + esc(notes.get("waiting_note") or notes.get("roadmap_note", "")) + "</p>" if (notes.get("waiting_note") or notes.get("roadmap_note")) else ""}
     </div>
-
-    <div class="rnums"><span class="lbl">Replacement level</span>{rnums}</div>
-    <details class="notes"><summary>{esc(hr.get("heading", "Why replacement level is the number that matters"))}</summary>{hr_paras or "<p>Replacement level is the projection of the worst player at each position who still has to start for someone every week. Every player's value is his projection minus that number — the Surplus column. Draft the biggest surplus, not the biggest projection.</p>"}</details>
   </section>
 
   <section id="picks" class="pagebreak">
     <h2>Your picks, in order</h2>
-    <p class="sub">Ranked by surplus. <b>Next</b> = how often he's still there at your following pick; <b>amber</b> = available now, probably gone by then.</p>
+    <p class="sub"><b>TAKE</b> is the pick — always the top row. Every other row shows what it costs you against him in points of projected starting lineup; a row marked <b>if he falls</b> is worth more but rarely gets to you. <b>Next</b> is how often he's still there at your following pick; <b>amber</b> means he's here now and probably gone by then.</p>
     {"".join(blocks)}
     {late_block}
   </section>
 
   <section id="tiers" class="pagebreak">
     <h2>Tier boards</h2>
-    <p class="sub">Grouped by real scoring gaps. A colored bar is a cliff — the point drop to the next tier. The right-hand number is surplus.</p>
+    <p class="sub">Grouped by real scoring gaps. A colored bar is a cliff — the point drop to the next tier. The right-hand number is <b>vs. free</b>: points above the worst player at that position anyone has to start. It shows where a position is deep; the pick tables above are what decide a pick.</p>
     <div class="tiertabs">{"".join(tier_tabs)}</div>
     {"".join(tier_html)}
   </section>
 
   <section id="names" class="pagebreak">
     <h2>Calls on your shortlist</h2>
-    <p class="sub">{esc(notes.get("shortlist_sub", "The names you flagged, run through the same surplus math."))}</p>
+    <p class="sub">{esc(notes.get("shortlist_sub", "The names you flagged, run through the same simulation."))}</p>
     <table class="verd">
-      <thead><tr><th>Player</th><th class="n">Surplus</th><th>Call</th><th class="act"></th></tr></thead>
+      <thead><tr><th>Player</th><th class="n" title="Points above the worst player at his position anyone has to start">vs. free</th><th>Call</th><th class="act"></th></tr></thead>
       <tbody>{"".join(sl)}</tbody>
     </table>
     {"<details class=notes><summary>What the betting market thinks</summary><ul class='vg'>" + vg + "</ul></details>" if vg else ""}
@@ -651,6 +796,10 @@ def main():
     <p class="sub">Every number on this sheet, where it came from, and what it means.</p>
     <h3>Terms</h3>
     <dl>{terms}</dl>
+    <h3>Replacement level — the explanation, not the decision</h3>
+    <div class="rnums"><span class="lbl">Replacement level</span>{rnums}</div>
+    <p class="axp">{esc(hr.get("heading", "What these four numbers mean"))}</p>
+    {hr_paras or "<p>Replacement level is the projection of the worst player at each position who still has to start for someone every week. A player's <b>surplus</b> is his projection minus that number, and it is the column on the tier boards. It is a useful way to see which positions are deep — but it is not what ranks your picks. The pick tables are ranked by simulating the rest of the draft after each choice, which needs no baseline at all.</p>"}
     <h3>How the numbers were built</h3>
     <ul>{how}</ul>
     <h3>Assumptions worth knowing about</h3>
@@ -720,6 +869,9 @@ def main():
       a.classList.toggle('now', pk === next);
       a.classList.toggle('done', MYPICKS.indexOf(pk) < drafted);
     }});
+    var j = document.getElementById('jump');
+    if (j) {{ j.setAttribute('href', next ? '#p' + next : '#picks');
+              j.textContent = next ? ('On the clock? Jump to pick ' + next + ' \u2192') : 'Your picks \u2192'; }}
     var nowEl = document.querySelector('.ladder a.now');
     if (nowEl) {{ var lad = nowEl.parentElement; try {{ lad.scrollTo({{left: Math.max(0, nowEl.offsetLeft - 70), behavior: drafted > 0 ? 'smooth' : 'auto'}}); }} catch(e) {{}} }}
   }}
