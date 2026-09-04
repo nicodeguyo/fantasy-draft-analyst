@@ -1,6 +1,6 @@
 # How this example was produced
 
-A worked run of the `fantasy-draft-analyst` skill on Thursday, September 3, 2026, for a 12-team ESPN half-PPR keeper league drafting Sunday, September 6 (`league.yaml`: pick 5, one same-round keeper, 4-pt pass TD, −2 INT, one flex). Everything in this folder was generated from the files listed at the bottom; nothing was hand-edited after the scripts ran except the prose.
+A worked run of the `fantasy-draft-analyst` skill on Thursday, September 3, 2026 (regenerated September 4 on the flex-equilibrium replacement model), for a 12-team ESPN half-PPR keeper league drafting Sunday, September 6 (`league.yaml`: pick 5, one same-round keeper, 4-pt pass TD, −2 INT, one flex). Everything in this folder was generated from the files listed at the bottom; nothing was hand-edited after the scripts ran except the prose.
 
 ## Inputs
 
@@ -18,9 +18,11 @@ A worked run of the `fantasy-draft-analyst` skill on Thursday, September 3, 2026
 
 `python3 scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --samples 10 --out sim.json`
 
-- 1,500 drafts, seed 1000; keeper Chase Brown at round 6 (pick 68 forfeited). Twelve league keepers drawn per run, weighted toward better players with keeper rounds correlated to quality (the league had not published its list). Opponents draft ESPN ADP plus noise scaled to each player's spread (capped), positional need from round 8, kickers and defenses on a rising curve from round 11. Replacement ranks QB12 / RB34 / WR32 / TE14 → 312 / 137 / 165 / 114 points.
+- 1,500 drafts, seed 1000; keeper Chase Brown at round 6 (pick 68 forfeited). Twelve league keepers drawn per run, weighted toward better players with keeper rounds correlated to quality (the league had not published its list). Opponents draft ESPN ADP plus noise scaled to each player's spread (capped), positional need from round 8, kickers and defenses on a rising curve from round 11; the simulated "me" weighs the opportunity cost of waiting at each position and keeps its bench balanced.
+- Replacement level by **flex equilibrium**: dedicated slots first, then the 12 flex slots and 3 bye/injury slots go to the best remaining RB/WR/TE regardless of position. That fills the flex 4 RB / 11 WR / 0 TE and prices RB28 = 164, WR35 = 156, TE13 = 116, QB12 = 312 (`replacement`, `flex_fill` in `sim.json`). An earlier fixed 55/40 flex split priced RB34 = 137 and made the model hoard running backs; the keeper surplus for Brown moved from +54 to +35 and the target build from four backs to a two-receiver lineup with a receiver at flex.
+- The **position plan** (`position_plan`): expected best surplus still available at each position at each of the user's picks — rendered as the roadmap heatmap on the board and read in §3 of the analysis (receiver holds value through 92, tight end windows at 20 and 53, running back positive only through 77, quarterback flat until 53).
 - Net keeper inflation measured in-sim (extra players gone beyond the pick number): +11.2 at pick 5, +7.9 at 20, +6.1 at 29, +3.9 at 44, +2.9 at 53, +0.5 at 77, +0.1 at 92.
-- Outputs: `sim.json` (keeper table, availability, sample drafts, most-owned, inflation), `sim_availability.csv` (There % for every player at every one of the user's picks), `sim_summary.md` (console output).
+- Outputs: `sim.json` (keeper table, replacement and flex fill, position plan, availability, sample drafts, most-owned, inflation), `sim_availability.csv` (There % for every player at every one of the user's picks), `sim_summary.md` (console output).
 - The mock-ADP comparison figures quoted in the analysis come from the same command run on `players_mock-adp.csv`; that output is not shipped.
 - Run time: about 45–55 seconds per 1,500-run simulation on a small container; the board renders in under a second.
 
@@ -28,7 +30,7 @@ A worked run of the `fantasy-draft-analyst` skill on Thursday, September 3, 2026
 
 `python3 scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html`
 
-Default renderer settings (top 7 per pick through round 9, plus every pick that has a note). Seahawks theme from `league.yaml`. Every player named in a pick note, the shortlist, the target build or `mine` appears in the relevant table.
+Default renderer settings (top 7 per pick through round 9, plus every pick that has a note). Seahawks theme from `league.yaml`. `notes.json` follows the current schema: a `plan` with a Plan B (`alt`) for every pick, `roadmap_note` for the position-plan heatmap, and `pick_notes` as `{note, plan_b}`. Every player named in a pick note or Plan B appears in that pick's table; the plan's starting lineup fills 2 WR plus a receiver at flex, and the lineup tracker and roadmap render from `sim.json`.
 
 ## Files
 

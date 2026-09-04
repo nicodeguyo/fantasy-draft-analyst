@@ -10,20 +10,22 @@ The skill is built to compute those two things well, then to be honest about wha
 
 ## 2. Replacement level: the number that decides the draft
 
-Suppose your league has 12 teams that each start 2 RB, 2 WR, and a flex. Every week, roughly 24 + 7 = 31 running backs and 24 + 5 = 29 receivers are in someone's lineup (the flex splits about 55/40 between RB and WR in half-PPR). Add a few for byes and injuries and you get: the 34th-best running back and the 32nd-best receiver are the worst players anyone *has to* start. Their projected totals are the **replacement level** at each position.
+Suppose your league has 12 teams that each start 2 RB, 2 WR, and a flex. Every week 24 running backs and 24 receivers start in dedicated slots, and 12 flex slots go to *whoever is better* among the backs, receivers, and tight ends left over. Add a few slots for byes and injuries. The last back and the last receiver to get a slot are the worst players anyone *has to* start. Their projected totals are the **replacement level** at each position — and because the flex goes to the better player, the marginal back and the marginal receiver end up worth roughly the same.
 
-In the example league those numbers are 137 (RB) and 165 (WR). That 28-point gap is the whole draft:
+In the example league those numbers are 164 (RB, the 28th back) and 156 (WR, the 35th receiver): the 15 flex-and-pad slots fill 4 RB / 11 WR because the receiver pool is deeper this year.
 
 ```
 surplus = projection − replacement[position]
 
-Zay Flowers  (WR)  215 − 165 = +50
-Breece Hall  (RB)  203 − 137 = +66
+Zay Flowers  (WR)  215 − 156 = +59
+Breece Hall  (RB)  203 − 164 = +39
 ```
 
-Flowers projects twelve points *more* than Hall and is the *worse* pick, because the receiver you can get for free is much better than the back you can get for free. Every board in the skill is ranked by surplus, never by projection.
+Every board in the skill is ranked by surplus, never by projection.
 
 Why this is the right frame and not just a clever one: your final score is the sum of your starters. Drafting a player only changes that sum by the difference between him and whoever would have filled that slot. Everything else is noise. Replacement level makes the "whoever" explicit.
+
+**The mistake we made first, which is worth knowing about.** The first version of the simulator assumed a fixed split of the flex — 55% of flex slots to running backs. In a 14-team, two-flex league that priced the "replacement" back at the 47th RB (95 points) and the replacement receiver at the 43rd WR (143 points). It implied managers flex a 95-point back over a 143-point receiver, which nobody does, and it made every depth running back look like +80 of surplus even when he'd sit on the bench behind a better receiver. The model drafted eight running backs and one starting receiver. Computing replacement by flex *equilibrium* — every flex slot to the best remaining player — fixed it at the root: same league, the marginal RB and WR came out at 132 and 130, the drafts balanced, and projected starter totals went up by about 35 points. When a model gives you a roster you'd never actually start, the model is wrong, not the roster.
 
 Scoring bends it. Four-point passing touchdowns with −2 per interception compress the difference between QB1 and QB8 to under two points a week, which is why the correct quarterback round is usually seven or later. Full PPR lifts pass-catching backs. TE-premium makes the second tight-end tier startable. A superflex slot roughly doubles the number of quarterbacks started league-wide and makes QB the scarcest position. The skill re-derives replacement level from *your* lineup and scoring rather than remembering last year's conclusion.
 
@@ -61,6 +63,22 @@ Without the simulator, the same estimate comes from a normal distribution: `P(av
 
 Real leaguemates are less rational than ADP bots. Value falls further than the model predicts, so when a tier-3 back is somehow there two rounds late, believe the board and take him.
 
+## 5b. When to take which position — read it off a table, not a slogan
+
+"RB early, WR late" is advice for a league that may not be yours. The simulator reports, for each of your picks, the expected best surplus still available at each position. In one 14-team, two-flex league it looked like this:
+
+| Pick | QB | RB | WR | TE |
+|---|---|---|---|---|
+| 20 | +44 | +74 | **+95** | +76 |
+| 37 | +42 | +59 | **+70** | +41 |
+| 48 | +39 | +44 | **+58** | +38 |
+| 65 | +24 | +44 | **+45** | +28 |
+| 76 | +22 | +34 | **+41** | +14 |
+| 93 | +19 | +9 | **+32** | +10 |
+| 121 | +9 | −12 | **+19** | +5 |
+
+Running-back surplus collapses after pick 76 — at 93 there is nothing above replacement — while receiver surplus holds into the 100s. So the plan that falls out is: receiver or elite tight end at 20, fill both running-back slots by 65–76 while backs still clear replacement, and treat WR2 and WR3 as picks you can make later without paying. Change the league and the table changes: in a superflex league the QB column dominates the first three rows; in TE-premium the TE column does. The draft-day board draws this table as a heatmap so you can see it at a glance.
+
 ## 6. Price the room you're in
 
 ADP is not one number. It is the average of the drafters who produced it, and drafters follow their platform's default rankings. In the 2026 cross-platform data:
@@ -71,7 +89,7 @@ ADP is not one number. It is the average of the drafters who produced it, and dr
 - **Underdog** (best ball, no waivers) inflates late-round ADP and moves fast on camp hype.
 - **Mock-draft ADP** (FantasyFootballCalculator) is the format baseline and the source of the spread, but it's produced by mock drafters with more autopicks and less roster discipline than real leagues.
 
-In the example run, repricing the same player pool from mock ADP to ESPN ADP moved Trey McBride's availability at pick 29 from 80% to 15%, Kyle Pitts at 77 from 88% to 16%, and Zay Flowers at 29 from 18% to 85%. Same players, same projections, different room, different plan.
+In the example run, repricing the same player pool from mock ADP to ESPN ADP moved Trey McBride's availability at pick 29 from 80% to 15%, Kyle Pitts at 77 from 88% to 16%, and Zay Flowers at 29 from 18% to 83%. Same players, same projections, different room, different plan.
 
 ## 7. Signal versus noise in player evaluation
 

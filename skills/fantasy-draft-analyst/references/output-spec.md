@@ -60,9 +60,23 @@ Replacement level in a <T>-team, <flex> league, in your scoring:
 That <gap>-point gap between RB and WR replacement is the entire draft. <One example of a higher-projection WR being the worse pick.>
 ```
 
-### 3. Pick geometry
+### 3. Pick geometry and the position plan
 
-Ladder with keeper-forfeited rounds removed; turn structure; what inflation does ("with <K> keepers gone, pick 20 delivers a true-ADP-30 player").
+Ladder with keeper-forfeited rounds removed; turn structure; the measured inflation at your early picks. Then the position plan:
+
+```
+### Where the value is at each of your picks
+Expected best surplus still available, by position (from 1,500 simulated drafts):
+
+| Pick | QB | RB | WR | TE |
+|---|---|---|---|---|
+| 20 | +44 | +74 | **+95** | +76 |
+| 37 | +42 | +59 | **+70** | +41 |
+| ... |
+
+Reading: <two sentences — which position carries the most value at each turn, and the pick after
+which each position has nothing left above replacement. Then the plan that follows from it.>
+```
 
 ### 4. The board — top five at each pick
 
@@ -117,24 +131,32 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
   "title": "Replacement Level",
   "subtitle": "2026 draft board · pick 5 of 12 · ESPN",
   "chips": ["Half PPR · 0.5 per catch", "4-pt passing TD · −2 INT", "1 flex", "Keeping Chase Brown (R6 · pick 68)"],
+  "howto": null,
+  "plan_sub": "Your target at every pick, with the fallback if he's gone.",
+  "plan": [
+    {"pick": "KEEP", "player": "Chase Brown", "alt": ""},
+    {"pick": "5", "player": "Jaxon Smith-Njigba", "alt": "Bijan Robinson if he fell (21%); Jonathan Taylor as the tiebreak loser", "note": "WR1 — the tier ends here"},
+    {"pick": "20", "player": "Brock Bowers", "alt": "Trey McBride (72%); Kyren Williams only if both TEs are gone"}
+  ],
+  "plan_total": "1,858 projected starters",
+  "target_note": "Across ten simulated drafts the range was 1,772 to 1,906...",
+  "roadmap_note": "Tight end carries the most value at 20 and again at 53; running back surplus is gone after 77; receivers hold value into the 100s, so WR2 can wait until 53–77.",
   "headline_rule": {
-    "heading": "The only number you need to remember",
-    "hot": {"value": 137, "label": "worst RB you'll ever have to start"},
-    "cool": {"value": 165, "label": "worst WR you'll ever have to start"},
+    "heading": "The only number you need to remember: replacement level",
     "paragraphs": [
-      "In a 12-team league with one flex, about 34 running backs and 32 receivers start every week...",
-      "So a receiver is worth 28 points less than his raw projection suggests..."
+      "In a 12-team league with one flex, the 28th running back and the 35th receiver are the worst players anyone has to start...",
+      "So draft the biggest surplus, not the biggest projection..."
     ]
   },
   "pick_notes": {
-    "5": "Running back if Bijan fell (21%). Otherwise Jaxon Smith-Njigba.",
+    "5": {"note": "Running back if Bijan fell (21%). Otherwise Jaxon Smith-Njigba.", "plan_b": "Jonathan Taylor (52%), then James Cook III (76%)"},
     "20": "Tight end. Bowers if he's there (52%); McBride if not (72%). The 25-point cliff below them closes before 29."
   },
   "late_note": "Nothing back here moves your lineup. Kicker and defense in the final two rounds only.",
   "late_body": "Spend rounds 9 through 13 on two things...",
   "tiers": {
     "RB": {
-      "subtitle": "replacement 137 · 34 get started weekly",
+      "subtitle": "replacement 164 · 28 get started weekly",
       "bands": [
         {"label": "Tier 1", "note": "win the league by themselves", "players": ["Jahmyr Gibbs", "Bijan Robinson"]},
         {"cliff": "−41", "cliff_note": "Both are kept in almost every league. Assume they're gone."},
@@ -143,7 +165,6 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
     }
   },
   "mine": ["Chase Brown", "Brock Bowers", "Bucky Irving"],
-  "shortlist_sub": "The names you flagged, run through the same surplus math.",
   "shortlist": [
     {"player": "Bucky Irving", "call": "TAKE AT 44", "tag": "take"},
     {"player": "Jaylen Waddle", "call": "PASS AT 44 · OK AT 53", "tag": "pass"},
@@ -152,11 +173,6 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
   "vegas": [
     {"value": "10.5", "text": "Bengals win total, under −120. A mild negative for a back whose value came partly from shootouts."}
   ],
-  "target_build": {
-    "total": 1858,
-    "rows": [{"pick": "KEEP", "player": "Chase Brown"}, {"pick": "5", "player": "Jaxon Smith-Njigba"}, {"pick": "20", "player": "Brock Bowers"}]
-  },
-  "target_note": "Across ten simulated drafts the range was 1,772 to 1,906...",
   "appendix": {
     "terms": [{"term": "Replacement level", "def": "The score of the worst player at a position who still has to be in someone's starting lineup every week."}],
     "how_built": ["Projections are mine, not a vendor's...", "ADP source: ...", "Simulation: ..."],
@@ -168,26 +184,38 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
 }
 ```
 
+Field notes:
+
+- `plan` is the target build, one row per pick plus the keeper. `alt` is the Plan B shown in the "If he's gone" column — name the fallback and his There %. `note` (optional) is a short label under the name. `plan_total` is a display string; if omitted the renderer computes the projected starter total from the plan's players. The older `target_build` shape is still accepted.
+- `roadmap_note` is the two-sentence reading of the position-plan heatmap (the renderer draws the heatmap from `sim.json`'s `position_plan` and appends the league's flex fill).
+- `pick_notes` values may be a string or `{"note": ..., "plan_b": ...}`; the Plan B renders under the decision sentence and its players are always shown in that pick's table.
+- `howto` may override the four "how to use this on draft day" steps as `[[heading, body], ...]`; leave it `null` to use the defaults, which are right for almost everyone.
+- `headline_rule.paragraphs` should quote the league's actual replacement numbers and the flex fill from `sim.json`.
+- Player names in `plan`, `pick_notes`, `tiers`, `mine`, and `shortlist` must match `players.csv` exactly (full names).
+
 `tiers.*.bands[].players` are names that must match `players.csv`; the renderer looks up team, ADP, and projection. `mine` marks rows gold. `shortlist[].tag` is one of `take`, `ok`, `pass`. Every key is optional: a pick without a `pick_notes` entry shows "Best surplus on the board.", and a missing `tiers`, `shortlist`, `vegas`, or `target_build` leaves that section empty, so fill them all in. `headline_rule.hot`/`cool` default to the RB and WR replacement numbers from `sim.json`. `repo` (the GitHub `owner/name` in the footer credit) may also live under `appendix`.
 
 Renderer flags worth knowing: `--top N` sets rows per pick (default 7); `--max-pick` sets the last pick that gets its own table (default: through round 9). Any player named in a `pick_notes` entry, the shortlist, or the target build is always shown in that pick's table if he was available there at all, so the decision sentence never names someone the table hides. Any pick with a `pick_notes` entry is rendered even past `--max-pick`.
 
 ## 4. The board itself
 
-One HTML file, no external dependencies except a Google Font, in the user's team colors. Structure, top to bottom:
+One HTML file, no external dependencies except a Google Font, in the user's team colors. Structure, top to bottom — the order is deliberate: what to do first, the plan, the tools that keep the plan honest during the draft, then the reference material:
 
 1. Masthead — team name, subtitle, setting chips.
-2. Sticky pick ladder — tap a pick number to jump to that turn.
-3. The one rule — replacement numbers and the two-paragraph explanation.
-4. How to read it — Proj / Surplus / There / Tap.
-5. Your picks in order — one block per pick with the decision sentence and the surplus-ranked table with There % bars.
-6. Late rounds block.
-7. Tier boards by position with cliffs.
-8. Your shortlist, scored — verdict tags; the Vegas list; the target build.
-9. Appendix — terms, how the numbers were built, assumptions, the two warnings.
-10. Toolbar — crossed-off counter, Reset, Print.
+2. Sticky pick ladder — PLAN first, then every pick number, then TIERS / CALLS / NOTES.
+3. **How to use this on draft day** — four numbered steps: before the draft, on the clock, when someone else drafts a player (tap him), when you draft a player (tap ✓).
+4. **The plan** — the target at every pick with round, projection, surplus, There %, and "If he's gone"; the projected starter total; the target note.
+5. **Where the value is at each of your picks** — the position-plan heatmap (QB/RB/WR/TE × your picks), the outlined cell marking the best position at each pick, and the roadmap sentence.
+6. **Your lineup** — every starting slot, filled in as the user taps ✓; open slots show the replacement number; a running projected total and a bench line.
+7. The replacement-level rule — four numbers and two short paragraphs.
+8. Your picks in order — one block per pick: decision sentence, Plan B, and the surplus-ranked table with There % bars and a ✓ button per row.
+9. Late rounds block.
+10. Tier boards by position with cliffs (each row shows projection and surplus).
+11. Your shortlist, scored — verdict tags; the Vegas list.
+12. Appendix — terms, how the numbers were built, assumptions, the two warnings.
+13. Toolbar — taken / mine counters, Hide taken, Reset, Print.
 
-Behaviors: tap any player row to cross him off everywhere; print hides the ladder and toolbar and breaks pages before tiers, shortlist, and appendix.
+Behaviors: tap any player row to mark him taken (greys out everywhere); tap ✓ to mark him yours (gold, fills the lineup); state persists in the browser's localStorage under a key derived from the title, so a reload mid-draft keeps everything; Hide taken collapses crossed-off rows; print hides the ladder, toolbar, and ✓ buttons and breaks pages before picks, tiers, shortlist, and appendix.
 
 ## 5. Style rules
 

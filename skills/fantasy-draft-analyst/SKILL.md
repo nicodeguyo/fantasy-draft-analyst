@@ -74,7 +74,7 @@ Run `python3 scripts/scoring.py --league league.yaml --stats stats.csv --out pla
 
 ### Step 4 — Replacement level, surplus, and pick geometry
 
-This is the step that makes you different from the table. Replacement level at a position is the projection of the last player who still has to start for someone every week. Count starters across the league (including how flex spots are likely to be filled), find that Nth player, and every player's **surplus = projection − replacement**.
+This is the step that makes you different from the table. Replacement level at a position is the projection of the last player who still has to start for someone every week. Fill the dedicated slots by position, then give every flex slot league-wide to the best remaining player regardless of position (flex equilibrium — the marginal RB and marginal WR end up priced the same, which is how real lineups work), find that last player at each position, and every player's **surplus = projection − replacement**. Never assume a fixed RB/WR split of the flex: it can price one position's depth as gold and produce a roster with eight running backs.
 
 `python3 scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --out sim.json` computes replacement levels, the user's pick numbers (with keeper-forfeited rounds removed), the keeper inflation actually in force at each pick, availability at each pick (the user's own players and "my guys" are always included), a full name × pick availability matrix (`sim_availability.csv`), sample drafts, and — for keeper leagues — the surplus of every keeper candidate against what that pick would otherwise return. Re-run it whenever `players.csv` changes; a stale `sim.json` in the folder is worse than none. Without scripts, do the math by hand using the formulas in `references/methodology.md` and the analytical availability shortcut there (a normal-distribution estimate from ADP and its spread). Say which method you used.
 
@@ -86,7 +86,9 @@ Then check the things that flip the answer: waiver-pickup eligibility, superflex
 
 ### Step 6 — Board, tiers, and the plan by pick
 
-Present the top five at each pick ranked by surplus with There %. Write one decision sentence per pick ("Running back. Saquon if he fell; otherwise Hampton."). Build tiers from projection gaps, not rounds; mark each cliff with the point drop. Note where a tier spans many rounds — that's where the value is ("Irving and Tuten are in the same tier as Derrick Henry, four rounds later").
+Start with the **position plan**: the simulator's `position_plan` table (expected best surplus still available at each of your picks, by position). Read it aloud in two sentences — which position has the most value left at each turn, and the pick after which each position has nothing above replacement ("RB collapses after 76; WR holds value into the 100s; TE windows at 20 and 65; QB is flat, so round 7"). That is the answer to "when do I take which position," and it changes with the league — superflex puts QB on top, TE premium puts TE on top — so never hard-code a position order.
+
+Then present the top five at each pick ranked by surplus with There %. Write one decision sentence per pick ("Running back. Saquon if he fell; otherwise Hampton.") and a Plan B ("If he's gone: McMillan, 82% there"). Build tiers from projection gaps, not rounds; mark each cliff with the point drop. Note where a tier spans many rounds — that's where the value is ("Irving and Tuten are in the same tier as Derrick Henry, four rounds later").
 
 Reach rules: a reach is earned by **role certainty in a scarce tier**, never by upside in the first three rounds; cap a reach at one round; and don't reach at all for a player whose There % at your next pick is above ~80%.
 
@@ -106,7 +108,7 @@ Close with the assumption that could flip the board (usually the RB-vs-WR replac
 
 ### Step 10 — The draft-day board (optional)
 
-`python3 scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html` renders the board. Write `notes.json` first (schema in `references/output-spec.md`): the decision sentence per pick, tier commentary and cliffs, shortlist verdicts, Vegas notes, the target build, and the assumptions. The board uses the user's team colors (`theme` in league.yaml, any NFL team or custom hex), prints to about four pages, and lets the user tap players to cross them off during the draft.
+`python3 scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html` renders the board. Write `notes.json` first (schema in `references/output-spec.md`): the plan (target at every pick with a Plan B), the roadmap sentence, the decision sentence and Plan B per pick, tier commentary and cliffs, shortlist verdicts, Vegas notes, and the assumptions. The board opens with a four-step "how to use this on draft day" strip and the plan; it tracks the user's lineup as they tap ✓ on their picks, and saves state in the browser so a reload mid-draft loses nothing. The board uses the user's team colors (`theme` in league.yaml, any NFL team or custom hex), prints to about four pages, and lets the user tap players to cross them off during the draft.
 
 ## How to write it
 

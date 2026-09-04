@@ -42,8 +42,11 @@ roster:
   K: 1
   DEF: 1
   bench: 6
-  # Optional: how flex slots tend to be filled league-wide (defaults shown). Override if your league is WR-heavy.
-  flex_share: {RB: 0.55, WR: 0.40, TE: 0.05}
+  # How replacement level treats flex slots. "equilibrium" (default, recommended): every flex slot league-wide
+  # goes to the best remaining player regardless of position, so the marginal RB and WR are priced the same.
+  # "fixed_share" uses flex_share below — only if you know your league flexes one position out of habit.
+  flex_mode: equilibrium
+  # flex_share: {RB: 0.55, WR: 0.40, TE: 0.05}   # used only with flex_mode: fixed_share
   # Optional: hard overrides of replacement ranks per position (e.g. RB: 30). Leave empty to derive.
   replacement_rank: {}
 

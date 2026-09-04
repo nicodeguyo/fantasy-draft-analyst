@@ -22,7 +22,7 @@ Give it your league settings, your roster, your draft slot, and the players you 
 7. **Sample drafts and the target build** — the roster to aim for, its projected total, and its known weakness with a hedge.
 8. **The late-round plan** — handcuffs, next-year keeper lottery tickets, when to take K/DEF.
 9. **The assumption that could flip the board** — stated plainly.
-10. **A draft-day board** — one HTML page in your team's colors: sticky pick ladder, tap-to-cross-off, tiers, verdicts, appendix. Open it on your phone during the draft.
+10. **A draft-day board** — one HTML page in your team's colors built for a phone on the clock: the plan with a Plan B at every pick, a position-value heatmap, tap-to-cross-off, a ✓ that fills your lineup and advances the nav to your next pick, tiers with cliffs, verdicts, appendix. State survives a reload.
 
 <p align="center"><img src="docs/media/board-walkthrough.gif" width="400" alt="The draft-day board: pick ladder, surplus-ranked tables with availability bars, tier boards with cliffs, shortlist verdicts"></p>
 
@@ -70,17 +70,19 @@ Good prompts:
 - [`league.yaml`](examples/sample-league/league.yaml), [`players.csv`](examples/sample-league/players.csv), [`sim.json`](examples/sample-league/sim.json), [`notes.json`](examples/sample-league/notes.json) — every input and intermediate, so you can reproduce it.
 - [`RUNLOG.md`](examples/sample-league/RUNLOG.md) — where every number came from.
 
-Three things it found in that run, which is roughly what it finds every time: four of the six "my guys" premises were wrong or misleading (the coach had publicly said the opposite about one player's role; a "TE2 finish" was TE6 per game, with three of his five touchdowns in one week); ESPN's room takes tight ends a full round earlier than mock drafts, which turned "wait on TE" into "take one at 20"; and the keeper that *felt* right (a round-2 WR) was 71 points worse than the keeper the math chose (a round-6 RB who became a first-round player).
+Three things it found in that run, which is roughly what it finds every time: four of the six "my guys" premises were wrong or misleading (the coach had publicly said the opposite about one player's role; a "TE2 finish" was TE6 per game, with three of his five touchdowns in one week); ESPN's room takes tight ends a full round earlier than mock drafts, which turned "wait on TE" into "take one at 20"; and the keeper that *felt* right (a round-2 WR) was 38 points worse than the keeper the math chose (a round-6 RB who became a first-round player).
 
 <p align="center"><img src="docs/media/board-calls.png" width="560" alt="Shortlist scored with verdict tags and what the betting market thinks"></p>
 
 ## How it thinks
 
-Five ideas do almost all the work. The long version, with the math and the evidence, is in [docs/how-it-works.md](docs/how-it-works.md).
+Six ideas do almost all the work. The long version, with the math and the evidence, is in [docs/how-it-works.md](docs/how-it-works.md).
 
-**Surplus, not projection.** A player's value is how many points he scores *over the player you'd otherwise start*. In a 14-team, two-flex league the 40th running back scores about 111 and the 44th receiver about 139, so a receiver projecting 215 can be a worse pick than a back projecting 211. Every table is ranked by surplus.
+**Surplus, not projection.** A player's value is how many points he scores *over the player you'd otherwise start*. Replacement level is computed the way lineups actually fill — every flex slot league-wide goes to the best remaining player — so the marginal RB and the marginal WR are priced honestly against each other, and the board tells you which position your league's depth actually lives in. Every table is ranked by surplus.
 
 **Price the market you're actually in.** ADP is the average drafter's price. Your room follows its platform's default rankings: ESPN drafts elite QBs and TEs a round early and lets receivers slide; Sleeper takes the top QBs early and mid-tier QBs very late; Underdog inflates the late rounds. The skill fetches the ADP for your platform and re-runs the availability model on it.
+
+**When to take which position is a table, not a slogan.** For each of your picks the simulator reports the best surplus still available at QB, RB, WR, and TE. In one 14-team league it showed RB value collapsing after pick 76 while WR value held into the 100s; in a superflex league the QB column dominates instead. The plan follows the table.
 
 **Keeper inflation is front-loaded.** With twelve keepers gone, pick 20 buys roughly the ADP-28 player — but a round-6 pick buys a true round-6 player, because every forfeited pick puts someone back on the board. The simulator measures the inflation actually in force at each of your picks instead of guessing.
 

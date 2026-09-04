@@ -24,7 +24,7 @@ Contents
 
 ## 1. The three ideas that do all the work
 
-**Surplus, not projection.** A player's value to you is not how many points he scores. It's how many more he scores than the player you'd otherwise start in that slot. A receiver projecting 215 can be a worse pick than a running back projecting 211 if the 44th-best receiver scores 139 and the 40th-best back scores 111. That 28-point gap in replacement level is the single most important number in most leagues, and almost nobody at the table has computed it.
+**Surplus, not projection.** A player's value to you is not how many points he scores. It's how many more he scores than the player you'd otherwise start in that slot. A receiver projecting 215 can be a worse pick than a running back projecting 203 if the receiver you can get for free scores 165 and the back you can get for free scores 137 — and the reverse is true in a league where the back pool is deeper. Replacement level is the single most important number in every league, and almost nobody at the table has computed it for theirs.
 
 **Price the market you're in.** ADP tells you what a generic drafter pays. Your league is not generic: it has this platform's default rankings pulling on the room, this many teams, these keepers already gone, and these specific humans with their specific habits. A player's "value" is what he costs *here*, at *your* picks. Keeper removals alone can shift the effective board by half a round or more.
 
@@ -34,29 +34,23 @@ Contents
 
 Replacement level at a position is the projected total of the worst player who still has to be in someone's starting lineup every week. Above him, players have surplus; below him, they're free.
 
-Compute it from the lineup:
+Compute it by **flex equilibrium**, which is how lineups actually get filled:
 
 ```
-starters_at_pos = teams × dedicated slots at that position
-flex_allocation = teams × flex slots × share of flex likely filled by that position
-N = starters_at_pos + flex_allocation
-replacement[pos] = projection of the N-th best player at pos
+1. Fill the dedicated slots: teams × slots at each position (the 28 best RBs in a 14-team, 2-RB league).
+2. Pool everyone left at the flex-eligible positions (RB/WR/TE) and give every flex slot league-wide
+   to the best remaining player, regardless of position.
+3. Add a few "virtual" flex slots for byes and injuries (2 in a 10-team league, 3 in 12, 4 in 14).
+4. replacement[pos] = projection of the last player at that position who got a slot.
 ```
 
-Flex share defaults (from how leagues actually fill flex): RB 55%, WR 40%, TE 5% in half-PPR and standard; RB 45%, WR 50%, TE 5% in full PPR. Superflex/OP slots are filled by QBs ~85% of the time when a QB is available — treat them as an extra QB starter.
+The marginal RB and the marginal WR end up worth about the same — in a 14-team, two-flex league with this year's pool, RB38 ≈ 132 and WR50 ≈ 130, with the 32 flex-and-pad slots filling 10 RB / 22 WR because the receiver pool is deeper. Superflex/OP slots are filled by QBs ~85% of the time; treat them as 0.85 of an extra QB starter.
 
-Worked example — 14 teams, QB/2RB/2WR/TE/2FLEX/K/DEF, half-PPR:
+Why equilibrium and not a fixed split: the obvious shortcut ("55% of flex slots go to RBs") can price one position's replacement absurdly low when the other position is deeper — RB47 = 95 against WR43 = 143 in the same league. That implies managers flex a 95-point back over a 143-point receiver, which nobody does, and it makes every depth running back look like +80 of surplus even when he'd sit behind a better receiver on your bench. The first version of this skill had exactly that flaw and drafted eight running backs. `draft_sim.py` uses equilibrium by default; `roster.flex_mode: fixed_share` with `flex_share` is available if you know your league flexes irrationally, and `replacement_rank` overrides any position outright.
 
-```
-QB:  14 × 1                       = 14   → 14th QB
-RB:  14 × 2 + 14 × 2 × 0.55       = 43   → ~42nd RB
-WR:  14 × 2 + 14 × 2 × 0.40       = 39   → ~44th WR (round up for injuries/byes)
-TE:  14 × 1 + 14 × 2 × 0.05       = 15   → 15th TE
-```
+Read the flex fill the simulator reports (`flex_fill`) — it tells you which position the league's depth actually lives in, which is the first clue about where your late-round value is.
 
-Round to what the sim script uses (it takes `replacement_rank` overrides in league.yaml if you disagree). Add 2–4 to RB and WR counts in deep leagues to account for byes and injuries: someone is always starting the 44th receiver in Week 7.
-
-Deeper leagues push replacement down at every position and make scarce positions scarcer; that is why the same player is a round more valuable in a 14-team league than a 10-team league.
+Deeper leagues push replacement down at every position and make scarce positions scarcer; that is why the same player is a round more valuable in a 14-team league than a 10-team league. Scoring bends it: full PPR lifts pass-catching backs and slot receivers; TE premium moves the second TE tier into flex territory; 6-point passing TDs pull QBs up.
 
 ## 3. Surplus, and why it's measured in points, not picks
 
@@ -153,9 +147,13 @@ Score the stat line in the league's exact settings. Never accept a vendor's poin
 
 Write the three or four projections you most changed from consensus into the appendix with the reason. That's what makes the analysis yours and checkable.
 
-## 11. Sample drafts and the target build
+## 11. The position plan, sample drafts, and the target build
 
-Run 8–10 full drafts (script or by hand). Report:
+**The position plan** answers "when do I take which position" with numbers instead of a slogan. For each of your picks, the simulator reports the expected best surplus still available at each position (`position_plan`). Read it as a heatmap: the position with the most value left at each pick, and the pick after which a position has nothing above replacement. A typical 14-team, two-flex reading: "RB surplus collapses after pick 76; WR holds value into the 100s; TE has one window at 20 and one at 65; QB is flat, so round 7." In a superflex league the QB column dominates the first three rows; in TE premium the TE column does. The plan follows the table, and the table changes with the league — which is why the skill never hard-codes "RB early" or "WR late."
+
+Two rules for reading it: (1) the lineup must still get filled — you take a second RB by the last pick where the RB column is positive, even if WR is higher there; (2) a position whose column is flat across several picks (QB, usually) can wait until the last of those picks.
+
+**Sample drafts.** Run 8–10 full drafts (script or by hand). Report:
 
 - The range of projected starter points across runs, and what it means per week. A 46-point spread across ten drafts is under three points a week — that's the message that the *structure* matters more than any single pick.
 - The most-owned players across runs: these are the players the math keeps choosing, and they should headline the target list.

@@ -11,19 +11,80 @@
  },
  "replacement_rank": {
   "QB": 12,
-  "RB": 34,
-  "WR": 32,
-  "TE": 14,
   "K": 12,
-  "DEF": 12
+  "DEF": 12,
+  "RB": 28,
+  "WR": 35,
+  "TE": 13
  },
  "replacement": {
   "QB": 312,
-  "RB": 137,
-  "WR": 165,
-  "TE": 114,
   "K": 130,
-  "DEF": 101
+  "DEF": 101,
+  "RB": 164,
+  "WR": 156,
+  "TE": 116
+ },
+ "flex_fill": {
+  "RB": 4,
+  "WR": 11,
+  "TE": 0
+ },
+ "position_plan": {
+  "5": {
+   "WR": 106,
+   "RB": 91,
+   "QB": 43,
+   "TE": 74
+  },
+  "20": {
+   "WR": 68,
+   "RB": 45,
+   "TE": 69,
+   "QB": 36
+  },
+  "29": {
+   "RB": 38,
+   "WR": 57,
+   "TE": 47,
+   "QB": 35
+  },
+  "44": {
+   "WR": 42,
+   "RB": 29,
+   "QB": 34,
+   "TE": 36
+  },
+  "53": {
+   "WR": 33,
+   "RB": 17,
+   "QB": 30,
+   "TE": 34
+  },
+  "77": {
+   "TE": 16,
+   "RB": 11,
+   "QB": 14,
+   "WR": 18
+  },
+  "92": {
+   "WR": 11,
+   "QB": 11,
+   "RB": -15,
+   "TE": 6
+  },
+  "101": {
+   "RB": -25,
+   "WR": -1,
+   "QB": 9,
+   "TE": 6
+  },
+  "116": {
+   "WR": -7,
+   "RB": -36,
+   "TE": 4,
+   "QB": 3
+  }
  },
  "ladder": [
   {
@@ -94,10 +155,10 @@
    "cost_pick": 20,
    "adp": 20.0,
    "proj": 227.0,
-   "vor": 62.0,
+   "vor": 71.0,
    "surplus_picks": 0.0,
-   "expected_alt_vor_at_pick": 78.7,
-   "surplus_points": -16.7
+   "expected_alt_vor_at_pick": 74.1,
+   "surplus_points": -3.1
   },
   {
    "player": "Chase Brown",
@@ -109,10 +170,10 @@
    "cost_pick": 68,
    "adp": 10.0,
    "proj": 230.0,
-   "vor": 93.0,
+   "vor": 66.0,
    "surplus_picks": 58.0,
-   "expected_alt_vor_at_pick": 38.8,
-   "surplus_points": 54.2
+   "expected_alt_vor_at_pick": 31.2,
+   "surplus_points": 34.8
   },
   {
    "player": "Jayden Daniels",
@@ -126,8 +187,8 @@
    "proj": 347.0,
    "vor": 35.0,
    "surplus_picks": 14.0,
-   "expected_alt_vor_at_pick": 35.4,
-   "surplus_points": -0.4
+   "expected_alt_vor_at_pick": 26.2,
+   "surplus_points": 8.8
   },
   {
    "player": "Brock Bowers",
@@ -139,10 +200,10 @@
    "cost_pick": 29,
    "adp": 26.0,
    "proj": 192.0,
-   "vor": 78.0,
+   "vor": 76.0,
    "surplus_picks": 3.0,
-   "expected_alt_vor_at_pick": 67.0,
-   "surplus_points": 11.0
+   "expected_alt_vor_at_pick": 61.1,
+   "surplus_points": 14.9
   },
   {
    "player": "Courtland Sutton",
@@ -154,10 +215,10 @@
    "cost_pick": 92,
    "adp": 78.0,
    "proj": 165.0,
-   "vor": 0.0,
+   "vor": 9.0,
    "surplus_picks": 14.0,
-   "expected_alt_vor_at_pick": 25.6,
-   "surplus_points": -25.6
+   "expected_alt_vor_at_pick": 25.0,
+   "surplus_points": -16.0
   },
   {
    "player": "Jaylen Warren",
@@ -182,10 +243,10 @@
    "cost_pick": 53,
    "adp": 42.0,
    "proj": 200.0,
-   "vor": 35.0,
+   "vor": 44.0,
    "surplus_picks": 11.0,
-   "expected_alt_vor_at_pick": 44.6,
-   "surplus_points": -9.6
+   "expected_alt_vor_at_pick": 35.6,
+   "surplus_points": 8.4
   },
   {
    "player": "Travis Etienne Jr.",
@@ -197,28 +258,28 @@
    "cost_pick": 44,
    "adp": 33.0,
    "proj": 190.0,
-   "vor": 53.0,
+   "vor": 26.0,
    "surplus_picks": 11.0,
-   "expected_alt_vor_at_pick": 55.0,
-   "surplus_points": -2.0
+   "expected_alt_vor_at_pick": 43.0,
+   "surplus_points": -17.0
   }
  ],
  "expected_best_surplus_at_pick": {
-  "5": 120.3,
-  "20": 78.7,
-  "29": 67.0,
-  "44": 55.0,
-  "53": 44.6,
-  "68": 38.8,
-  "77": 35.4,
-  "92": 25.6,
+  "5": 112.3,
+  "20": 74.1,
+  "29": 61.1,
+  "44": 43.0,
+  "53": 35.6,
+  "68": 31.2,
+  "77": 26.2,
+  "92": 25.0,
   "101": 25.0,
   "116": 25.0,
-  "125": 24.6,
-  "140": 19.4,
+  "125": 24.7,
+  "140": 19.6,
   "149": 15.3,
-  "164": 9.4,
-  "173": 5.1
+  "164": 9.2,
+  "173": 5.2
  },
  "inflation_at_pick": {
   "5": 11.2,
@@ -253,17 +314,8 @@
     "pos": "RB",
     "team": "ATL",
     "proj": 282,
-    "surplus": 145,
+    "surplus": 118,
     "there": 21,
-    "watch": false
-   },
-   {
-    "name": "Jonathan Taylor",
-    "pos": "RB",
-    "team": "IND",
-    "proj": 241,
-    "surplus": 104,
-    "there": 52,
     "watch": false
    },
    {
@@ -271,35 +323,8 @@
     "pos": "WR",
     "team": "SEA",
     "proj": 268,
-    "surplus": 103,
+    "surplus": 112,
     "there": 63,
-    "watch": false
-   },
-   {
-    "name": "James Cook III",
-    "pos": "RB",
-    "team": "BUF",
-    "proj": 237,
-    "surplus": 100,
-    "there": 76,
-    "watch": false
-   },
-   {
-    "name": "Christian McCaffrey",
-    "pos": "RB",
-    "team": "SF",
-    "proj": 234,
-    "surplus": 97,
-    "there": 68,
-    "watch": false
-   },
-   {
-    "name": "De'Von Achane",
-    "pos": "RB",
-    "team": "MIA",
-    "proj": 234,
-    "surplus": 97,
-    "there": 81,
     "watch": false
    },
    {
@@ -307,7 +332,7 @@
     "pos": "WR",
     "team": "CIN",
     "proj": 261,
-    "surplus": 96,
+    "surplus": 105,
     "there": 31,
     "watch": false
    },
@@ -316,7 +341,7 @@
     "pos": "WR",
     "team": "LAR",
     "proj": 259,
-    "surplus": 94,
+    "surplus": 103,
     "there": 40,
     "watch": false
    },
@@ -325,8 +350,26 @@
     "pos": "WR",
     "team": "DET",
     "proj": 243,
-    "surplus": 78,
+    "surplus": 87,
     "there": 75,
+    "watch": false
+   },
+   {
+    "name": "CeeDee Lamb",
+    "pos": "WR",
+    "team": "DAL",
+    "proj": 237,
+    "surplus": 81,
+    "there": 84,
+    "watch": false
+   },
+   {
+    "name": "Jonathan Taylor",
+    "pos": "RB",
+    "team": "IND",
+    "proj": 241,
+    "surplus": 77,
+    "there": 52,
     "watch": false
    },
    {
@@ -334,17 +377,35 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 84,
     "watch": true
    },
    {
-    "name": "CeeDee Lamb",
-    "pos": "WR",
-    "team": "DAL",
+    "name": "James Cook III",
+    "pos": "RB",
+    "team": "BUF",
     "proj": 237,
-    "surplus": 72,
-    "there": 84,
+    "surplus": 73,
+    "there": 76,
+    "watch": false
+   },
+   {
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "team": "SF",
+    "proj": 234,
+    "surplus": 70,
+    "there": 68,
+    "watch": false
+   },
+   {
+    "name": "De'Von Achane",
+    "pos": "RB",
+    "team": "MIA",
+    "proj": 234,
+    "surplus": 70,
+    "there": 81,
     "watch": false
    },
    {
@@ -352,7 +413,7 @@
     "pos": "TE",
     "team": "ARI",
     "proj": 184,
-    "surplus": 70,
+    "surplus": 68,
     "there": 85,
     "watch": false
    },
@@ -370,7 +431,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 89,
     "watch": true
    },
@@ -379,18 +440,9 @@
     "pos": "TE",
     "team": "IND",
     "proj": 151,
-    "surplus": 37,
+    "surplus": 35,
     "there": 90,
     "watch": false
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 93,
-    "watch": true
    },
    {
     "name": "Jayden Daniels",
@@ -399,6 +451,15 @@
     "proj": 347,
     "surplus": 35,
     "there": 92,
+    "watch": true
+   },
+   {
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 93,
     "watch": true
    },
    {
@@ -433,7 +494,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 90,
     "watch": true
    },
@@ -442,7 +503,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 93,
     "watch": true
    },
@@ -451,7 +512,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 86,
     "watch": true
    },
@@ -460,7 +521,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 89,
     "watch": true
    },
@@ -469,7 +530,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 89,
     "watch": true
    },
@@ -478,7 +539,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 93,
     "watch": true
    },
@@ -487,7 +548,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 91,
     "watch": true
    },
@@ -496,7 +557,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 88,
     "watch": true
    },
@@ -505,7 +566,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 89,
     "watch": true
    }
@@ -516,71 +577,26 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 52,
     "watch": true
-   },
-   {
-    "name": "Omarion Hampton",
-    "pos": "RB",
-    "team": "LAC",
-    "proj": 211,
-    "surplus": 74,
-    "there": 26,
-    "watch": false
-   },
-   {
-    "name": "Kenneth Walker",
-    "pos": "RB",
-    "team": "KC",
-    "proj": 210,
-    "surplus": 73,
-    "there": 21,
-    "watch": false
-   },
-   {
-    "name": "Trey McBride",
-    "pos": "TE",
-    "team": "ARI",
-    "proj": 184,
-    "surplus": 70,
-    "there": 72,
-    "watch": false
-   },
-   {
-    "name": "Kyren Williams",
-    "pos": "RB",
-    "team": "LAR",
-    "proj": 203,
-    "surplus": 66,
-    "there": 84,
-    "watch": false
-   },
-   {
-    "name": "Breece Hall",
-    "pos": "RB",
-    "team": "NYJ",
-    "proj": 203,
-    "surplus": 66,
-    "there": 88,
-    "watch": false
    },
    {
     "name": "Drake London",
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 60,
     "watch": true
    },
    {
-    "name": "Javonte Williams",
-    "pos": "RB",
-    "team": "DAL",
-    "proj": 193,
-    "surplus": 56,
-    "there": 86,
+    "name": "Trey McBride",
+    "pos": "TE",
+    "team": "ARI",
+    "proj": 184,
+    "surplus": 68,
+    "there": 72,
     "watch": false
    },
    {
@@ -588,7 +604,7 @@
     "pos": "WR",
     "team": "BAL",
     "proj": 215,
-    "surplus": 50,
+    "surplus": 59,
     "there": 87,
     "watch": false
    },
@@ -597,7 +613,7 @@
     "pos": "WR",
     "team": "KC",
     "proj": 214,
-    "surplus": 49,
+    "surplus": 58,
     "there": 79,
     "watch": false
    },
@@ -606,7 +622,7 @@
     "pos": "WR",
     "team": "DAL",
     "proj": 211,
-    "surplus": 46,
+    "surplus": 55,
     "there": 70,
     "watch": false
    },
@@ -615,8 +631,26 @@
     "pos": "WR",
     "team": "HOU",
     "proj": 211,
-    "surplus": 46,
+    "surplus": 55,
     "there": 80,
+    "watch": false
+   },
+   {
+    "name": "Omarion Hampton",
+    "pos": "RB",
+    "team": "LAC",
+    "proj": 211,
+    "surplus": 47,
+    "there": 26,
+    "watch": false
+   },
+   {
+    "name": "Kenneth Walker",
+    "pos": "RB",
+    "team": "KC",
+    "proj": 210,
+    "surplus": 46,
+    "there": 21,
     "watch": false
    },
    {
@@ -624,27 +658,36 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 88,
     "watch": true
+   },
+   {
+    "name": "Kyren Williams",
+    "pos": "RB",
+    "team": "LAR",
+    "proj": 203,
+    "surplus": 39,
+    "there": 84,
+    "watch": false
+   },
+   {
+    "name": "Breece Hall",
+    "pos": "RB",
+    "team": "NYJ",
+    "proj": 203,
+    "surplus": 39,
+    "there": 88,
+    "watch": false
    },
    {
     "name": "Tyler Warren",
     "pos": "TE",
     "team": "IND",
     "proj": 151,
-    "surplus": 37,
+    "surplus": 35,
     "there": 90,
     "watch": false
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 93,
-    "watch": true
    },
    {
     "name": "Jayden Daniels",
@@ -656,11 +699,29 @@
     "watch": true
    },
    {
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 93,
+    "watch": true
+   },
+   {
     "name": "Lamar Jackson",
     "pos": "QB",
     "team": "BAL",
     "proj": 344,
     "surplus": 32,
+    "there": 86,
+    "watch": false
+   },
+   {
+    "name": "Javonte Williams",
+    "pos": "RB",
+    "team": "DAL",
+    "proj": 193,
+    "surplus": 29,
     "there": 86,
     "watch": false
    },
@@ -696,7 +757,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 90,
     "watch": true
    },
@@ -705,7 +766,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 93,
     "watch": true
    },
@@ -714,7 +775,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 89,
     "watch": true
    },
@@ -723,7 +784,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 89,
     "watch": true
    },
@@ -732,7 +793,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 93,
     "watch": true
    },
@@ -741,7 +802,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 91,
     "watch": true
    },
@@ -750,7 +811,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 88,
     "watch": true
    },
@@ -759,18 +820,81 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 88,
     "watch": true
    }
   ],
   "29": [
    {
+    "name": "Trey McBride",
+    "pos": "TE",
+    "team": "ARI",
+    "proj": 184,
+    "surplus": 68,
+    "there": 15,
+    "watch": false
+   },
+   {
+    "name": "Zay Flowers",
+    "pos": "WR",
+    "team": "BAL",
+    "proj": 215,
+    "surplus": 59,
+    "there": 83,
+    "watch": false
+   },
+   {
+    "name": "Nico Collins",
+    "pos": "WR",
+    "team": "HOU",
+    "proj": 211,
+    "surplus": 55,
+    "there": 22,
+    "watch": false
+   },
+   {
+    "name": "Tetairoa McMillan",
+    "pos": "WR",
+    "team": "CAR",
+    "proj": 200,
+    "surplus": 44,
+    "there": 88,
+    "watch": true
+   },
+   {
+    "name": "Colston Loveland",
+    "pos": "TE",
+    "team": "CHI",
+    "proj": 159,
+    "surplus": 43,
+    "there": 80,
+    "watch": true
+   },
+   {
+    "name": "Tee Higgins",
+    "pos": "WR",
+    "team": "CIN",
+    "proj": 197,
+    "surplus": 41,
+    "there": 87,
+    "watch": false
+   },
+   {
+    "name": "Malik Nabers",
+    "pos": "WR",
+    "team": "NYG",
+    "proj": 197,
+    "surplus": 41,
+    "there": 69,
+    "watch": false
+   },
+   {
     "name": "Breece Hall",
     "pos": "RB",
     "team": "NYJ",
     "proj": 203,
-    "surplus": 66,
+    "surplus": 39,
     "there": 88,
     "watch": false
    },
@@ -779,90 +903,18 @@
     "pos": "RB",
     "team": "LAR",
     "proj": 203,
-    "surplus": 66,
+    "surplus": 39,
     "there": 31,
     "watch": false
-   },
-   {
-    "name": "Javonte Williams",
-    "pos": "RB",
-    "team": "DAL",
-    "proj": 193,
-    "surplus": 56,
-    "there": 72,
-    "watch": false
-   },
-   {
-    "name": "Travis Etienne Jr.",
-    "pos": "RB",
-    "team": "NO",
-    "proj": 190,
-    "surplus": 53,
-    "there": 84,
-    "watch": true
-   },
-   {
-    "name": "D'Andre Swift",
-    "pos": "RB",
-    "team": "CHI",
-    "proj": 190,
-    "surplus": 53,
-    "there": 84,
-    "watch": false
-   },
-   {
-    "name": "Zay Flowers",
-    "pos": "WR",
-    "team": "BAL",
-    "proj": 215,
-    "surplus": 50,
-    "there": 85,
-    "watch": false
-   },
-   {
-    "name": "Nico Collins",
-    "pos": "WR",
-    "team": "HOU",
-    "proj": 211,
-    "surplus": 46,
-    "there": 22,
-    "watch": false
-   },
-   {
-    "name": "Colston Loveland",
-    "pos": "TE",
-    "team": "CHI",
-    "proj": 159,
-    "surplus": 45,
-    "there": 80,
-    "watch": true
    },
    {
     "name": "Tyler Warren",
     "pos": "TE",
     "team": "IND",
     "proj": 151,
-    "surplus": 37,
+    "surplus": 35,
     "there": 90,
     "watch": false
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 93,
-    "watch": true
-   },
-   {
-    "name": "Tetairoa McMillan",
-    "pos": "WR",
-    "team": "CAR",
-    "proj": 200,
-    "surplus": 35,
-    "there": 88,
-    "watch": true
    },
    {
     "name": "Jayden Daniels",
@@ -874,13 +926,13 @@
     "watch": true
    },
    {
-    "name": "Tee Higgins",
-    "pos": "WR",
-    "team": "CIN",
-    "proj": 197,
-    "surplus": 32,
-    "there": 87,
-    "watch": false
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 93,
+    "watch": true
    },
    {
     "name": "Lamar Jackson",
@@ -892,12 +944,12 @@
     "watch": false
    },
    {
-    "name": "Malik Nabers",
-    "pos": "WR",
-    "team": "NYG",
-    "proj": 197,
-    "surplus": 32,
-    "there": 69,
+    "name": "Javonte Williams",
+    "pos": "RB",
+    "team": "DAL",
+    "proj": 193,
+    "surplus": 29,
+    "there": 71,
     "watch": false
    },
    {
@@ -910,11 +962,29 @@
     "watch": false
    },
    {
+    "name": "Travis Etienne Jr.",
+    "pos": "RB",
+    "team": "NO",
+    "proj": 190,
+    "surplus": 26,
+    "there": 84,
+    "watch": true
+   },
+   {
+    "name": "D'Andre Swift",
+    "pos": "RB",
+    "team": "CHI",
+    "proj": 190,
+    "surplus": 26,
+    "there": 85,
+    "watch": false
+   },
+   {
     "name": "Tucker Kraft",
     "pos": "TE",
     "team": "GB",
     "proj": 136,
-    "surplus": 22,
+    "surplus": 20,
     "there": 93,
     "watch": false
    },
@@ -925,15 +995,6 @@
     "proj": 331,
     "surplus": 19,
     "there": 90,
-    "watch": false
-   },
-   {
-    "name": "Harold Fannin Jr.",
-    "pos": "TE",
-    "team": "CLE",
-    "proj": 133,
-    "surplus": 19,
-    "there": 92,
     "watch": false
    },
    {
@@ -950,7 +1011,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 90,
     "watch": true
    },
@@ -959,7 +1020,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -968,7 +1029,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 93,
     "watch": true
    },
@@ -977,7 +1038,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 3,
     "watch": true
    },
@@ -986,7 +1047,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 89,
     "watch": true
    },
@@ -995,7 +1056,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 89,
     "watch": true
    },
@@ -1004,7 +1065,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 93,
     "watch": true
    },
@@ -1013,64 +1074,64 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 91,
     "watch": true
    }
   ],
   "44": [
    {
-    "name": "Breece Hall",
-    "pos": "RB",
-    "team": "NYJ",
-    "proj": 203,
-    "surplus": 66,
-    "there": 23,
-    "watch": false
-   },
-   {
-    "name": "Bucky Irving",
-    "pos": "RB",
-    "team": "TB",
-    "proj": 188,
-    "surplus": 51,
-    "there": 71,
-    "watch": false
-   },
-   {
-    "name": "Josh Jacobs",
-    "pos": "RB",
-    "team": "GB",
-    "proj": 187,
-    "surplus": 50,
-    "there": 60,
-    "watch": false
+    "name": "Tetairoa McMillan",
+    "pos": "WR",
+    "team": "CAR",
+    "proj": 200,
+    "surplus": 44,
+    "there": 62,
+    "watch": true
    },
    {
     "name": "Colston Loveland",
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
-    "there": 17,
+    "surplus": 43,
+    "there": 16,
     "watch": true
    },
    {
-    "name": "Quinshon Judkins",
-    "pos": "RB",
-    "team": "CLE",
-    "proj": 179,
-    "surplus": 42,
-    "there": 83,
+    "name": "Tee Higgins",
+    "pos": "WR",
+    "team": "CIN",
+    "proj": 197,
+    "surplus": 41,
+    "there": 24,
     "watch": false
    },
    {
-    "name": "David Montgomery",
+    "name": "Breece Hall",
     "pos": "RB",
-    "team": "HOU",
-    "proj": 176,
+    "team": "NYJ",
+    "proj": 203,
     "surplus": 39,
-    "there": 86,
+    "there": 32,
+    "watch": false
+   },
+   {
+    "name": "Emeka Egbuka",
+    "pos": "WR",
+    "team": "TB",
+    "proj": 192,
+    "surplus": 36,
+    "there": 80,
+    "watch": true
+   },
+   {
+    "name": "Garrett Wilson",
+    "pos": "WR",
+    "team": "NYJ",
+    "proj": 191,
+    "surplus": 35,
+    "there": 83,
     "watch": false
    },
    {
@@ -1078,18 +1139,9 @@
     "pos": "TE",
     "team": "IND",
     "proj": 151,
-    "surplus": 37,
+    "surplus": 35,
     "there": 87,
     "watch": false
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 91,
-    "watch": true
    },
    {
     "name": "Jayden Daniels",
@@ -1101,21 +1153,21 @@
     "watch": true
    },
    {
-    "name": "Tetairoa McMillan",
-    "pos": "WR",
-    "team": "CAR",
-    "proj": 200,
-    "surplus": 35,
-    "there": 66,
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 91,
     "watch": true
    },
    {
-    "name": "Tee Higgins",
+    "name": "Ladd McConkey",
     "pos": "WR",
-    "team": "CIN",
-    "proj": 197,
-    "surplus": 32,
-    "there": 25,
+    "team": "LAC",
+    "proj": 189,
+    "surplus": 33,
+    "there": 37,
     "watch": false
    },
    {
@@ -1128,30 +1180,21 @@
     "watch": false
    },
    {
-    "name": "Emeka Egbuka",
-    "pos": "WR",
+    "name": "Bucky Irving",
+    "pos": "RB",
     "team": "TB",
-    "proj": 192,
-    "surplus": 27,
-    "there": 80,
-    "watch": true
-   },
-   {
-    "name": "Garrett Wilson",
-    "pos": "WR",
-    "team": "NYJ",
-    "proj": 191,
-    "surplus": 26,
-    "there": 83,
+    "proj": 188,
+    "surplus": 24,
+    "there": 71,
     "watch": false
    },
    {
-    "name": "Ladd McConkey",
-    "pos": "WR",
-    "team": "LAC",
-    "proj": 189,
-    "surplus": 24,
-    "there": 39,
+    "name": "Josh Jacobs",
+    "pos": "RB",
+    "team": "GB",
+    "proj": 187,
+    "surplus": 23,
+    "there": 59,
     "watch": false
    },
    {
@@ -1159,16 +1202,7 @@
     "pos": "TE",
     "team": "GB",
     "proj": 136,
-    "surplus": 22,
-    "there": 92,
-    "watch": false
-   },
-   {
-    "name": "Harold Fannin Jr.",
-    "pos": "TE",
-    "team": "CLE",
-    "proj": 133,
-    "surplus": 19,
+    "surplus": 20,
     "there": 92,
     "watch": false
    },
@@ -1178,7 +1212,7 @@
     "team": "NE",
     "proj": 331,
     "surplus": 19,
-    "there": 74,
+    "there": 75,
     "watch": false
    },
    {
@@ -1191,6 +1225,24 @@
     "watch": false
    },
    {
+    "name": "Harold Fannin Jr.",
+    "pos": "TE",
+    "team": "CLE",
+    "proj": 133,
+    "surplus": 17,
+    "there": 92,
+    "watch": false
+   },
+   {
+    "name": "Quinshon Judkins",
+    "pos": "RB",
+    "team": "CLE",
+    "proj": 179,
+    "surplus": 15,
+    "there": 83,
+    "watch": false
+   },
+   {
     "name": "Patrick Mahomes",
     "pos": "QB",
     "team": "KC",
@@ -1200,11 +1252,20 @@
     "watch": false
    },
    {
+    "name": "David Montgomery",
+    "pos": "RB",
+    "team": "HOU",
+    "proj": 176,
+    "surplus": 12,
+    "there": 86,
+    "watch": false
+   },
+   {
     "name": "Bhayshul Tuten",
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 89,
     "watch": true
    },
@@ -1213,7 +1274,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -1222,7 +1283,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 93,
     "watch": true
    },
@@ -1231,7 +1292,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -1240,8 +1301,8 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
-    "there": 78,
+    "surplus": 18,
+    "there": 77,
     "watch": true
    },
    {
@@ -1249,7 +1310,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 93,
     "watch": true
    },
@@ -1258,7 +1319,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 91,
     "watch": true
    },
@@ -1267,100 +1328,19 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 2,
     "watch": true
    }
   ],
   "53": [
    {
-    "name": "Josh Jacobs",
-    "pos": "RB",
-    "team": "GB",
-    "proj": 187,
-    "surplus": 50,
-    "there": 31,
-    "watch": false
-   },
-   {
-    "name": "Quinshon Judkins",
-    "pos": "RB",
-    "team": "CLE",
-    "proj": 179,
-    "surplus": 42,
-    "there": 42,
-    "watch": false
-   },
-   {
-    "name": "Jaylen Warren",
-    "pos": "RB",
-    "team": "PIT",
-    "proj": 176,
-    "surplus": 39,
-    "there": 93,
-    "watch": true
-   },
-   {
-    "name": "David Montgomery",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 176,
-    "surplus": 39,
-    "there": 54,
-    "watch": false
-   },
-   {
-    "name": "Bhayshul Tuten",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 176,
-    "surplus": 39,
-    "there": 78,
-    "watch": true
-   },
-   {
-    "name": "Tyler Warren",
-    "pos": "TE",
-    "team": "IND",
-    "proj": 151,
-    "surplus": 37,
-    "there": 65,
-    "watch": false
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 86,
-    "watch": true
-   },
-   {
-    "name": "Jayden Daniels",
-    "pos": "QB",
-    "team": "WAS",
-    "proj": 347,
-    "surplus": 35,
-    "there": 47,
-    "watch": true
-   },
-   {
-    "name": "Jalen Hurts",
-    "pos": "QB",
-    "team": "PHI",
-    "proj": 340,
-    "surplus": 28,
-    "there": 68,
-    "watch": false
-   },
-   {
     "name": "Emeka Egbuka",
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
-    "there": 23,
+    "surplus": 36,
+    "there": 21,
     "watch": true
    },
    {
@@ -1368,25 +1348,43 @@
     "pos": "WR",
     "team": "NYJ",
     "proj": 191,
-    "surplus": 26,
-    "there": 36,
+    "surplus": 35,
+    "there": 35,
     "watch": false
    },
    {
-    "name": "Tucker Kraft",
+    "name": "Jayden Daniels",
+    "pos": "QB",
+    "team": "WAS",
+    "proj": 347,
+    "surplus": 35,
+    "there": 50,
+    "watch": true
+   },
+   {
+    "name": "Tyler Warren",
     "pos": "TE",
-    "team": "GB",
-    "proj": 136,
-    "surplus": 22,
-    "there": 87,
+    "team": "IND",
+    "proj": 151,
+    "surplus": 35,
+    "there": 68,
     "watch": false
+   },
+   {
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 86,
+    "watch": true
    },
    {
     "name": "Jameson Williams",
     "pos": "WR",
     "team": "DET",
     "proj": 187,
-    "surplus": 22,
+    "surplus": 31,
     "there": 89,
     "watch": false
    },
@@ -1395,17 +1393,44 @@
     "pos": "WR",
     "team": "LAR",
     "proj": 186,
-    "surplus": 21,
+    "surplus": 30,
     "there": 86,
     "watch": false
    },
    {
-    "name": "Harold Fannin Jr.",
+    "name": "Jalen Hurts",
+    "pos": "QB",
+    "team": "PHI",
+    "proj": 340,
+    "surplus": 28,
+    "there": 67,
+    "watch": false
+   },
+   {
+    "name": "Terry McLaurin",
+    "pos": "WR",
+    "team": "WAS",
+    "proj": 180,
+    "surplus": 24,
+    "there": 90,
+    "watch": false
+   },
+   {
+    "name": "Josh Jacobs",
+    "pos": "RB",
+    "team": "GB",
+    "proj": 187,
+    "surplus": 23,
+    "there": 31,
+    "watch": false
+   },
+   {
+    "name": "Tucker Kraft",
     "pos": "TE",
-    "team": "CLE",
-    "proj": 133,
-    "surplus": 19,
-    "there": 92,
+    "team": "GB",
+    "proj": 136,
+    "surplus": 20,
+    "there": 87,
     "watch": false
    },
    {
@@ -1414,7 +1439,16 @@
     "team": "NE",
     "proj": 331,
     "surplus": 19,
-    "there": 36,
+    "there": 37,
+    "watch": false
+   },
+   {
+    "name": "Harold Fannin Jr.",
+    "pos": "TE",
+    "team": "CLE",
+    "proj": 133,
+    "surplus": 17,
+    "there": 92,
     "watch": false
    },
    {
@@ -1427,21 +1461,12 @@
     "watch": false
    },
    {
-    "name": "Terry McLaurin",
-    "pos": "WR",
-    "team": "WAS",
-    "proj": 180,
+    "name": "Quinshon Judkins",
+    "pos": "RB",
+    "team": "CLE",
+    "proj": 179,
     "surplus": 15,
-    "there": 90,
-    "watch": false
-   },
-   {
-    "name": "George Kittle",
-    "pos": "TE",
-    "team": "SF",
-    "proj": 129,
-    "surplus": 15,
-    "there": 90,
+    "there": 41,
     "watch": false
    },
    {
@@ -1454,11 +1479,47 @@
     "watch": false
    },
    {
+    "name": "George Kittle",
+    "pos": "TE",
+    "team": "SF",
+    "proj": 129,
+    "surplus": 13,
+    "there": 90,
+    "watch": false
+   },
+   {
+    "name": "David Montgomery",
+    "pos": "RB",
+    "team": "HOU",
+    "proj": 176,
+    "surplus": 12,
+    "there": 54,
+    "watch": false
+   },
+   {
+    "name": "Bhayshul Tuten",
+    "pos": "RB",
+    "team": "JAX",
+    "proj": 176,
+    "surplus": 12,
+    "there": 79,
+    "watch": true
+   },
+   {
+    "name": "Jaylen Warren",
+    "pos": "RB",
+    "team": "PIT",
+    "proj": 176,
+    "surplus": 12,
+    "there": 93,
+    "watch": true
+   },
+   {
     "name": "Brock Bowers",
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -1467,7 +1528,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 1,
     "watch": true
    },
@@ -1476,7 +1537,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 93,
     "watch": true
    },
@@ -1485,7 +1546,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -1494,7 +1555,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 30,
     "watch": true
    },
@@ -1503,7 +1564,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 89,
     "watch": true
    },
@@ -1512,8 +1573,8 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
-    "there": 3,
+    "surplus": 44,
+    "there": 2,
     "watch": true
    },
    {
@@ -1521,64 +1582,28 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
   ],
   "77": [
    {
-    "name": "Jaylen Warren",
-    "pos": "RB",
-    "team": "PIT",
-    "proj": 176,
-    "surplus": 39,
-    "there": 90,
-    "watch": true
-   },
-   {
     "name": "Kyle Pitts Sr.",
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 16,
     "watch": true
    },
    {
-    "name": "TreVeyon Henderson",
-    "pos": "RB",
-    "team": "NE",
-    "proj": 168,
-    "surplus": 31,
-    "there": 63,
-    "watch": false
-   },
-   {
-    "name": "Rhamondre Stevenson",
-    "pos": "RB",
-    "team": "NE",
-    "proj": 166,
-    "surplus": 29,
-    "there": 50,
-    "watch": false
-   },
-   {
-    "name": "Tony Pollard",
-    "pos": "RB",
-    "team": "TEN",
-    "proj": 164,
-    "surplus": 27,
-    "there": 82,
-    "watch": false
-   },
-   {
-    "name": "Tucker Kraft",
-    "pos": "TE",
-    "team": "GB",
-    "proj": 136,
-    "surplus": 22,
-    "there": 16,
+    "name": "Parker Washington",
+    "pos": "WR",
+    "team": "JAX",
+    "proj": 176,
+    "surplus": 20,
+    "there": 46,
     "watch": false
    },
    {
@@ -1586,26 +1611,26 @@
     "pos": "TE",
     "team": "CLE",
     "proj": 133,
-    "surplus": 19,
-    "there": 25,
+    "surplus": 17,
+    "there": 23,
     "watch": false
    },
    {
-    "name": "Rico Dowdle",
-    "pos": "RB",
-    "team": "PIT",
-    "proj": 153,
-    "surplus": 16,
-    "there": 88,
-    "watch": false
-   },
-   {
-    "name": "George Kittle",
-    "pos": "TE",
-    "team": "SF",
-    "proj": 129,
+    "name": "Brian Thomas Jr.",
+    "pos": "WR",
+    "team": "JAX",
+    "proj": 171,
     "surplus": 15,
-    "there": 46,
+    "there": 92,
+    "watch": false
+   },
+   {
+    "name": "Mike Evans",
+    "pos": "WR",
+    "team": "SF",
+    "proj": 171,
+    "surplus": 15,
+    "there": 41,
     "watch": false
    },
    {
@@ -1618,31 +1643,40 @@
     "watch": false
    },
    {
-    "name": "Parker Washington",
-    "pos": "WR",
-    "team": "JAX",
-    "proj": 176,
-    "surplus": 11,
-    "there": 45,
-    "watch": false
-   },
-   {
-    "name": "Travis Kelce",
+    "name": "George Kittle",
     "pos": "TE",
-    "team": "KC",
-    "proj": 122,
-    "surplus": 8,
-    "there": 100,
+    "team": "SF",
+    "proj": 129,
+    "surplus": 13,
+    "there": 48,
     "watch": false
    },
    {
-    "name": "Brian Thomas Jr.",
+    "name": "Jaylen Warren",
+    "pos": "RB",
+    "team": "PIT",
+    "proj": 176,
+    "surplus": 12,
+    "there": 89,
+    "watch": true
+   },
+   {
+    "name": "Marvin Harrison Jr.",
     "pos": "WR",
-    "team": "JAX",
-    "proj": 171,
-    "surplus": 6,
-    "there": 93,
+    "team": "ARI",
+    "proj": 166,
+    "surplus": 10,
+    "there": 39,
     "watch": false
+   },
+   {
+    "name": "Courtland Sutton",
+    "pos": "WR",
+    "team": "DEN",
+    "proj": 165,
+    "surplus": 9,
+    "there": 90,
+    "watch": true
    },
    {
     "name": "Jaxson Dart",
@@ -1650,16 +1684,25 @@
     "team": "NYG",
     "proj": 318,
     "surplus": 6,
+    "there": 99,
+    "watch": false
+   },
+   {
+    "name": "Travis Kelce",
+    "pos": "TE",
+    "team": "KC",
+    "proj": 122,
+    "surplus": 6,
     "there": 100,
     "watch": false
    },
    {
-    "name": "Mike Evans",
-    "pos": "WR",
-    "team": "SF",
-    "proj": 171,
-    "surplus": 6,
-    "there": 42,
+    "name": "TreVeyon Henderson",
+    "pos": "RB",
+    "team": "NE",
+    "proj": 168,
+    "surplus": 4,
+    "there": 63,
     "watch": false
    },
    {
@@ -1668,7 +1711,25 @@
     "team": "LAC",
     "proj": 315,
     "surplus": 3,
-    "there": 65,
+    "there": 66,
+    "watch": false
+   },
+   {
+    "name": "Dallas Goedert",
+    "pos": "TE",
+    "team": "PHI",
+    "proj": 118,
+    "surplus": 2,
+    "there": 75,
+    "watch": false
+   },
+   {
+    "name": "Rhamondre Stevenson",
+    "pos": "RB",
+    "team": "NE",
+    "proj": 166,
+    "surplus": 2,
+    "there": 50,
     "watch": false
    },
    {
@@ -1681,22 +1742,13 @@
     "watch": false
    },
    {
-    "name": "Marvin Harrison Jr.",
-    "pos": "WR",
-    "team": "ARI",
-    "proj": 166,
-    "surplus": 1,
-    "there": 40,
-    "watch": false
-   },
-   {
-    "name": "Courtland Sutton",
-    "pos": "WR",
-    "team": "DEN",
-    "proj": 165,
+    "name": "Tony Pollard",
+    "pos": "RB",
+    "team": "TEN",
+    "proj": 164,
     "surplus": 0,
-    "there": 90,
-    "watch": true
+    "there": 82,
+    "watch": false
    },
    {
     "name": "Kyler Murray",
@@ -1708,11 +1760,20 @@
     "watch": false
    },
    {
+    "name": "Rico Dowdle",
+    "pos": "RB",
+    "team": "PIT",
+    "proj": 153,
+    "surplus": -11,
+    "there": 88,
+    "watch": false
+   },
+   {
     "name": "Bhayshul Tuten",
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -1721,7 +1782,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -1730,7 +1791,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -1739,7 +1800,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -1748,7 +1809,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -1766,7 +1827,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -1775,7 +1836,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 1,
     "watch": true
    },
@@ -1784,7 +1845,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -1793,28 +1854,46 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
   ],
   "92": [
    {
+    "name": "Brian Thomas Jr.",
+    "pos": "WR",
+    "team": "JAX",
+    "proj": 171,
+    "surplus": 15,
+    "there": 47,
+    "watch": false
+   },
+   {
     "name": "Patrick Mahomes",
     "pos": "QB",
     "team": "KC",
     "proj": 326,
     "surplus": 14,
-    "there": 81,
+    "there": 67,
     "watch": false
    },
    {
-    "name": "J.K. Dobbins",
-    "pos": "RB",
-    "team": "DEN",
-    "proj": 148,
-    "surplus": 11,
-    "there": 54,
+    "name": "Alec Pierce",
+    "pos": "WR",
+    "team": "IND",
+    "proj": 165,
+    "surplus": 9,
+    "there": 55,
+    "watch": false
+   },
+   {
+    "name": "DK Metcalf",
+    "pos": "WR",
+    "team": "PIT",
+    "proj": 164,
+    "surplus": 8,
+    "there": 80,
     "watch": false
    },
    {
@@ -1822,17 +1901,8 @@
     "pos": "TE",
     "team": "KC",
     "proj": 122,
-    "surplus": 8,
-    "there": 96,
-    "watch": false
-   },
-   {
-    "name": "Brian Thomas Jr.",
-    "pos": "WR",
-    "team": "JAX",
-    "proj": 171,
     "surplus": 6,
-    "there": 49,
+    "there": 96,
     "watch": false
    },
    {
@@ -1845,21 +1915,12 @@
     "watch": false
    },
    {
-    "name": "RJ Harvey",
-    "pos": "RB",
-    "team": "DEN",
-    "proj": 142,
-    "surplus": 5,
-    "there": 60,
-    "watch": false
-   },
-   {
     "name": "Isaiah Likely",
     "pos": "TE",
     "team": "NYG",
     "proj": 118,
-    "surplus": 4,
-    "there": 99,
+    "surplus": 2,
+    "there": 100,
     "watch": false
    },
    {
@@ -1867,8 +1928,8 @@
     "pos": "TE",
     "team": "PHI",
     "proj": 118,
-    "surplus": 4,
-    "there": 34,
+    "surplus": 2,
+    "there": 35,
     "watch": false
    },
    {
@@ -1876,17 +1937,8 @@
     "pos": "TE",
     "team": "BAL",
     "proj": 116,
-    "surplus": 2,
-    "there": 97,
-    "watch": false
-   },
-   {
-    "name": "Alec Pierce",
-    "pos": "WR",
-    "team": "IND",
-    "proj": 165,
     "surplus": 0,
-    "there": 56,
+    "there": 97,
     "watch": false
    },
    {
@@ -1903,44 +1955,8 @@
     "pos": "TE",
     "team": "DAL",
     "proj": 114,
-    "surplus": 0,
+    "surplus": -2,
     "there": 99,
-    "watch": false
-   },
-   {
-    "name": "J. Croskey-Merritt",
-    "pos": "RB",
-    "team": "WAS",
-    "proj": 137,
-    "surplus": 0,
-    "there": 91,
-    "watch": false
-   },
-   {
-    "name": "Chuba Hubbard",
-    "pos": "RB",
-    "team": "CAR",
-    "proj": 137,
-    "surplus": 0,
-    "there": 96,
-    "watch": false
-   },
-   {
-    "name": "DK Metcalf",
-    "pos": "WR",
-    "team": "PIT",
-    "proj": 164,
-    "surplus": -1,
-    "there": 80,
-    "watch": false
-   },
-   {
-    "name": "Kenny Gainwell",
-    "pos": "RB",
-    "team": "TB",
-    "proj": 134,
-    "surplus": -3,
-    "there": 83,
     "watch": false
    },
    {
@@ -1953,20 +1969,11 @@
     "watch": false
    },
    {
-    "name": "Bo Nix",
-    "pos": "QB",
-    "team": "DEN",
-    "proj": 304,
-    "surplus": -8,
-    "there": 96,
-    "watch": false
-   },
-   {
     "name": "Michael Pittman Jr.",
     "pos": "WR",
     "team": "PIT",
     "proj": 150,
-    "surplus": -15,
+    "surplus": -6,
     "there": 100,
     "watch": false
    },
@@ -1975,8 +1982,62 @@
     "pos": "WR",
     "team": "TEN",
     "proj": 148,
-    "surplus": -17,
-    "there": 74,
+    "surplus": -8,
+    "there": 73,
+    "watch": false
+   },
+   {
+    "name": "Bo Nix",
+    "pos": "QB",
+    "team": "DEN",
+    "proj": 304,
+    "surplus": -8,
+    "there": 97,
+    "watch": false
+   },
+   {
+    "name": "Rico Dowdle",
+    "pos": "RB",
+    "team": "PIT",
+    "proj": 153,
+    "surplus": -11,
+    "there": 16,
+    "watch": false
+   },
+   {
+    "name": "J.K. Dobbins",
+    "pos": "RB",
+    "team": "DEN",
+    "proj": 148,
+    "surplus": -16,
+    "there": 56,
+    "watch": false
+   },
+   {
+    "name": "RJ Harvey",
+    "pos": "RB",
+    "team": "DEN",
+    "proj": 142,
+    "surplus": -22,
+    "there": 61,
+    "watch": false
+   },
+   {
+    "name": "Chuba Hubbard",
+    "pos": "RB",
+    "team": "CAR",
+    "proj": 137,
+    "surplus": -27,
+    "there": 96,
+    "watch": false
+   },
+   {
+    "name": "J. Croskey-Merritt",
+    "pos": "RB",
+    "team": "WAS",
+    "proj": 137,
+    "surplus": -27,
+    "there": 90,
     "watch": false
    },
    {
@@ -1984,7 +2045,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -1993,7 +2054,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -2002,7 +2063,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -2011,7 +2072,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 14,
     "watch": true
    },
@@ -2020,7 +2081,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -2029,7 +2090,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -2047,7 +2108,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -2056,8 +2117,8 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
-    "there": 0,
+    "surplus": 12,
+    "there": 4,
     "watch": true
    },
    {
@@ -2065,7 +2126,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -2074,7 +2135,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2083,7 +2144,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -2092,7 +2153,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -2104,7 +2165,16 @@
     "team": "KC",
     "proj": 326,
     "surplus": 14,
-    "there": 39,
+    "there": 45,
+    "watch": false
+   },
+   {
+    "name": "DK Metcalf",
+    "pos": "WR",
+    "team": "PIT",
+    "proj": 164,
+    "surplus": 8,
+    "there": 33,
     "watch": false
    },
    {
@@ -2112,8 +2182,8 @@
     "pos": "TE",
     "team": "KC",
     "proj": 122,
-    "surplus": 8,
-    "there": 88,
+    "surplus": 6,
+    "there": 89,
     "watch": false
    },
    {
@@ -2122,16 +2192,7 @@
     "team": "NYG",
     "proj": 318,
     "surplus": 6,
-    "there": 75,
-    "watch": false
-   },
-   {
-    "name": "RJ Harvey",
-    "pos": "RB",
-    "team": "DEN",
-    "proj": 142,
-    "surplus": 5,
-    "there": 15,
+    "there": 76,
     "watch": false
    },
    {
@@ -2139,7 +2200,7 @@
     "pos": "TE",
     "team": "NYG",
     "proj": 118,
-    "surplus": 4,
+    "surplus": 2,
     "there": 97,
     "watch": false
    },
@@ -2148,8 +2209,8 @@
     "pos": "TE",
     "team": "BAL",
     "proj": 116,
-    "surplus": 2,
-    "there": 89,
+    "surplus": 0,
+    "there": 90,
     "watch": false
    },
    {
@@ -2166,53 +2227,8 @@
     "pos": "TE",
     "team": "DAL",
     "proj": 114,
-    "surplus": 0,
-    "there": 96,
-    "watch": false
-   },
-   {
-    "name": "J. Croskey-Merritt",
-    "pos": "RB",
-    "team": "WAS",
-    "proj": 137,
-    "surplus": 0,
-    "there": 70,
-    "watch": false
-   },
-   {
-    "name": "Chuba Hubbard",
-    "pos": "RB",
-    "team": "CAR",
-    "proj": 137,
-    "surplus": 0,
-    "there": 92,
-    "watch": false
-   },
-   {
-    "name": "DK Metcalf",
-    "pos": "WR",
-    "team": "PIT",
-    "proj": 164,
-    "surplus": -1,
-    "there": 42,
-    "watch": false
-   },
-   {
-    "name": "Dalton Kincaid",
-    "pos": "TE",
-    "team": "BUF",
-    "proj": 112,
     "surplus": -2,
-    "there": 97,
-    "watch": false
-   },
-   {
-    "name": "Kenny Gainwell",
-    "pos": "RB",
-    "team": "TB",
-    "proj": 134,
-    "surplus": -3,
-    "there": 47,
+    "there": 96,
     "watch": false
    },
    {
@@ -2225,21 +2241,12 @@
     "watch": false
    },
    {
-    "name": "Kyle Monangai",
-    "pos": "RB",
-    "team": "CHI",
-    "proj": 132,
-    "surplus": -5,
-    "there": 82,
-    "watch": false
-   },
-   {
-    "name": "Bo Nix",
-    "pos": "QB",
-    "team": "DEN",
-    "proj": 304,
-    "surplus": -8,
-    "there": 83,
+    "name": "Dalton Kincaid",
+    "pos": "TE",
+    "team": "BUF",
+    "proj": 112,
+    "surplus": -4,
+    "there": 98,
     "watch": false
    },
    {
@@ -2247,8 +2254,8 @@
     "pos": "WR",
     "team": "PIT",
     "proj": 150,
-    "surplus": -15,
-    "there": 100,
+    "surplus": -6,
+    "there": 99,
     "watch": false
    },
    {
@@ -2256,8 +2263,8 @@
     "pos": "WR",
     "team": "KC",
     "proj": 148,
-    "surplus": -17,
-    "there": 72,
+    "surplus": -8,
+    "there": 70,
     "watch": false
    },
    {
@@ -2265,7 +2272,7 @@
     "pos": "WR",
     "team": "ARI",
     "proj": 148,
-    "surplus": -17,
+    "surplus": -8,
     "there": 91,
     "watch": false
    },
@@ -2274,8 +2281,62 @@
     "pos": "WR",
     "team": "MIN",
     "proj": 148,
-    "surplus": -17,
+    "surplus": -8,
     "there": 95,
+    "watch": false
+   },
+   {
+    "name": "Bo Nix",
+    "pos": "QB",
+    "team": "DEN",
+    "proj": 304,
+    "surplus": -8,
+    "there": 84,
+    "watch": false
+   },
+   {
+    "name": "RJ Harvey",
+    "pos": "RB",
+    "team": "DEN",
+    "proj": 142,
+    "surplus": -22,
+    "there": 22,
+    "watch": false
+   },
+   {
+    "name": "Chuba Hubbard",
+    "pos": "RB",
+    "team": "CAR",
+    "proj": 137,
+    "surplus": -27,
+    "there": 93,
+    "watch": false
+   },
+   {
+    "name": "J. Croskey-Merritt",
+    "pos": "RB",
+    "team": "WAS",
+    "proj": 137,
+    "surplus": -27,
+    "there": 71,
+    "watch": false
+   },
+   {
+    "name": "Kenny Gainwell",
+    "pos": "RB",
+    "team": "TB",
+    "proj": 134,
+    "surplus": -30,
+    "there": 50,
+    "watch": false
+   },
+   {
+    "name": "Kyle Monangai",
+    "pos": "RB",
+    "team": "CHI",
+    "proj": 132,
+    "surplus": -32,
+    "there": 85,
     "watch": false
    },
    {
@@ -2283,7 +2344,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2292,7 +2353,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -2301,7 +2362,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -2310,7 +2371,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -2319,7 +2380,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -2328,7 +2389,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -2346,7 +2407,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -2355,7 +2416,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2364,7 +2425,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -2373,7 +2434,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2382,7 +2443,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -2391,7 +2452,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -2402,8 +2463,8 @@
     "pos": "TE",
     "team": "KC",
     "proj": 122,
-    "surplus": 8,
-    "there": 51,
+    "surplus": 6,
+    "there": 49,
     "watch": false
    },
    {
@@ -2412,7 +2473,7 @@
     "team": "NYG",
     "proj": 318,
     "surplus": 6,
-    "there": 34,
+    "there": 35,
     "watch": false
    },
    {
@@ -2420,17 +2481,8 @@
     "pos": "TE",
     "team": "NYG",
     "proj": 118,
-    "surplus": 4,
-    "there": 80,
-    "watch": false
-   },
-   {
-    "name": "Mark Andrews",
-    "pos": "TE",
-    "team": "BAL",
-    "proj": 116,
     "surplus": 2,
-    "there": 58,
+    "there": 81,
     "watch": false
    },
    {
@@ -2443,30 +2495,21 @@
     "watch": false
    },
    {
+    "name": "Mark Andrews",
+    "pos": "TE",
+    "team": "BAL",
+    "proj": 116,
+    "surplus": 0,
+    "there": 58,
+    "watch": false
+   },
+   {
     "name": "Jake Ferguson",
     "pos": "TE",
     "team": "DAL",
     "proj": 114,
-    "surplus": 0,
-    "there": 79,
-    "watch": false
-   },
-   {
-    "name": "Chuba Hubbard",
-    "pos": "RB",
-    "team": "CAR",
-    "proj": 137,
-    "surplus": 0,
-    "there": 48,
-    "watch": false
-   },
-   {
-    "name": "Dalton Kincaid",
-    "pos": "TE",
-    "team": "BUF",
-    "proj": 112,
     "surplus": -2,
-    "there": 84,
+    "there": 79,
     "watch": false
    },
    {
@@ -2479,12 +2522,39 @@
     "watch": false
    },
    {
-    "name": "Kyle Monangai",
-    "pos": "RB",
-    "team": "CHI",
-    "proj": 132,
-    "surplus": -5,
-    "there": 30,
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 100,
+    "watch": false
+   },
+   {
+    "name": "Michael Pittman Jr.",
+    "pos": "WR",
+    "team": "PIT",
+    "proj": 150,
+    "surplus": -6,
+    "there": 76,
+    "watch": false
+   },
+   {
+    "name": "Michael Wilson",
+    "pos": "WR",
+    "team": "ARI",
+    "proj": 148,
+    "surplus": -8,
+    "there": 25,
+    "watch": false
+   },
+   {
+    "name": "Jordan Addison",
+    "pos": "WR",
+    "team": "MIN",
+    "proj": 148,
+    "surplus": -8,
+    "there": 61,
     "watch": false
    },
    {
@@ -2497,48 +2567,12 @@
     "watch": false
    },
    {
-    "name": "Michael Pittman Jr.",
-    "pos": "WR",
-    "team": "PIT",
-    "proj": 150,
-    "surplus": -15,
-    "there": 95,
-    "watch": false
-   },
-   {
-    "name": "Jordan Addison",
-    "pos": "WR",
-    "team": "MIN",
-    "proj": 148,
-    "surplus": -17,
-    "there": 63,
-    "watch": false
-   },
-   {
-    "name": "Michael Wilson",
-    "pos": "WR",
-    "team": "ARI",
-    "proj": 148,
-    "surplus": -17,
-    "there": 24,
-    "watch": false
-   },
-   {
     "name": "Jayden Reed",
     "pos": "WR",
     "team": "GB",
     "proj": 140,
-    "surplus": -25,
-    "there": 99,
-    "watch": false
-   },
-   {
-    "name": "Woody Marks",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 112,
-    "surplus": -25,
-    "there": 98,
+    "surplus": -16,
+    "there": 100,
     "watch": false
    },
    {
@@ -2546,17 +2580,17 @@
     "pos": "WR",
     "team": "IND",
     "proj": 139,
-    "surplus": -26,
-    "there": 96,
+    "surplus": -17,
+    "there": 97,
     "watch": false
    },
    {
-    "name": "Zach Charbonnet",
+    "name": "Chuba Hubbard",
     "pos": "RB",
-    "team": "SEA",
-    "proj": 111,
-    "surplus": -26,
-    "there": 96,
+    "team": "CAR",
+    "proj": 137,
+    "surplus": -27,
+    "there": 50,
     "watch": false
    },
    {
@@ -2569,12 +2603,39 @@
     "watch": false
    },
    {
+    "name": "Kyle Monangai",
+    "pos": "RB",
+    "team": "CHI",
+    "proj": 132,
+    "surplus": -32,
+    "there": 34,
+    "watch": false
+   },
+   {
+    "name": "Woody Marks",
+    "pos": "RB",
+    "team": "HOU",
+    "proj": 112,
+    "surplus": -52,
+    "there": 98,
+    "watch": false
+   },
+   {
+    "name": "Zach Charbonnet",
+    "pos": "RB",
+    "team": "SEA",
+    "proj": 111,
+    "surplus": -53,
+    "there": 95,
+    "watch": false
+   },
+   {
     "name": "Rachaad White",
     "pos": "RB",
     "team": "WAS",
     "proj": 105,
-    "surplus": -32,
-    "there": 87,
+    "surplus": -59,
+    "there": 88,
     "watch": false
    },
    {
@@ -2582,7 +2643,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2591,7 +2652,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -2600,7 +2661,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -2609,7 +2670,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -2618,7 +2679,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -2627,7 +2688,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -2645,7 +2706,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -2654,7 +2715,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2663,7 +2724,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -2672,7 +2733,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -2681,7 +2742,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -2690,7 +2751,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -2701,7 +2762,7 @@
     "pos": "TE",
     "team": "KC",
     "proj": 122,
-    "surplus": 8,
+    "surplus": 6,
     "there": 28,
     "watch": false
    },
@@ -2711,7 +2772,7 @@
     "team": "NYG",
     "proj": 318,
     "surplus": 6,
-    "there": 15,
+    "there": 17,
     "watch": false
    },
    {
@@ -2719,8 +2780,17 @@
     "pos": "TE",
     "team": "NYG",
     "proj": 118,
-    "surplus": 4,
-    "there": 66,
+    "surplus": 2,
+    "there": 67,
+    "watch": false
+   },
+   {
+    "name": "Kyler Murray",
+    "pos": "QB",
+    "team": "MIN",
+    "proj": 312,
+    "surplus": 0,
+    "there": 98,
     "watch": false
    },
    {
@@ -2728,17 +2798,8 @@
     "pos": "TE",
     "team": "BAL",
     "proj": 116,
-    "surplus": 2,
-    "there": 37,
-    "watch": false
-   },
-   {
-    "name": "Kyler Murray",
-    "pos": "QB",
-    "team": "MIN",
-    "proj": 312,
     "surplus": 0,
-    "there": 96,
+    "there": 37,
     "watch": false
    },
    {
@@ -2746,17 +2807,8 @@
     "pos": "TE",
     "team": "DAL",
     "proj": 114,
-    "surplus": 0,
-    "there": 65,
-    "watch": false
-   },
-   {
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "team": "MIN",
-    "proj": 112,
     "surplus": -2,
-    "there": 100,
+    "there": 65,
     "watch": false
    },
    {
@@ -2769,12 +2821,12 @@
     "watch": false
    },
    {
-    "name": "Bo Nix",
-    "pos": "QB",
-    "team": "DEN",
-    "proj": 304,
-    "surplus": -8,
-    "there": 16,
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 100,
     "watch": false
    },
    {
@@ -2782,8 +2834,8 @@
     "pos": "WR",
     "team": "PIT",
     "proj": 150,
-    "surplus": -15,
-    "there": 50,
+    "surplus": -6,
+    "there": 39,
     "watch": false
    },
    {
@@ -2791,8 +2843,8 @@
     "pos": "WR",
     "team": "MIN",
     "proj": 148,
-    "surplus": -17,
-    "there": 30,
+    "surplus": -8,
+    "there": 26,
     "watch": false
    },
    {
@@ -2800,17 +2852,8 @@
     "pos": "WR",
     "team": "GB",
     "proj": 140,
-    "surplus": -25,
-    "there": 97,
-    "watch": false
-   },
-   {
-    "name": "Woody Marks",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 112,
-    "surplus": -25,
-    "there": 94,
+    "surplus": -16,
+    "there": 96,
     "watch": false
    },
    {
@@ -2818,26 +2861,8 @@
     "pos": "WR",
     "team": "IND",
     "proj": 139,
-    "surplus": -26,
-    "there": 88,
-    "watch": false
-   },
-   {
-    "name": "Zach Charbonnet",
-    "pos": "RB",
-    "team": "SEA",
-    "proj": 111,
-    "surplus": -26,
-    "there": 90,
-    "watch": false
-   },
-   {
-    "name": "Jordan Love",
-    "pos": "QB",
-    "team": "GB",
-    "proj": 284,
-    "surplus": -28,
-    "there": 100,
+    "surplus": -17,
+    "there": 86,
     "watch": false
    },
    {
@@ -2845,253 +2870,8 @@
     "pos": "WR",
     "team": "WAS",
     "proj": 135,
-    "surplus": -30,
-    "there": 43,
-    "watch": false
-   },
-   {
-    "name": "Rachaad White",
-    "pos": "RB",
-    "team": "WAS",
-    "proj": 105,
-    "surplus": -32,
-    "there": 67,
-    "watch": false
-   },
-   {
-    "name": "Chris Rodriguez Jr.",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 95,
-    "surplus": -42,
-    "there": 99,
-    "watch": false
-   },
-   {
-    "name": "Mike Washington Jr.",
-    "pos": "RB",
-    "team": "LV",
-    "proj": 95,
-    "surplus": -42,
-    "there": 88,
-    "watch": false
-   },
-   {
-    "name": "Bhayshul Tuten",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 176,
-    "surplus": 39,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Brock Bowers",
-    "pos": "TE",
-    "team": "LV",
-    "proj": 192,
-    "surplus": 78,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Colston Loveland",
-    "pos": "TE",
-    "team": "CHI",
-    "proj": 159,
-    "surplus": 45,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Courtland Sutton",
-    "pos": "WR",
-    "team": "DEN",
-    "proj": 165,
-    "surplus": 0,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Drake London",
-    "pos": "WR",
-    "team": "ATL",
-    "proj": 227,
-    "surplus": 62,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Emeka Egbuka",
-    "pos": "WR",
-    "team": "TB",
-    "proj": 192,
-    "surplus": 27,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Jayden Daniels",
-    "pos": "QB",
-    "team": "WAS",
-    "proj": 347,
-    "surplus": 35,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Jaylen Waddle",
-    "pos": "WR",
-    "team": "DEN",
-    "proj": 174,
-    "surplus": 9,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Jaylen Warren",
-    "pos": "RB",
-    "team": "PIT",
-    "proj": 176,
-    "surplus": 39,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Kyle Pitts Sr.",
-    "pos": "TE",
-    "team": "ATL",
-    "proj": 150,
-    "surplus": 36,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Luther Burden III",
-    "pos": "WR",
-    "team": "CHI",
-    "proj": 168,
-    "surplus": 3,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Tetairoa McMillan",
-    "pos": "WR",
-    "team": "CAR",
-    "proj": 200,
-    "surplus": 35,
-    "there": 0,
-    "watch": true
-   },
-   {
-    "name": "Travis Etienne Jr.",
-    "pos": "RB",
-    "team": "NO",
-    "proj": 190,
-    "surplus": 53,
-    "there": 0,
-    "watch": true
-   }
-  ],
-  "140": [
-   {
-    "name": "Isaiah Likely",
-    "pos": "TE",
-    "team": "NYG",
-    "proj": 118,
-    "surplus": 4,
-    "there": 40,
-    "watch": false
-   },
-   {
-    "name": "Jake Ferguson",
-    "pos": "TE",
-    "team": "DAL",
-    "proj": 114,
-    "surplus": 0,
-    "there": 40,
-    "watch": false
-   },
-   {
-    "name": "Kyler Murray",
-    "pos": "QB",
-    "team": "MIN",
-    "proj": 312,
-    "surplus": 0,
-    "there": 91,
-    "watch": false
-   },
-   {
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "team": "MIN",
-    "proj": 112,
-    "surplus": -2,
-    "there": 100,
-    "watch": false
-   },
-   {
-    "name": "Dalton Kincaid",
-    "pos": "TE",
-    "team": "BUF",
-    "proj": 112,
-    "surplus": -2,
-    "there": 48,
-    "watch": false
-   },
-   {
-    "name": "Baker Mayfield",
-    "pos": "QB",
-    "team": "TB",
-    "proj": 308,
-    "surplus": -4,
-    "there": 96,
-    "watch": false
-   },
-   {
-    "name": "Juwan Johnson",
-    "pos": "TE",
-    "team": "NO",
-    "proj": 110,
-    "surplus": -4,
-    "there": 84,
-    "watch": false
-   },
-   {
-    "name": "Jayden Reed",
-    "pos": "WR",
-    "team": "GB",
-    "proj": 140,
-    "surplus": -25,
-    "there": 56,
-    "watch": false
-   },
-   {
-    "name": "Woody Marks",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 112,
-    "surplus": -25,
-    "there": 82,
-    "watch": false
-   },
-   {
-    "name": "Josh Downs",
-    "pos": "WR",
-    "team": "IND",
-    "proj": 139,
-    "surplus": -26,
-    "there": 58,
-    "watch": false
-   },
-   {
-    "name": "Zach Charbonnet",
-    "pos": "RB",
-    "team": "SEA",
-    "proj": 111,
-    "surplus": -26,
-    "there": 73,
+    "surplus": -21,
+    "there": 44,
     "watch": false
    },
    {
@@ -3113,30 +2893,30 @@
     "watch": false
    },
    {
+    "name": "Woody Marks",
+    "pos": "RB",
+    "team": "HOU",
+    "proj": 112,
+    "surplus": -52,
+    "there": 94,
+    "watch": false
+   },
+   {
+    "name": "Zach Charbonnet",
+    "pos": "RB",
+    "team": "SEA",
+    "proj": 111,
+    "surplus": -53,
+    "there": 89,
+    "watch": false
+   },
+   {
     "name": "Rachaad White",
     "pos": "RB",
     "team": "WAS",
     "proj": 105,
-    "surplus": -32,
-    "there": 34,
-    "watch": false
-   },
-   {
-    "name": "Rashid Shaheed",
-    "pos": "WR",
-    "team": "SEA",
-    "proj": 130,
-    "surplus": -35,
-    "there": 37,
-    "watch": false
-   },
-   {
-    "name": "Daniel Jones",
-    "pos": "QB",
-    "team": "IND",
-    "proj": 277,
-    "surplus": -35,
-    "there": 100,
+    "surplus": -59,
+    "there": 70,
     "watch": false
    },
    {
@@ -3144,8 +2924,8 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 95,
-    "surplus": -42,
-    "there": 97,
+    "surplus": -69,
+    "there": 99,
     "watch": false
    },
    {
@@ -3153,26 +2933,8 @@
     "pos": "RB",
     "team": "LV",
     "proj": 95,
-    "surplus": -42,
-    "there": 74,
-    "watch": false
-   },
-   {
-    "name": "KC Concepcion",
-    "pos": "WR",
-    "team": "CLE",
-    "proj": 122,
-    "surplus": -43,
-    "there": 15,
-    "watch": false
-   },
-   {
-    "name": "Jalen Coker",
-    "pos": "WR",
-    "team": "CAR",
-    "proj": 122,
-    "surplus": -43,
-    "there": 46,
+    "surplus": -69,
+    "there": 87,
     "watch": false
    },
    {
@@ -3180,7 +2942,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3189,7 +2951,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -3198,7 +2960,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -3207,7 +2969,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -3216,7 +2978,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -3225,7 +2987,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -3243,7 +3005,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -3252,7 +3014,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3261,7 +3023,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -3270,7 +3032,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3279,7 +3041,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -3288,7 +3050,306 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
+    "there": 0,
+    "watch": true
+   }
+  ],
+  "140": [
+   {
+    "name": "Isaiah Likely",
+    "pos": "TE",
+    "team": "NYG",
+    "proj": 118,
+    "surplus": 2,
+    "there": 39,
+    "watch": false
+   },
+   {
+    "name": "Kyler Murray",
+    "pos": "QB",
+    "team": "MIN",
+    "proj": 312,
+    "surplus": 0,
+    "there": 93,
+    "watch": false
+   },
+   {
+    "name": "Jake Ferguson",
+    "pos": "TE",
+    "team": "DAL",
+    "proj": 114,
+    "surplus": -2,
+    "there": 43,
+    "watch": false
+   },
+   {
+    "name": "Baker Mayfield",
+    "pos": "QB",
+    "team": "TB",
+    "proj": 308,
+    "surplus": -4,
+    "there": 96,
+    "watch": false
+   },
+   {
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 100,
+    "watch": false
+   },
+   {
+    "name": "Dalton Kincaid",
+    "pos": "TE",
+    "team": "BUF",
+    "proj": 112,
+    "surplus": -4,
+    "there": 50,
+    "watch": false
+   },
+   {
+    "name": "Juwan Johnson",
+    "pos": "TE",
+    "team": "NO",
+    "proj": 110,
+    "surplus": -6,
+    "there": 85,
+    "watch": false
+   },
+   {
+    "name": "Jayden Reed",
+    "pos": "WR",
+    "team": "GB",
+    "proj": 140,
+    "surplus": -16,
+    "there": 68,
+    "watch": false
+   },
+   {
+    "name": "Josh Downs",
+    "pos": "WR",
+    "team": "IND",
+    "proj": 139,
+    "surplus": -17,
+    "there": 55,
+    "watch": false
+   },
+   {
+    "name": "Rashid Shaheed",
+    "pos": "WR",
+    "team": "SEA",
+    "proj": 130,
+    "surplus": -26,
+    "there": 36,
+    "watch": false
+   },
+   {
+    "name": "Jordan Love",
+    "pos": "QB",
+    "team": "GB",
+    "proj": 284,
+    "surplus": -28,
+    "there": 98,
+    "watch": false
+   },
+   {
+    "name": "C.J. Stroud",
+    "pos": "QB",
+    "team": "HOU",
+    "proj": 281,
+    "surplus": -31,
+    "there": 99,
+    "watch": false
+   },
+   {
+    "name": "Jalen Coker",
+    "pos": "WR",
+    "team": "CAR",
+    "proj": 122,
+    "surplus": -34,
+    "there": 47,
+    "watch": false
+   },
+   {
+    "name": "Daniel Jones",
+    "pos": "QB",
+    "team": "IND",
+    "proj": 277,
+    "surplus": -35,
+    "there": 100,
+    "watch": false
+   },
+   {
+    "name": "Calvin Ridley",
+    "pos": "WR",
+    "team": "TEN",
+    "proj": 118,
+    "surplus": -38,
+    "there": 100,
+    "watch": false
+   },
+   {
+    "name": "Woody Marks",
+    "pos": "RB",
+    "team": "HOU",
+    "proj": 112,
+    "surplus": -52,
+    "there": 63,
+    "watch": false
+   },
+   {
+    "name": "Zach Charbonnet",
+    "pos": "RB",
+    "team": "SEA",
+    "proj": 111,
+    "surplus": -53,
+    "there": 73,
+    "watch": false
+   },
+   {
+    "name": "Rachaad White",
+    "pos": "RB",
+    "team": "WAS",
+    "proj": 105,
+    "surplus": -59,
+    "there": 35,
+    "watch": false
+   },
+   {
+    "name": "Chris Rodriguez Jr.",
+    "pos": "RB",
+    "team": "JAX",
+    "proj": 95,
+    "surplus": -69,
+    "there": 97,
+    "watch": false
+   },
+   {
+    "name": "Mike Washington Jr.",
+    "pos": "RB",
+    "team": "LV",
+    "proj": 95,
+    "surplus": -69,
+    "there": 75,
+    "watch": false
+   },
+   {
+    "name": "Bhayshul Tuten",
+    "pos": "RB",
+    "team": "JAX",
+    "proj": 176,
+    "surplus": 12,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Brock Bowers",
+    "pos": "TE",
+    "team": "LV",
+    "proj": 192,
+    "surplus": 76,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Colston Loveland",
+    "pos": "TE",
+    "team": "CHI",
+    "proj": 159,
+    "surplus": 43,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Courtland Sutton",
+    "pos": "WR",
+    "team": "DEN",
+    "proj": 165,
+    "surplus": 9,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Drake London",
+    "pos": "WR",
+    "team": "ATL",
+    "proj": 227,
+    "surplus": 71,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Emeka Egbuka",
+    "pos": "WR",
+    "team": "TB",
+    "proj": 192,
+    "surplus": 36,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Jayden Daniels",
+    "pos": "QB",
+    "team": "WAS",
+    "proj": 347,
+    "surplus": 35,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Jaylen Waddle",
+    "pos": "WR",
+    "team": "DEN",
+    "proj": 174,
+    "surplus": 18,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Jaylen Warren",
+    "pos": "RB",
+    "team": "PIT",
+    "proj": 176,
+    "surplus": 12,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Kyle Pitts Sr.",
+    "pos": "TE",
+    "team": "ATL",
+    "proj": 150,
+    "surplus": 34,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Luther Burden III",
+    "pos": "WR",
+    "team": "CHI",
+    "proj": 168,
+    "surplus": 12,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Tetairoa McMillan",
+    "pos": "WR",
+    "team": "CAR",
+    "proj": 200,
+    "surplus": 44,
+    "there": 0,
+    "watch": true
+   },
+   {
+    "name": "Travis Etienne Jr.",
+    "pos": "RB",
+    "team": "NO",
+    "proj": 190,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -3300,7 +3361,7 @@
     "team": "DAL",
     "proj": 155,
     "surplus": 25,
-    "there": 25,
+    "there": 27,
     "watch": false
    },
    {
@@ -3309,7 +3370,7 @@
     "team": "LAC",
     "proj": 143,
     "surplus": 13,
-    "there": 40,
+    "there": 41,
     "watch": false
    },
    {
@@ -3318,7 +3379,7 @@
     "team": "DET",
     "proj": 140,
     "surplus": 10,
-    "there": 64,
+    "there": 63,
     "watch": false
    },
    {
@@ -3327,7 +3388,7 @@
     "team": "JAX",
     "proj": 139,
     "surplus": 9,
-    "there": 69,
+    "there": 70,
     "watch": false
    },
    {
@@ -3336,7 +3397,7 @@
     "team": "NE",
     "proj": 108,
     "surplus": 7,
-    "there": 38,
+    "there": 36,
     "watch": false
    },
    {
@@ -3354,7 +3415,7 @@
     "team": "PHI",
     "proj": 107,
     "surplus": 6,
-    "there": 46,
+    "there": 44,
     "watch": false
    },
    {
@@ -3363,16 +3424,7 @@
     "team": "DET",
     "proj": 106,
     "surplus": 5,
-    "there": 66,
-    "watch": false
-   },
-   {
-    "name": "Isaiah Likely",
-    "pos": "TE",
-    "team": "NYG",
-    "proj": 118,
-    "surplus": 4,
-    "there": 27,
+    "there": 67,
     "watch": false
    },
    {
@@ -3381,7 +3433,7 @@
     "team": "PIT",
     "proj": 104,
     "surplus": 3,
-    "there": 78,
+    "there": 77,
     "watch": false
    },
    {
@@ -3390,16 +3442,16 @@
     "team": "BAL",
     "proj": 103,
     "surplus": 2,
-    "there": 96,
+    "there": 97,
     "watch": false
    },
    {
-    "name": "Jake Ferguson",
+    "name": "Isaiah Likely",
     "pos": "TE",
-    "team": "DAL",
-    "proj": 114,
-    "surplus": 0,
-    "there": 27,
+    "team": "NYG",
+    "proj": 118,
+    "surplus": 2,
+    "there": 24,
     "watch": false
    },
    {
@@ -3408,25 +3460,16 @@
     "team": "MIN",
     "proj": 312,
     "surplus": 0,
-    "there": 85,
+    "there": 87,
     "watch": false
    },
    {
-    "name": "T.J. Hockenson",
+    "name": "Jake Ferguson",
     "pos": "TE",
-    "team": "MIN",
-    "proj": 112,
+    "team": "DAL",
+    "proj": 114,
     "surplus": -2,
-    "there": 100,
-    "watch": false
-   },
-   {
-    "name": "Dalton Kincaid",
-    "pos": "TE",
-    "team": "BUF",
-    "proj": 112,
-    "surplus": -2,
-    "there": 35,
+    "there": 30,
     "watch": false
    },
    {
@@ -3435,7 +3478,25 @@
     "team": "TB",
     "proj": 308,
     "surplus": -4,
-    "there": 91,
+    "there": 92,
+    "watch": false
+   },
+   {
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 100,
+    "watch": false
+   },
+   {
+    "name": "Dalton Kincaid",
+    "pos": "TE",
+    "team": "BUF",
+    "proj": 112,
+    "surplus": -4,
+    "there": 35,
     "watch": false
    },
    {
@@ -3443,17 +3504,17 @@
     "pos": "TE",
     "team": "NO",
     "proj": 110,
-    "surplus": -4,
-    "there": 78,
+    "surplus": -6,
+    "there": 77,
     "watch": false
    },
    {
-    "name": "Woody Marks",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 112,
-    "surplus": -25,
-    "there": 61,
+    "name": "Jayden Reed",
+    "pos": "WR",
+    "team": "GB",
+    "proj": 140,
+    "surplus": -16,
+    "there": 15,
     "watch": false
    },
    {
@@ -3461,17 +3522,8 @@
     "pos": "WR",
     "team": "IND",
     "proj": 139,
-    "surplus": -26,
-    "there": 18,
-    "watch": false
-   },
-   {
-    "name": "Zach Charbonnet",
-    "pos": "RB",
-    "team": "SEA",
-    "proj": 111,
-    "surplus": -26,
-    "there": 53,
+    "surplus": -17,
+    "there": 21,
     "watch": false
    },
    {
@@ -3493,6 +3545,15 @@
     "watch": false
    },
    {
+    "name": "Jalen Coker",
+    "pos": "WR",
+    "team": "CAR",
+    "proj": 122,
+    "surplus": -34,
+    "there": 17,
+    "watch": false
+   },
+   {
     "name": "Daniel Jones",
     "pos": "QB",
     "team": "IND",
@@ -3502,12 +3563,12 @@
     "watch": false
    },
    {
-    "name": "Chris Rodriguez Jr.",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 95,
-    "surplus": -42,
-    "there": 95,
+    "name": "Calvin Ridley",
+    "pos": "WR",
+    "team": "TEN",
+    "proj": 118,
+    "surplus": -38,
+    "there": 99,
     "watch": false
    },
    {
@@ -3515,7 +3576,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3524,7 +3585,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -3533,7 +3594,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -3542,7 +3603,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -3551,7 +3612,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -3560,7 +3621,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -3578,7 +3639,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -3587,7 +3648,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3596,7 +3657,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -3605,7 +3666,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3614,7 +3675,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -3623,7 +3684,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -3635,7 +3696,7 @@
     "team": "DET",
     "proj": 140,
     "surplus": 10,
-    "there": 23,
+    "there": 27,
     "watch": false
    },
    {
@@ -3653,7 +3714,7 @@
     "team": "HOU",
     "proj": 137,
     "surplus": 7,
-    "there": 29,
+    "there": 30,
     "watch": false
    },
    {
@@ -3662,7 +3723,7 @@
     "team": "TB",
     "proj": 136,
     "surplus": 6,
-    "there": 52,
+    "there": 50,
     "watch": false
    },
    {
@@ -3671,7 +3732,7 @@
     "team": "LAR",
     "proj": 135,
     "surplus": 5,
-    "there": 49,
+    "there": 50,
     "watch": false
    },
    {
@@ -3680,7 +3741,7 @@
     "team": "DET",
     "proj": 106,
     "surplus": 5,
-    "there": 27,
+    "there": 28,
     "watch": false
    },
    {
@@ -3689,7 +3750,7 @@
     "team": "PIT",
     "proj": 104,
     "surplus": 3,
-    "there": 45,
+    "there": 44,
     "watch": false
    },
    {
@@ -3698,7 +3759,7 @@
     "team": "BAL",
     "proj": 103,
     "surplus": 2,
-    "there": 88,
+    "there": 89,
     "watch": false
    },
    {
@@ -3707,16 +3768,7 @@
     "team": "BUF",
     "proj": 102,
     "surplus": 1,
-    "there": 100,
-    "watch": false
-   },
-   {
-    "name": "Jacksonville Defense",
-    "pos": "DEF",
-    "team": "JAX",
-    "proj": 101,
-    "surplus": 0,
-    "there": 96,
+    "there": 99,
     "watch": false
    },
    {
@@ -3729,12 +3781,12 @@
     "watch": false
    },
    {
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "team": "MIN",
-    "proj": 112,
-    "surplus": -2,
-    "there": 99,
+    "name": "Jacksonville Defense",
+    "pos": "DEF",
+    "team": "JAX",
+    "proj": 101,
+    "surplus": 0,
+    "there": 95,
     "watch": false
    },
    {
@@ -3743,7 +3795,16 @@
     "team": "TB",
     "proj": 308,
     "surplus": -4,
-    "there": 70,
+    "there": 73,
+    "watch": false
+   },
+   {
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 99,
     "watch": false
    },
    {
@@ -3751,8 +3812,8 @@
     "pos": "TE",
     "team": "NO",
     "proj": 110,
-    "surplus": -4,
-    "there": 59,
+    "surplus": -6,
+    "there": 57,
     "watch": false
    },
    {
@@ -3760,8 +3821,8 @@
     "pos": "TE",
     "team": "JAX",
     "proj": 104,
-    "surplus": -10,
-    "there": 80,
+    "surplus": -12,
+    "there": 79,
     "watch": false
    },
    {
@@ -3769,7 +3830,7 @@
     "pos": "TE",
     "team": "NE",
     "proj": 103,
-    "surplus": -11,
+    "surplus": -13,
     "there": 96,
     "watch": false
    },
@@ -3778,26 +3839,8 @@
     "pos": "TE",
     "team": "WAS",
     "proj": 97,
-    "surplus": -17,
+    "surplus": -19,
     "there": 98,
-    "watch": false
-   },
-   {
-    "name": "Woody Marks",
-    "pos": "RB",
-    "team": "HOU",
-    "proj": 112,
-    "surplus": -25,
-    "there": 17,
-    "watch": false
-   },
-   {
-    "name": "Zach Charbonnet",
-    "pos": "RB",
-    "team": "SEA",
-    "proj": 111,
-    "surplus": -26,
-    "there": 16,
     "watch": false
    },
    {
@@ -3806,7 +3849,7 @@
     "team": "GB",
     "proj": 284,
     "surplus": -28,
-    "there": 91,
+    "there": 90,
     "watch": false
    },
    {
@@ -3815,7 +3858,7 @@
     "team": "HOU",
     "proj": 281,
     "surplus": -31,
-    "there": 93,
+    "there": 94,
     "watch": false
    },
    {
@@ -3828,21 +3871,39 @@
     "watch": false
    },
    {
-    "name": "Chris Rodriguez Jr.",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 95,
-    "surplus": -42,
-    "there": 80,
+    "name": "Calvin Ridley",
+    "pos": "WR",
+    "team": "TEN",
+    "proj": 118,
+    "surplus": -38,
+    "there": 88,
     "watch": false
    },
    {
-    "name": "Mike Washington Jr.",
-    "pos": "RB",
+    "name": "Tre Tucker",
+    "pos": "WR",
     "team": "LV",
-    "proj": 95,
+    "proj": 115,
+    "surplus": -41,
+    "there": 35,
+    "watch": false
+   },
+   {
+    "name": "Makai Lemon",
+    "pos": "WR",
+    "team": "PHI",
+    "proj": 114,
     "surplus": -42,
     "there": 36,
+    "watch": false
+   },
+   {
+    "name": "Jalen McMillan",
+    "pos": "WR",
+    "team": "TB",
+    "proj": 112,
+    "surplus": -44,
+    "there": 71,
     "watch": false
    },
    {
@@ -3850,7 +3911,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3859,7 +3920,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -3868,7 +3929,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -3877,7 +3938,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -3886,7 +3947,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -3895,7 +3956,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -3913,7 +3974,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -3922,7 +3983,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3931,7 +3992,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -3940,7 +4001,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -3949,7 +4010,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -3958,7 +4019,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -3970,7 +4031,7 @@
     "team": "TB",
     "proj": 136,
     "surplus": 6,
-    "there": 26,
+    "there": 25,
     "watch": false
    },
    {
@@ -3979,7 +4040,7 @@
     "team": "LAR",
     "proj": 135,
     "surplus": 5,
-    "there": 30,
+    "there": 28,
     "watch": false
    },
    {
@@ -3988,7 +4049,7 @@
     "team": "BAL",
     "proj": 134,
     "surplus": 4,
-    "there": 60,
+    "there": 62,
     "watch": false
    },
    {
@@ -4001,21 +4062,21 @@
     "watch": false
    },
    {
-    "name": "Baltimore Defense",
-    "pos": "DEF",
-    "team": "BAL",
-    "proj": 103,
-    "surplus": 2,
-    "there": 82,
-    "watch": false
-   },
-   {
     "name": "Will Reichard",
     "pos": "K",
     "team": "MIN",
     "proj": 132,
     "surplus": 2,
-    "there": 64,
+    "there": 63,
+    "watch": false
+   },
+   {
+    "name": "Baltimore Defense",
+    "pos": "DEF",
+    "team": "BAL",
+    "proj": 103,
+    "surplus": 2,
+    "there": 83,
     "watch": false
    },
    {
@@ -4024,7 +4085,7 @@
     "team": "BUF",
     "proj": 102,
     "surplus": 1,
-    "there": 99,
+    "there": 98,
     "watch": false
    },
    {
@@ -4033,7 +4094,16 @@
     "team": "CIN",
     "proj": 131,
     "surplus": 1,
-    "there": 98,
+    "there": 99,
+    "watch": false
+   },
+   {
+    "name": "Kyler Murray",
+    "pos": "QB",
+    "team": "MIN",
+    "proj": 312,
+    "surplus": 0,
+    "there": 41,
     "watch": false
    },
    {
@@ -4046,30 +4116,12 @@
     "watch": false
    },
    {
-    "name": "Kyler Murray",
-    "pos": "QB",
-    "team": "MIN",
-    "proj": 312,
-    "surplus": 0,
-    "there": 40,
-    "watch": false
-   },
-   {
     "name": "LA Chargers Defense",
     "pos": "DEF",
     "team": "LAC",
     "proj": 100,
     "surplus": -1,
-    "there": 65,
-    "watch": false
-   },
-   {
-    "name": "T.J. Hockenson",
-    "pos": "TE",
-    "team": "MIN",
-    "proj": 112,
-    "surplus": -2,
-    "there": 98,
+    "there": 62,
     "watch": false
    },
    {
@@ -4078,7 +4130,16 @@
     "team": "TB",
     "proj": 308,
     "surplus": -4,
-    "there": 49,
+    "there": 50,
+    "watch": false
+   },
+   {
+    "name": "T.J. Hockenson",
+    "pos": "TE",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -4,
+    "there": 99,
     "watch": false
    },
    {
@@ -4086,8 +4147,8 @@
     "pos": "TE",
     "team": "NO",
     "proj": 110,
-    "surplus": -4,
-    "there": 45,
+    "surplus": -6,
+    "there": 44,
     "watch": false
    },
    {
@@ -4095,8 +4156,8 @@
     "pos": "TE",
     "team": "JAX",
     "proj": 104,
-    "surplus": -10,
-    "there": 70,
+    "surplus": -12,
+    "there": 68,
     "watch": false
    },
    {
@@ -4104,7 +4165,7 @@
     "pos": "TE",
     "team": "NE",
     "proj": 103,
-    "surplus": -11,
+    "surplus": -13,
     "there": 93,
     "watch": false
    },
@@ -4113,7 +4174,7 @@
     "pos": "TE",
     "team": "WAS",
     "proj": 97,
-    "surplus": -17,
+    "surplus": -19,
     "there": 97,
     "watch": false
    },
@@ -4123,7 +4184,7 @@
     "team": "GB",
     "proj": 284,
     "surplus": -28,
-    "there": 81,
+    "there": 82,
     "watch": false
    },
    {
@@ -4132,7 +4193,7 @@
     "team": "HOU",
     "proj": 281,
     "surplus": -31,
-    "there": 89,
+    "there": 90,
     "watch": false
    },
    {
@@ -4145,39 +4206,39 @@
     "watch": false
    },
    {
-    "name": "Chris Rodriguez Jr.",
-    "pos": "RB",
-    "team": "JAX",
-    "proj": 95,
-    "surplus": -42,
-    "there": 62,
-    "watch": false
-   },
-   {
-    "name": "Mike Washington Jr.",
-    "pos": "RB",
-    "team": "LV",
-    "proj": 95,
-    "surplus": -42,
-    "there": 20,
-    "watch": false
-   },
-   {
-    "name": "Tyler Allgeier",
-    "pos": "RB",
-    "team": "ARI",
-    "proj": 92,
-    "surplus": -45,
-    "there": 60,
-    "watch": false
-   },
-   {
     "name": "Calvin Ridley",
     "pos": "WR",
     "team": "TEN",
     "proj": 118,
-    "surplus": -47,
-    "there": 55,
+    "surplus": -38,
+    "there": 76,
+    "watch": false
+   },
+   {
+    "name": "Jalen McMillan",
+    "pos": "WR",
+    "team": "TB",
+    "proj": 112,
+    "surplus": -44,
+    "there": 38,
+    "watch": false
+   },
+   {
+    "name": "Jauan Jennings",
+    "pos": "WR",
+    "team": "MIN",
+    "proj": 112,
+    "surplus": -44,
+    "there": 88,
+    "watch": false
+   },
+   {
+    "name": "Rashod Bateman",
+    "pos": "WR",
+    "team": "BAL",
+    "proj": 110,
+    "surplus": -46,
+    "there": 18,
     "watch": false
    },
    {
@@ -4185,7 +4246,7 @@
     "pos": "RB",
     "team": "JAX",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -4194,7 +4255,7 @@
     "pos": "TE",
     "team": "LV",
     "proj": 192,
-    "surplus": 78,
+    "surplus": 76,
     "there": 0,
     "watch": true
    },
@@ -4203,7 +4264,7 @@
     "pos": "TE",
     "team": "CHI",
     "proj": 159,
-    "surplus": 45,
+    "surplus": 43,
     "there": 0,
     "watch": true
    },
@@ -4212,7 +4273,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 165,
-    "surplus": 0,
+    "surplus": 9,
     "there": 0,
     "watch": true
    },
@@ -4221,7 +4282,7 @@
     "pos": "WR",
     "team": "ATL",
     "proj": 227,
-    "surplus": 62,
+    "surplus": 71,
     "there": 0,
     "watch": true
    },
@@ -4230,7 +4291,7 @@
     "pos": "WR",
     "team": "TB",
     "proj": 192,
-    "surplus": 27,
+    "surplus": 36,
     "there": 0,
     "watch": true
    },
@@ -4248,7 +4309,7 @@
     "pos": "WR",
     "team": "DEN",
     "proj": 174,
-    "surplus": 9,
+    "surplus": 18,
     "there": 0,
     "watch": true
    },
@@ -4257,7 +4318,7 @@
     "pos": "RB",
     "team": "PIT",
     "proj": 176,
-    "surplus": 39,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -4266,7 +4327,7 @@
     "pos": "TE",
     "team": "ATL",
     "proj": 150,
-    "surplus": 36,
+    "surplus": 34,
     "there": 0,
     "watch": true
    },
@@ -4275,7 +4336,7 @@
     "pos": "WR",
     "team": "CHI",
     "proj": 168,
-    "surplus": 3,
+    "surplus": 12,
     "there": 0,
     "watch": true
    },
@@ -4284,7 +4345,7 @@
     "pos": "WR",
     "team": "CAR",
     "proj": 200,
-    "surplus": 35,
+    "surplus": 44,
     "there": 0,
     "watch": true
    },
@@ -4293,7 +4354,7 @@
     "pos": "RB",
     "team": "NO",
     "proj": 190,
-    "surplus": 53,
+    "surplus": 26,
     "there": 0,
     "watch": true
    }
@@ -4301,28 +4362,28 @@
  },
  "most_owned": [
   {
+   "name": "Zay Flowers",
+   "pct": 82
+  },
+  {
    "name": "Jaylen Warren",
-   "pct": 88
+   "pct": 71
   },
   {
    "name": "Jayden Daniels",
-   "pct": 60
-  },
-  {
-   "name": "Zay Flowers",
-   "pct": 55
+   "pct": 63
   },
   {
    "name": "Brock Bowers",
-   "pct": 51
+   "pct": 52
   },
   {
    "name": "Tetairoa McMillan",
-   "pct": 50
+   "pct": 51
   },
   {
-   "name": "Breece Hall",
-   "pct": 47
+   "name": "Brian Thomas Jr.",
+   "pct": 45
   },
   {
    "name": "Jaxon Smith-Njigba",
@@ -4330,47 +4391,47 @@
   },
   {
    "name": "Trey McBride",
-   "pct": 32
+   "pct": 31
   },
   {
-   "name": "J.K. Dobbins",
-   "pct": 29
+   "name": "Breece Hall",
+   "pct": 26
   },
   {
-   "name": "Brian Thomas Jr.",
-   "pct": 23
-  },
-  {
-   "name": "Patrick Mahomes",
-   "pct": 23
+   "name": "Alec Pierce",
+   "pct": 24
   },
   {
    "name": "Bijan Robinson",
    "pct": 19
   },
   {
+   "name": "Patrick Mahomes",
+   "pct": 19
+  },
+  {
+   "name": "Jalen Hurts",
+   "pct": 15
+  },
+  {
+   "name": "DK Metcalf",
+   "pct": 15
+  },
+  {
    "name": "Jahmyr Gibbs",
    "pct": 14
-  },
-  {
-   "name": "Jonathan Taylor",
-   "pct": 14
-  },
-  {
-   "name": "Kyren Williams",
-   "pct": 13
   }
  ],
  "totals": {
-  "mean": 1852,
-  "min": 1772,
-  "max": 1906,
-  "sd": 21.9
+  "mean": 1864,
+  "min": 1785,
+  "max": 1912,
+  "sd": 18.1
  },
  "samples": [
   {
    "draft": 1,
-   "total": 1844,
+   "total": 1892,
    "picks": [
     {
      "pick": 5,
@@ -4396,917 +4457,11 @@
     {
      "pick": 44,
      "round": 4,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Bucky Irving",
-     "pos": "RB",
-     "proj": 188
-    },
-    {
-     "pick": 77,
-     "round": 7,
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "RJ Harvey",
-     "pos": "RB",
-     "proj": 142
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "J. Croskey-Merritt",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Jordan Addison",
-     "pos": "WR",
-     "proj": 148
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Jayden Reed",
-     "pos": "WR",
-     "proj": 140
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Jalen Coker",
-     "pos": "WR",
-     "proj": 122
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Ka'imi Fairbairn",
-     "pos": "K",
-     "proj": 137
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    }
-   ],
-   "starters": [
-    {
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "name": "Bijan Robinson",
-     "pos": "RB",
-     "proj": 282
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "proj": 192
-    },
-    {
-     "name": "Ka'imi Fairbairn",
-     "pos": "K",
-     "proj": 137
-    },
-    {
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    },
-    {
-     "name": "Bucky Irving",
-     "pos": "RB",
-     "proj": 188
-    }
-   ]
-  },
-  {
-   "draft": 2,
-   "total": 1839,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "James Cook III",
-     "pos": "RB",
-     "proj": 237
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "proj": 192
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Tetairoa McMillan",
-     "pos": "WR",
-     "proj": 200
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 77,
-     "round": 7,
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "Brian Thomas Jr.",
-     "pos": "WR",
-     "proj": 171
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "Chuba Hubbard",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Jayden Reed",
-     "pos": "WR",
-     "proj": 140
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Woody Marks",
-     "pos": "RB",
-     "proj": 112
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Rachaad White",
-     "pos": "RB",
-     "proj": 105
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    }
-   ],
-   "starters": [
-    {
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "name": "James Cook III",
-     "pos": "RB",
-     "proj": 237
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "name": "Tetairoa McMillan",
-     "pos": "WR",
-     "proj": 200
-    },
-    {
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "proj": 192
-    },
-    {
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    },
-    {
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    }
-   ]
-  },
-  {
-   "draft": 3,
-   "total": 1852,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Justin Jefferson",
-     "pos": "WR",
-     "proj": 231
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Kyren Williams",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Colston Loveland",
-     "pos": "TE",
-     "proj": 159
-    },
-    {
-     "pick": 53,
-     "round": 5,
      "name": "Emeka Egbuka",
      "pos": "WR",
      "proj": 192
     },
     {
-     "pick": 77,
-     "round": 7,
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "Patrick Mahomes",
-     "pos": "QB",
-     "proj": 326
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "RJ Harvey",
-     "pos": "RB",
-     "proj": 142
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "J. Croskey-Merritt",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Chuba Hubbard",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Josh Downs",
-     "pos": "WR",
-     "proj": 139
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Calvin Ridley",
-     "pos": "WR",
-     "proj": 118
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Pittsburgh Defense",
-     "pos": "DEF",
-     "proj": 104
-    }
-   ],
-   "starters": [
-    {
-     "name": "Patrick Mahomes",
-     "pos": "QB",
-     "proj": 326
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Kyren Williams",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "name": "Justin Jefferson",
-     "pos": "WR",
-     "proj": 231
-    },
-    {
-     "name": "Colston Loveland",
-     "pos": "TE",
-     "proj": 159
-    },
-    {
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "name": "Pittsburgh Defense",
-     "pos": "DEF",
-     "proj": 104
-    },
-    {
-     "name": "Emeka Egbuka",
-     "pos": "WR",
-     "proj": 192
-    }
-   ]
-  },
-  {
-   "draft": 4,
-   "total": 1791,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jonathan Taylor",
-     "pos": "RB",
-     "proj": 241
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Kyle Pitts Sr.",
-     "pos": "TE",
-     "proj": 150
-    },
-    {
-     "pick": 77,
-     "round": 7,
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "J.K. Dobbins",
-     "pos": "RB",
-     "proj": 148
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "DK Metcalf",
-     "pos": "WR",
-     "proj": 164
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Jordan Addison",
-     "pos": "WR",
-     "proj": 148
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Zach Charbonnet",
-     "pos": "RB",
-     "proj": 111
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Jalen Coker",
-     "pos": "WR",
-     "proj": 122
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Buffalo Defense",
-     "pos": "DEF",
-     "proj": 102
-    }
-   ],
-   "starters": [
-    {
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "name": "Jonathan Taylor",
-     "pos": "RB",
-     "proj": 241
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "name": "DK Metcalf",
-     "pos": "WR",
-     "proj": 164
-    },
-    {
-     "name": "Kyle Pitts Sr.",
-     "pos": "TE",
-     "proj": 150
-    },
-    {
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "name": "Buffalo Defense",
-     "pos": "DEF",
-     "proj": 102
-    },
-    {
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    }
-   ]
-  },
-  {
-   "draft": 5,
-   "total": 1845,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "proj": 192
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Emeka Egbuka",
-     "pos": "WR",
-     "proj": 192
-    },
-    {
-     "pick": 77,
-     "round": 7,
-     "name": "TreVeyon Henderson",
-     "pos": "RB",
-     "proj": 168
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "Brian Thomas Jr.",
-     "pos": "WR",
-     "proj": 171
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "J. Croskey-Merritt",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "Chuba Hubbard",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Jayden Reed",
-     "pos": "WR",
-     "proj": 140
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Woody Marks",
-     "pos": "RB",
-     "proj": 112
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    }
-   ],
-   "starters": [
-    {
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "name": "Emeka Egbuka",
-     "pos": "WR",
-     "proj": 192
-    },
-    {
-     "name": "Brock Bowers",
-     "pos": "TE",
-     "proj": 192
-    },
-    {
-     "name": "Cam Little",
-     "pos": "K",
-     "proj": 139
-    },
-    {
-     "name": "Baltimore Defense",
-     "pos": "DEF",
-     "proj": 103
-    },
-    {
-     "name": "Brian Thomas Jr.",
-     "pos": "WR",
-     "proj": 171
-    }
-   ]
-  },
-  {
-   "draft": 6,
-   "total": 1855,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jahmyr Gibbs",
-     "pos": "RB",
-     "proj": 288
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 77,
-     "round": 7,
-     "name": "TreVeyon Henderson",
-     "pos": "RB",
-     "proj": 168
-    },
-    {
-     "pick": 92,
-     "round": 8,
-     "name": "RJ Harvey",
-     "pos": "RB",
-     "proj": 142
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "J. Croskey-Merritt",
-     "pos": "RB",
-     "proj": 137
-    },
-    {
-     "pick": 116,
-     "round": 10,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Jayden Reed",
-     "pos": "WR",
-     "proj": 140
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Josh Downs",
-     "pos": "WR",
-     "proj": 139
-    },
-    {
-     "pick": 149,
-     "round": 13,
-     "name": "Calvin Ridley",
-     "pos": "WR",
-     "proj": 118
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "Chase McLaughlin",
-     "pos": "K",
-     "proj": 136
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Buffalo Defense",
-     "pos": "DEF",
-     "proj": 102
-    }
-   ],
-   "starters": [
-    {
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "name": "Jahmyr Gibbs",
-     "pos": "RB",
-     "proj": 288
-    },
-    {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Zay Flowers",
-     "pos": "WR",
-     "proj": 215
-    },
-    {
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
-    },
-    {
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "name": "Chase McLaughlin",
-     "pos": "K",
-     "proj": 136
-    },
-    {
-     "name": "Buffalo Defense",
-     "pos": "DEF",
-     "proj": 102
-    },
-    {
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    }
-   ]
-  },
-  {
-   "draft": 7,
-   "total": 1851,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Tetairoa McMillan",
-     "pos": "WR",
-     "proj": 200
-    },
-    {
      "pick": 53,
      "round": 5,
      "name": "Jayden Daniels",
@@ -5323,18 +4478,320 @@
     {
      "pick": 92,
      "round": 8,
-     "name": "Brian Thomas Jr.",
-     "pos": "WR",
-     "proj": 171
-    },
-    {
-     "pick": 101,
-     "round": 9,
      "name": "Alec Pierce",
      "pos": "WR",
      "proj": 165
     },
     {
+     "pick": 101,
+     "round": 9,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "J. Croskey-Merritt",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Jordan Addison",
+     "pos": "WR",
+     "proj": 148
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Brandon Aubrey",
+     "pos": "K",
+     "proj": 155
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "proj": 282
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Emeka Egbuka",
+     "pos": "WR",
+     "proj": 192
+    },
+    {
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "proj": 192
+    },
+    {
+     "name": "Brandon Aubrey",
+     "pos": "K",
+     "proj": 155
+    },
+    {
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    }
+   ]
+  },
+  {
+   "draft": 2,
+   "total": 1860,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "proj": 259
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "proj": 192
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "proj": 171
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Zach Charbonnet",
+     "pos": "RB",
+     "proj": 111
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Detroit Defense",
+     "pos": "DEF",
+     "proj": 106
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Harrison Mevis",
+     "pos": "K",
+     "proj": 135
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "proj": 259
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "proj": 192
+    },
+    {
+     "name": "Harrison Mevis",
+     "pos": "K",
+     "proj": 135
+    },
+    {
+     "name": "Detroit Defense",
+     "pos": "DEF",
+     "proj": 106
+    },
+    {
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    }
+   ]
+  },
+  {
+   "draft": 3,
+   "total": 1859,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "proj": 231
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "proj": 159
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Jalen Hurts",
+     "pos": "QB",
+     "proj": 340
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "Alec Pierce",
+     "pos": "WR",
+     "proj": 165
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "J. Croskey-Merritt",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
      "pick": 116,
      "round": 10,
      "name": "Chuba Hubbard",
@@ -5358,30 +4815,30 @@
     {
      "pick": 149,
      "round": 13,
-     "name": "Josh Downs",
-     "pos": "WR",
-     "proj": 139
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
     },
     {
      "pick": 164,
      "round": 14,
-     "name": "Philadelphia Defense",
-     "pos": "DEF",
-     "proj": 107
+     "name": "Ka'imi Fairbairn",
+     "pos": "K",
+     "proj": 137
     },
     {
      "pick": 173,
      "round": 15,
-     "name": "Chase McLaughlin",
-     "pos": "K",
-     "proj": 136
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
     }
    ],
    "starters": [
     {
-     "name": "Jayden Daniels",
+     "name": "Jalen Hurts",
      "pos": "QB",
-     "proj": 347
+     "proj": 340
     },
     {
      "name": "Chase Brown",
@@ -5389,230 +4846,79 @@
      "proj": 230
     },
     {
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "name": "Tetairoa McMillan",
-     "pos": "WR",
-     "proj": 200
-    },
-    {
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "name": "Chase McLaughlin",
-     "pos": "K",
-     "proj": 136
-    },
-    {
-     "name": "Philadelphia Defense",
-     "pos": "DEF",
-     "proj": 107
-    },
-    {
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    }
-   ]
-  },
-  {
-   "draft": 8,
-   "total": 1839,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Kyren Williams",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 53,
-     "round": 5,
-     "name": "Jayden Daniels",
-     "pos": "QB",
-     "proj": 347
-    },
-    {
-     "pick": 77,
-     "round": 7,
      "name": "Jaylen Warren",
      "pos": "RB",
      "proj": 176
     },
     {
-     "pick": 92,
-     "round": 8,
-     "name": "J.K. Dobbins",
-     "pos": "RB",
-     "proj": 148
-    },
-    {
-     "pick": 101,
-     "round": 9,
-     "name": "DK Metcalf",
+     "name": "Jaxon Smith-Njigba",
      "pos": "WR",
-     "proj": 164
+     "proj": 268
     },
     {
-     "pick": 116,
-     "round": 10,
-     "name": "Kyle Monangai",
-     "pos": "RB",
-     "proj": 132
-    },
-    {
-     "pick": 125,
-     "round": 11,
-     "name": "Michael Pittman Jr.",
+     "name": "Justin Jefferson",
      "pos": "WR",
-     "proj": 150
+     "proj": 231
     },
     {
-     "pick": 140,
-     "round": 12,
-     "name": "Josh Downs",
-     "pos": "WR",
-     "proj": 139
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "proj": 159
     },
     {
-     "pick": 149,
-     "round": 13,
-     "name": "Calvin Ridley",
-     "pos": "WR",
-     "proj": 118
-    },
-    {
-     "pick": 164,
-     "round": 14,
-     "name": "New England Defense",
-     "pos": "DEF",
-     "proj": 108
-    },
-    {
-     "pick": 173,
-     "round": 15,
-     "name": "Will Reichard",
+     "name": "Ka'imi Fairbairn",
      "pos": "K",
-     "proj": 132
-    }
-   ],
-   "starters": [
+     "proj": 137
+    },
     {
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    }
+   ]
+  },
+  {
+   "draft": 4,
+   "total": 1816,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "proj": 261
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "proj": 159
+    },
+    {
+     "pick": 44,
+     "round": 4,
      "name": "Jayden Daniels",
      "pos": "QB",
      "proj": 347
     },
     {
-     "name": "Chase Brown",
-     "pos": "RB",
-     "proj": 230
-    },
-    {
-     "name": "Kyren Williams",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "name": "DK Metcalf",
-     "pos": "WR",
-     "proj": 164
-    },
-    {
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "name": "Will Reichard",
-     "pos": "K",
-     "proj": 132
-    },
-    {
-     "name": "New England Defense",
-     "pos": "DEF",
-     "proj": 108
-    },
-    {
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    }
-   ]
-  },
-  {
-   "draft": 9,
-   "total": 1840,
-   "picks": [
-    {
-     "pick": 5,
-     "round": 1,
-     "name": "Jaxon Smith-Njigba",
-     "pos": "WR",
-     "proj": 268
-    },
-    {
-     "pick": 20,
-     "round": 2,
-     "name": "Trey McBride",
-     "pos": "TE",
-     "proj": 184
-    },
-    {
-     "pick": 29,
-     "round": 3,
-     "name": "Breece Hall",
-     "pos": "RB",
-     "proj": 203
-    },
-    {
-     "pick": 44,
-     "round": 4,
-     "name": "Tetairoa McMillan",
-     "pos": "WR",
-     "proj": 200
-    },
-    {
      "pick": 53,
      "round": 5,
-     "name": "Josh Jacobs",
-     "pos": "RB",
+     "name": "Jameson Williams",
+     "pos": "WR",
      "proj": 187
     },
     {
@@ -5625,14 +4931,14 @@
     {
      "pick": 92,
      "round": 8,
-     "name": "Patrick Mahomes",
-     "pos": "QB",
-     "proj": 326
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "proj": 171
     },
     {
      "pick": 101,
      "round": 9,
-     "name": "Chuba Hubbard",
+     "name": "J. Croskey-Merritt",
      "pos": "RB",
      "proj": 137
     },
@@ -5653,6 +4959,157 @@
     {
      "pick": 140,
      "round": 12,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Rashid Shaheed",
+     "pos": "WR",
+     "proj": 130
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Detroit Defense",
+     "pos": "DEF",
+     "proj": 106
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Harrison Mevis",
+     "pos": "K",
+     "proj": 135
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "proj": 261
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "proj": 159
+    },
+    {
+     "name": "Harrison Mevis",
+     "pos": "K",
+     "proj": 135
+    },
+    {
+     "name": "Detroit Defense",
+     "pos": "DEF",
+     "proj": 106
+    },
+    {
+     "name": "Jameson Williams",
+     "pos": "WR",
+     "proj": 187
+    }
+   ]
+  },
+  {
+   "draft": 5,
+   "total": 1854,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "proj": 192
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Emeka Egbuka",
+     "pos": "WR",
+     "proj": 192
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "TreVeyon Henderson",
+     "pos": "RB",
+     "proj": 168
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "proj": 171
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "J. Croskey-Merritt",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 140,
+     "round": 12,
      "name": "Jayden Reed",
      "pos": "WR",
      "proj": 140
@@ -5660,9 +5117,613 @@
     {
      "pick": 149,
      "round": 13,
-     "name": "Calvin Ridley",
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Cam Little",
+     "pos": "K",
+     "proj": 139
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "TreVeyon Henderson",
+     "pos": "RB",
+     "proj": 168
+    },
+    {
+     "name": "Jaxon Smith-Njigba",
      "pos": "WR",
-     "proj": 118
+     "proj": 268
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "proj": 192
+    },
+    {
+     "name": "Cam Little",
+     "pos": "K",
+     "proj": 139
+    },
+    {
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    },
+    {
+     "name": "Emeka Egbuka",
+     "pos": "WR",
+     "proj": 192
+    }
+   ]
+  },
+  {
+   "draft": 6,
+   "total": 1875,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "proj": 288
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "TreVeyon Henderson",
+     "pos": "RB",
+     "proj": 168
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "proj": 164
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Josh Downs",
+     "pos": "WR",
+     "proj": 139
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Jake Bates",
+     "pos": "K",
+     "proj": 140
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "proj": 288
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    },
+    {
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "name": "Jake Bates",
+     "pos": "K",
+     "proj": 140
+    },
+    {
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    },
+    {
+     "name": "TreVeyon Henderson",
+     "pos": "RB",
+     "proj": 168
+    }
+   ]
+  },
+  {
+   "draft": 7,
+   "total": 1859,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "Brian Thomas Jr.",
+     "pos": "WR",
+     "proj": 171
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "J.K. Dobbins",
+     "pos": "RB",
+     "proj": 148
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Ka'imi Fairbairn",
+     "pos": "K",
+     "proj": 137
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Buffalo Defense",
+     "pos": "DEF",
+     "proj": 102
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "name": "Ka'imi Fairbairn",
+     "pos": "K",
+     "proj": 137
+    },
+    {
+     "name": "Buffalo Defense",
+     "pos": "DEF",
+     "proj": 102
+    },
+    {
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    }
+   ]
+  },
+  {
+   "draft": 8,
+   "total": 1865,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Breece Hall",
+     "pos": "RB",
+     "proj": 203
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "Alec Pierce",
+     "pos": "WR",
+     "proj": 165
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "proj": 164
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
+    },
+    {
+     "pick": 164,
+     "round": 14,
+     "name": "Cam Little",
+     "pos": "K",
+     "proj": 139
+    },
+    {
+     "pick": 173,
+     "round": 15,
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    }
+   ],
+   "starters": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "proj": 347
+    },
+    {
+     "name": "Chase Brown",
+     "pos": "RB",
+     "proj": 230
+    },
+    {
+     "name": "Breece Hall",
+     "pos": "RB",
+     "proj": 203
+    },
+    {
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "proj": 215
+    },
+    {
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "name": "Cam Little",
+     "pos": "K",
+     "proj": 139
+    },
+    {
+     "name": "Baltimore Defense",
+     "pos": "DEF",
+     "proj": 103
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "proj": 176
+    }
+   ]
+  },
+  {
+   "draft": 9,
+   "total": 1848,
+   "picks": [
+    {
+     "pick": 5,
+     "round": 1,
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "proj": 268
+    },
+    {
+     "pick": 20,
+     "round": 2,
+     "name": "Trey McBride",
+     "pos": "TE",
+     "proj": 184
+    },
+    {
+     "pick": 29,
+     "round": 3,
+     "name": "Nico Collins",
+     "pos": "WR",
+     "proj": 211
+    },
+    {
+     "pick": 44,
+     "round": 4,
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
+    },
+    {
+     "pick": 53,
+     "round": 5,
+     "name": "Josh Jacobs",
+     "pos": "RB",
+     "proj": 187
+    },
+    {
+     "pick": 77,
+     "round": 7,
+     "name": "Patrick Mahomes",
+     "pos": "QB",
+     "proj": 326
+    },
+    {
+     "pick": 92,
+     "round": 8,
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "proj": 164
+    },
+    {
+     "pick": 101,
+     "round": 9,
+     "name": "J. Croskey-Merritt",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 116,
+     "round": 10,
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
+    },
+    {
+     "pick": 125,
+     "round": 11,
+     "name": "Michael Pittman Jr.",
+     "pos": "WR",
+     "proj": 150
+    },
+    {
+     "pick": 140,
+     "round": 12,
+     "name": "Josh Downs",
+     "pos": "WR",
+     "proj": 139
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Woody Marks",
+     "pos": "RB",
+     "proj": 112
     },
     {
      "pick": 164,
@@ -5691,9 +5752,9 @@
      "proj": 230
     },
     {
-     "name": "Breece Hall",
+     "name": "Josh Jacobs",
      "pos": "RB",
-     "proj": 203
+     "proj": 187
     },
     {
      "name": "Jaxon Smith-Njigba",
@@ -5701,9 +5762,9 @@
      "proj": 268
     },
     {
-     "name": "Tetairoa McMillan",
+     "name": "Nico Collins",
      "pos": "WR",
-     "proj": 200
+     "proj": 211
     },
     {
      "name": "Trey McBride",
@@ -5721,15 +5782,15 @@
      "proj": 103
     },
     {
-     "name": "Josh Jacobs",
-     "pos": "RB",
-     "proj": 187
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "proj": 200
     }
    ]
   },
   {
    "draft": 10,
-   "total": 1874,
+   "total": 1872,
    "picks": [
     {
      "pick": 5,
@@ -5769,65 +5830,65 @@
     {
      "pick": 77,
      "round": 7,
-     "name": "Jaylen Warren",
-     "pos": "RB",
-     "proj": 176
-    },
-    {
-     "pick": 92,
-     "round": 8,
      "name": "Patrick Mahomes",
      "pos": "QB",
      "proj": 326
     },
     {
+     "pick": 92,
+     "round": 8,
+     "name": "Courtland Sutton",
+     "pos": "WR",
+     "proj": 165
+    },
+    {
      "pick": 101,
      "round": 9,
-     "name": "J. Croskey-Merritt",
-     "pos": "RB",
-     "proj": 137
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "proj": 164
     },
     {
      "pick": 116,
      "round": 10,
-     "name": "Michael Pittman Jr.",
-     "pos": "WR",
-     "proj": 150
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "proj": 137
     },
     {
      "pick": 125,
      "round": 11,
-     "name": "Jayden Reed",
-     "pos": "WR",
-     "proj": 140
-    },
-    {
-     "pick": 140,
-     "round": 12,
-     "name": "Khalil Shakir",
-     "pos": "WR",
-     "proj": 134
-    },
-    {
-     "pick": 149,
-     "round": 13,
      "name": "Woody Marks",
      "pos": "RB",
      "proj": 112
     },
     {
+     "pick": 140,
+     "round": 12,
+     "name": "Jayden Reed",
+     "pos": "WR",
+     "proj": 140
+    },
+    {
+     "pick": 149,
+     "round": 13,
+     "name": "Chris Rodriguez Jr.",
+     "pos": "RB",
+     "proj": 95
+    },
+    {
      "pick": 164,
      "round": 14,
-     "name": "Cameron Dicker",
+     "name": "Jake Bates",
      "pos": "K",
-     "proj": 143
+     "proj": 140
     },
     {
      "pick": 173,
      "round": 15,
-     "name": "Buffalo Defense",
+     "name": "Baltimore Defense",
      "pos": "DEF",
-     "proj": 102
+     "proj": 103
     }
    ],
    "starters": [
@@ -5862,14 +5923,14 @@
      "proj": 184
     },
     {
-     "name": "Cameron Dicker",
+     "name": "Jake Bates",
      "pos": "K",
-     "proj": 143
+     "proj": 140
     },
     {
-     "name": "Buffalo Defense",
+     "name": "Baltimore Defense",
      "pos": "DEF",
-     "proj": 102
+     "proj": 103
     },
     {
      "name": "Emeka Egbuka",

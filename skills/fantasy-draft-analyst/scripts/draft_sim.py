@@ -96,30 +96,61 @@ def round_half_up(x: float) -> int:
     return int(math.floor(x + 0.5))
 
 
-def replacement_ranks(cfg: dict) -> dict:
-    """How many players at each position are started league-wide (the N in 'Nth best')."""
+def replacement_ranks(cfg: dict, pool: list[dict] | None = None) -> tuple[dict, dict]:
+    """How many players at each position are started league-wide (the N in 'Nth best'), and how the
+    flex slots get filled.
+
+    Default ("equilibrium"): dedicated slots are filled by position, then every flex slot league-wide
+    goes to the best remaining RB/WR/TE regardless of position. That makes the marginal RB and the
+    marginal WR worth about the same — which is what actually happens, because nobody flexes a
+    95-point back over a 143-point receiver. The old fixed-share model (RB 55% / WR 40% / TE 5%)
+    is still available with roster.flex_mode: fixed_share; it can price a position's replacement
+    absurdly low when the other position is deeper, which over-values that position's depth.
+    """
     teams = int(cfg["league"]["teams"])
     s = starters(cfg)
-    share = cfg.get("roster", {}).get("flex_share") or {"RB": 0.55, "WR": 0.40, "TE": 0.05}
-    ppr = float(cfg.get("scoring", {}).get("reception", 0.5))
-    if ppr >= 1.0 and "flex_share" not in cfg.get("roster", {}):
-        share = {"RB": 0.45, "WR": 0.50, "TE": 0.05}
+    roster = cfg.get("roster", {}) or {}
+    mode = (roster.get("flex_mode") or ("fixed_share" if roster.get("flex_share") else "equilibrium")).lower()
+    # Byes and injuries: someone is always starting a deeper player at RB/WR in deep leagues.
+    pad = 2 if teams <= 10 else 3 if teams <= 12 else 4
     ranks = {
         "QB": teams * s["QB"] + round_half_up(teams * s["SUPERFLEX"] * 0.85),
-        "RB": teams * s["RB"] + round_half_up(teams * s["FLEX"] * share.get("RB", 0.55)),
-        "WR": teams * s["WR"] + round_half_up(teams * s["FLEX"] * share.get("WR", 0.40)),
-        "TE": teams * s["TE"] + round_half_up(teams * s["FLEX"] * share.get("TE", 0.05)),
         "K": teams * s["K"],
         "DEF": teams * s["DEF"],
     }
-    # Byes and injuries: someone is always starting a deeper player at RB/WR in deep leagues.
-    pad = 2 if teams <= 10 else 3 if teams <= 12 else 4
-    ranks["RB"] += pad
-    ranks["WR"] += pad
-    ranks["TE"] += 1
-    for k, v in (cfg.get("roster", {}).get("replacement_rank") or {}).items():
+    flex_fill = {"RB": 0, "WR": 0, "TE": 0}
+    if mode == "fixed_share" or pool is None:
+        share = roster.get("flex_share") or ({"RB": 0.45, "WR": 0.50, "TE": 0.05} if float(cfg.get("scoring", {}).get("reception", 0.5)) >= 1.0
+                                            else {"RB": 0.55, "WR": 0.40, "TE": 0.05})
+        for pos in ("RB", "WR", "TE"):
+            flex_fill[pos] = round_half_up(teams * s["FLEX"] * share.get(pos, 0))
+            ranks[pos] = teams * s[pos] + flex_fill[pos]
+        ranks["RB"] += pad
+        ranks["WR"] += pad
+        ranks["TE"] += 1
+    else:
+        byp = defaultdict(list)
+        for p in pool:
+            if p["pos"] in ("RB", "WR", "TE"):
+                byp[p["pos"]].append(p["proj"])
+        for k in byp:
+            byp[k].sort(reverse=True)
+        taken = {pos: teams * s[pos] for pos in ("RB", "WR", "TE")}
+        remaining = []
+        for pos in ("RB", "WR", "TE"):
+            for i in range(taken[pos], len(byp[pos])):
+                remaining.append((byp[pos][i], pos, i))
+        remaining.sort(reverse=True)
+        n_flex = teams * s["FLEX"] + pad  # pad = extra "virtual" flex starters for byes and injuries
+        for v, pos, i in remaining[:n_flex]:
+            taken[pos] = max(taken[pos], i + 1)
+            flex_fill[pos] += 1
+        for pos in ("RB", "WR", "TE"):
+            ranks[pos] = max(taken[pos], 1)
+        ranks["TE"] = max(ranks["TE"], teams * s["TE"] + 1)
+    for k, v in (roster.get("replacement_rank") or {}).items():
         ranks[k.upper()] = int(v)
-    return ranks
+    return ranks, flex_fill
 
 
 def replacement_levels(pool: list[dict], ranks: dict) -> dict:
@@ -207,7 +238,7 @@ class Sim:
         self.starters = starters(cfg)
         self.flex = self.starters["FLEX"]
         self.superflex = self.starters["SUPERFLEX"]
-        self.ranks = replacement_ranks(cfg)
+        self.ranks, self.flex_fill = replacement_ranks(cfg, pool)
         self.repl = replacement_levels(pool, self.ranks)
         self.pool = pool
         for p in self.pool:
@@ -408,6 +439,12 @@ class Sim:
                     v -= 40
                 if self.te_strategy == "elite" and rnd <= 3 and c["TE"] == 0:
                     v += 25
+            # Bench balance: once a player wouldn't start, a fourth backup at one position is worth
+            # less than a first backup at another — injuries hit every position.
+            if gain <= 0.5 and p["pos"] in SKILL_POS:
+                backups = c[p["pos"]] - self.starters[p["pos"]]
+                if backups >= 2:
+                    v -= 10 * (backups - 1)
             if v > bv:
                 best, bv = p, v
         return best or avail[0]
@@ -613,6 +650,9 @@ def main():
                    "platform": cfg["league"].get("platform"), "name": cfg["league"].get("name"), "team_name": cfg["league"].get("team_name")},
         "replacement_rank": sim.ranks,
         "replacement": {k: round(v) for k, v in sim.repl.items()},
+        "flex_fill": sim.flex_fill,
+        "position_plan": {str(ov): {pos: round(v) for pos, v in d.items() if pos in ("QB", "RB", "WR", "TE")}
+                          for ov, d in sorted(sim.pos_horizon.items()) if ov <= teams * 10},
         "ladder": [{"pick": ov, "round": r} for ov, r in ladder],
         "keeper_eval": keeper_eval,
         "expected_best_surplus_at_pick": {str(k): round(v, 1) for k, v in sorted(exp_best_vor.items())},
@@ -642,6 +682,18 @@ def main():
     print(f"Keeper: {keeper or 'none'}" + (f" (round {keeper_round})" if keeper_round else ""))
     print("\n## Replacement level (position → points of the last weekly starter)")
     print(fmt_table([(k, v, f"{k}{sim.ranks[k]}") for k, v in out["replacement"].items()], ["Pos", "Replacement", "Who"]))
+    ff = sim.flex_fill
+    print(f"Flex slots league-wide fill as RB {ff['RB']} / WR {ff['WR']} / TE {ff['TE']} (equilibrium: best remaining player takes the flex).")
+    print("\n## Position plan — expected best surplus still available at each of your picks, by position")
+    pp = out["position_plan"]
+    rows = []
+    for ov, _ in ladder:
+        d = pp.get(str(ov))
+        if not d:
+            continue
+        best = max(d, key=d.get)
+        rows.append((ov, d.get("QB", ""), d.get("RB", ""), d.get("WR", ""), d.get("TE", ""), best))
+    print(fmt_table(rows, ["Pick", "QB", "RB", "WR", "TE", "Best"]))
     if keeper_eval:
         print("\n## Keeper candidates (surplus in points = your surplus minus what that pick would otherwise return)")
         rows = []
