@@ -75,10 +75,13 @@ a team getting worse. `control` and `vs_control` are in the output so the drift 
 scenario totals come from a free-running policy and sit on a third scale again; never subtract one
 from a pick value.
 
-*Following the plan simulates to 1,839 on the sample league; letting the same simulated drafter
-choose freshly at every pick gives 1,863.* The tool's own recommendation trails its own default
-policy by 24 points — a point and a half a week — and that is stated in `methodology.md` §2 rather
-than buried. Part of it is the price of having a plan at all (a ranking computed before the draft
+*Following the board is worth about 109 points of starting lineup over autopicking* — 1,838 against
+1,729 across 800 paired drafts, and with a quarter of the spread (±19 against ±81), which for most
+people matters more than the mean. `scripts/compare_policies.py` reproduces it.
+
+*The same run shows the limit:* a drafter following the written plan gets 1,838 where the tool's own
+adaptive policy, choosing freshly at every pick, gets 1,864. The recommendation trails the policy by
+26 points. That is stated in `methodology.md` §2 rather than buried. Part of it is the price of having a plan at all (a ranking computed before the draft
 can't react to the board). Part of it is a real bias worth fixing: the rest-of-draft policy inside a
 rollout is the same heuristic, so forcing in a player it would not have chosen leaves it repairing a
 roster shape it did not plan, and the candidate is charged for that rigidity as well as for himself.

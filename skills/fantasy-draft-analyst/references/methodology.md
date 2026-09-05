@@ -80,15 +80,30 @@ are two different baselines. `control` and `vs_control` are in the output so you
 subtract one pick's value from another's, and never read a pick value against a keeper-scenario
 total — those come from a free-running policy and sit on a different scale again.
 
-**One more honest limit, and it is the one to argue with.** Simulate a drafter who follows the plan
-and you get 1,839 on the sample league. Simulate the same drafter choosing freshly at every pick with
-the heuristic policy and you get 1,863 — 24 points better, a point and a half a week. The tool's own
-recommendation trails the tool's own default. Two things are going on and only one of them is benign:
+**What the board is worth, and one honest limit.** Run three drafters in your seat over the same 800
+simulated drafts — `scripts/compare_policies.py` reproduces this — and only the way you pick changes:
+
+| drafter in your seat | mean lineup | spread (sd) | vs autodraft, paired |
+|---|---|---|---|
+| ADP autodraft | 1,729 | ±81 | — |
+| **following the board** | **1,838** | **±19** | **+109 ± 6** |
+| the heuristic policy, free | 1,864 | ±18 | +135 ± 6 |
+
+Following the board is worth about **109 points over autopicking** — six and a half a week — and it is
+four times more consistent. That spread column deserves as much attention as the mean: an autopick
+roster is not merely worse on average, it is unpredictable, and you cannot tell in advance which
+season you drew. Note what this is: the simulator grading itself, with the same projections and the
+same model of the room for all three rows. A valid internal comparison, not a backtest against real
+drafts. If the projections are wrong, all three move together.
+
+Now the limit. A drafter following the plan gets 1,838; the same drafter choosing freshly at every
+pick with the heuristic policy gets 1,864 — 26 points better. The tool's own written recommendation
+trails the tool's own adaptive policy. Two things are going on and only one of them is benign:
 
 * A plan is a ranking computed *before* the draft. Someone reacting to the actual board can always do
   a little better, and no written plan can capture that. That part is the price of having a plan at
   all, and the board recovers most of it by being adaptive: it shows the whole ranked list and tells
-  you to take the top row *still on the board*, which is the policy those 1,839 points already
+  you to take the top row *still on the board*, which is the policy those 1,838 points already
   assume.
 * The rest-of-draft policy inside a rollout is the same heuristic. When a rollout forces in a player
   that heuristic would not have taken, the heuristic then has to repair a roster shape it did not

@@ -90,6 +90,13 @@ That's not hypothetical. **Two defensible versions of this tool drafted eight ru
 
 **Price the room you're actually in.** ESPN drafts elite quarterbacks and tight ends a round early and lets receivers slide; Sleeper takes the top two or three quarterbacks very early and everyone else very late; Underdog inflates the late rounds. The skill fetches ADP for *your* platform and re-runs the availability model on it.
 
+**And it says what it's worth.** Three drafters, 800 identical simulated drafts, only your seat
+changes: autopicking off ADP finishes on 1,729 projected starting points, following this board
+finishes on 1,838 — **+109, about six and a half a week** — and the board's spread is a quarter of
+autodraft's (±19 against ±81), so it is far more consistent as well as better. Reproduce it with
+`scripts/compare_policies.py`. That is the simulator grading itself under its own assumptions, not a
+backtest against real drafts, and the repo says so.
+
 **Say the bear case out loud.** Every verdict comes with the strongest argument against it and the one fact that would change it. Every number carries a standard error, and two players inside the noise are reported as level rather than ranked. Where the tool's own recommendation underperforms its own default policy — it does, by about a point and a half a week — [the docs say so and say why](skills/fantasy-draft-analyst/references/methodology.md).
 
 ---
