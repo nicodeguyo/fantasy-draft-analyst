@@ -1,7 +1,7 @@
 # Sample league used for the demo in this repo. Fictional team, real 2026 players and data.
 league:
   name: "The Sample League"
-  team_name: "Replacement Level"
+  team_name: "The Sample League"
   platform: espn
   teams: 12
   draft_type: snake

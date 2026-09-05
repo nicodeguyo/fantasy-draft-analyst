@@ -52,7 +52,7 @@ roster:
   replacement_rank: {}
 
 keepers:
-  count: 1                       # 0 for a pure redraft league
+  count: 1                       # supported: 0 (redraft) or 1 keeper per team
   cost_basis: same_round         # same_round | round_minus_one | round_minus_two | fixed | escalating | auction_value
   fixed_round: null              # only for cost_basis: fixed
   escalation_per_year: 0         # rounds the cost rises each additional year kept
@@ -61,7 +61,10 @@ keepers:
   traded_players: inherit_cost   # inherit_cost | repriced
   max_years_kept: null           # e.g. 2, or null for unlimited
   declared_before_draft: true    # if true and you know the league's keeper list, add it below
-  league_keeper_list: []         # optional: [{team: "Team A", player: "Jahmyr Gibbs", round: 1}, ...]
+  league_keeper_list: []         # optional complete opponent list: [{team: "Team A", draft_slot: 2, player: "Jahmyr Gibbs", round: 1}]
+  # Empty list means unknown opponents: draw modeled keepers. A non-empty list is complete.
+  # draft_slot is one-based original position; unique slots/players, exact CSV names.
+  # Omitted opponents keep nobody; own-slot entries do not override --keeper/scenarios.
 
 my_roster:
   # Last season's roster with how you got each player. Only matters in keeper leagues.

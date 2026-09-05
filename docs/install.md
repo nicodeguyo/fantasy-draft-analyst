@@ -102,6 +102,8 @@ python skills/fantasy-draft-analyst/scripts/build_board.py \
 
 These multi-line commands use macOS/Linux shell syntax. In PowerShell, put each command on one line without the trailing backslashes. Open `output/draft-board.html` in a browser to inspect the result.
 
+Keeper scenarios run before the board and choose among up to four surplus-shortlisted candidates plus nobody. Use `--keeper "Player Name"` or `--no-keeper` for an explicit decision. The simulator supports zero or one keeper per team. A published keeper list needs each player’s original draft slot and round cost; omitted opponents keep nobody. An empty list means unknown keepers and uses modeled draws.
+
 The simulator prints a summary and writes the JSON results plus an availability CSV. Budget several minutes depending on your hardware; `--rollouts 60` is quicker but less precise, and `--no-pick-values` skips the full candidate comparisons. The sample uses saved inputs so you can reproduce it. For a real league, update the settings and fetch fresh data first.
 
 To reproduce the README's policy comparison using the committed sample output:

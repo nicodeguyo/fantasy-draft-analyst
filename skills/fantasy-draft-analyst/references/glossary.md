@@ -16,17 +16,17 @@ Use only the terms that appear in the analysis. Definitions are written for a fi
 
 **Keeper** — A player you carry over from last season instead of drafting. He costs you a pick, set by the league's keeper rule (often the round he was originally drafted, or one round earlier).
 
-**Keeper inflation** — With keepers removed before the draft, the player available at any pick is worse than ADP implies, because the best players are already gone. Roughly, pick p delivers the ADP-(p + 0.7 × keepers) player early in the draft.
+**Keeper inflation** — The change in draft pricing when keepers leave the pool and their owners forfeit picks. It varies by pick and keeper rules; read the simulated estimate for the league.
 
-**Monte Carlo simulation** — Running the same draft many times with realistic randomness in how other teams pick. It is used twice here: 1,500 drafts to measure how often each player is still available at each of your picks, and 200 more per candidate per pick to measure pick value.
+**Monte Carlo simulation** — Repeated simulated drafts under stated opponent assumptions. More runs reduce random sampling noise, but do not validate projections or calibrate the opponent model.
 
-**Pick value** — Your projected final starting lineup if you take this player at this pick and draft sensibly for the rest of the draft. It is measured, not derived: the simulator plays the remaining picks out a couple of hundred times for each candidate and averages the lineup you end up with. It is what ranks every pick table, and unlike surplus it needs no assumption about where replacement level sits.
+**Pick value** — A matched-control estimate of projected points for one best legal starting lineup after taking a candidate and simulating the remaining draft. Candidate availability populations can differ. Replacement assumptions still influence shortlisting and later picks.
 
-**Now** — On the board, how many points of final starting lineup you give up by taking that row instead of the best choice at that pick. "best" means take him; "−14" means fourteen points across a season, under one a week.
+**Now** — The modeled projected-lineup difference versus the prepared target at this pick. TAKE identifies the target; −14 means an estimated 14 fewer points in the fixed projected lineup, not a measured weekly or season loss.
 
-**Cost of waiting** — For one of your picks and one position, the value expected to be on the board now minus the value expected at your next pick. It answers "is this the round for a running back?" The same replacement level sits in both terms and cancels, so the answer doesn't move if that estimate does.
+**Cost of waiting** — The modeled drop in best available positional surplus between two user picks. Replacement cancels in the direct subtraction, while changed draft paths can still alter the result. Roster fit remains important.
 
-**Standard error (SE)** — How much a simulated average would wobble if you ran the simulation again. Two players within about two standard errors of each other are level, and the board says so rather than picking a winner on a decimal.
+**Standard error (SE)** — Monte Carlo noise in a simulated estimate under fixed inputs. It excludes projection and opponent-model error. A small gap suggests no clear model preference; the displayed “close” label means an absolute gap below one projected point, not equivalence.
 
 **Plan path** — The target at each of your picks, built pick by pick by taking the best pick value each time. A target has to be someone you can realistically expect to be there (at least half the time); a better player who falls to you less often is shown as "if he falls" upside instead.
 
@@ -38,7 +38,7 @@ Use only the terms that appear in the analysis. Definitions are written for a fi
 
 **Red-zone share** — The percentage of a team's plays inside the opponent's 20-yard line that go to a player. Touchdown totals bounce around; red-zone share moves less and predicts them better.
 
-**Replacement level** — The projected points of the worst player at a position who still has to be in someone's starting lineup every week. With 14 teams and two flex spots, roughly the 38th running back and the 50th receiver. It explains which pools are deep; it no longer decides picks, because it is an estimate that can sit on a cliff and swing every back's value by twenty points.
+**Replacement level** — The estimated projection of a marginal starter at a position under league-wide roster assumptions. It describes depth and contributes to candidate and fallback choices; it is not guaranteed waiver-wire production.
 
 **Route share** — The percentage of his team's pass plays a receiver actually runs a route on. The most predictive receiver stat there is, because efficiency on 40% of routes rarely survives a promotion to 85%.
 
@@ -52,7 +52,7 @@ Use only the terms that appear in the analysis. Definitions are written for a fi
 
 **Targets per route run (TPRR)** — Targets divided by routes run. Measures whether a player earns the ball when he's on the field. Above ~24% is elite; below ~17% is a decoy.
 
-**There %** — How often a player was still undrafted at a given pick across the simulated drafts, measured with your own seat drafting off ADP so the number is about the rest of the room and not about your plan. Below 50% means plan for him being gone; above 80% means don't reach.
+**There %** — The fraction of all modeled drafts in which a player is undrafted before a pick, with the user’s seat also drafting from ADP. This unconditional pre-draft frequency does not answer whether he survives after you see him available and pass.
 
 **Tier** — A group of players close enough in projection that which one you get barely matters. Draft across tiers, never within them.
 

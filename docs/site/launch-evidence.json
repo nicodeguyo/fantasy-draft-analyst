@@ -1,0 +1,27 @@
+{
+  "sample": "The Sample League",
+  "projection_data_date": "2026-09-03 (saved analyst-authored inputs, not a current-data refresh)",
+  "metric": "sum of projections for one best legal starting lineup",
+  "benchmark_claim": "Across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.",
+  "benchmark_source": "examples/sample-league/benchmark.json",
+  "comparison_source": "docs/site/pick-comparison.json",
+  "availability_definition": "Unconditional frequency before the draft; includes drafts where the player was taken by the simulated user. Not pass-up survival.",
+  "sources_sha256": {
+    "examples/sample-league/league.yaml": "212a8a1ba93dfc538598589e0e19a592e163e05eb623195ab6a7a2ca53ced061",
+    "examples/sample-league/players.csv": "bdfecc09a0a841d30f59b0ae4a7670dad54f8f4ff7f97b0552d4cde59babd25d",
+    "examples/sample-league/sim.json": "f08008059dd138b1d4e3ef3d3188c89108a31c008f645d62213df3f4028d39e0",
+    "examples/sample-league/notes.json": "e15a9a872e2a00cf0355cccabaa5ee449055aeec7619111118142205c52a30e8",
+    "examples/sample-league/benchmark.json": "c12481fdb3805ca7ce731dee27dfc966360c9998bcf09d010a0523df8693a0af",
+    "docs/site/pick-comparison.json": "22f7a9c1c96f98f55ebd2e6801f733f85f4b6b641a7d2644f5f7c398021eec11",
+    "skills/fantasy-draft-analyst/scripts/draft_sim.py": "7f65a89939f9112344ea5accf915950b2afb6eb6ad43ec672e8246f99287812d",
+    "skills/fantasy-draft-analyst/scripts/build_board.py": "e044beb5906555f30cf3c221e9dd6e8a29727349e007d56e0f85852283492d58",
+    "scripts/compare_policies.py": "75e5830a47fac67436fa1d1849e7c3dc50d48ac7cf8058acece36abc4ba4ee4b"
+  },
+  "regeneration_commands": [
+    "python3 skills/fantasy-draft-analyst/scripts/draft_sim.py --league examples/sample-league/league.yaml --players examples/sample-league/players.csv --sims 1500 --samples 10 --pick-values --keeper-scenarios --out examples/sample-league/sim.json",
+    "python3 scripts/compare_policies.py --league examples/sample-league/league.yaml --players examples/sample-league/players.csv --sim examples/sample-league/sim.json --notes examples/sample-league/notes.json --drafts 800 --output examples/sample-league/benchmark.json",
+    "python3 scripts/reproduce_demo.py --repo . --output docs/site/pick-comparison.json",
+    "python3 scripts/build_demo.py",
+    "python3 scripts/build_launch_evidence.py"
+  ]
+}

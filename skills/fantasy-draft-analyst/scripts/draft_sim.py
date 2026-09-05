@@ -52,25 +52,39 @@ def load_league(path: str) -> dict:
 
 def load_players(path: str) -> list[dict]:
     rows = []
+    names = set()
     with open(path, newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if not r.get("name"):
                 continue
+            name = r["name"].strip()
+            if not name:
+                continue
+            if name in names:
+                raise ValueError(f"Duplicate player name '{name}' in players.csv")
+            names.add(name)
             pos = r["pos"].strip().upper()
             if pos in ("DST", "D/ST", "D"):
                 pos = "DEF"
             if pos == "PK":
                 pos = "K"
+            if pos not in ("QB", "RB", "WR", "TE", "K", "DEF"):
+                raise ValueError(f"Unsupported position '{pos}' for {name}")
             adp = float(r["adp"])
             sd = r.get("adp_sd")
-            sd = float(sd) if sd not in (None, "", "nan") else max(4.0, 0.08 * adp)
+            sd = float(sd) if sd not in (None, "") else max(4.0, 0.08 * adp)
+            proj = float(r["proj"])
+            if not all(math.isfinite(v) for v in (adp, sd, proj)):
+                raise ValueError(f"ADP, ADP standard deviation and projection must be finite for {name}")
+            if adp <= 0 or sd < 0:
+                raise ValueError(f"ADP must be positive and its standard deviation nonnegative for {name}")
             rows.append({
-                "name": r["name"].strip(),
+                "name": name,
                 "pos": pos,
                 "team": (r.get("team") or "").strip(),
                 "adp": adp,
                 "sd": sd,
-                "proj": float(r["proj"]),
+                "proj": proj,
                 "bye": r.get("bye", ""),
                 "note": r.get("note", ""),
             })
@@ -242,14 +256,16 @@ class Sim:
         dtype = str(cfg["league"].get("draft_type", "snake")).strip().lower()
         if dtype == "auction":
             sys.exit("draft_type: auction — this simulator drafts picks, not dollars. "
-                     "See references/methodology.md § Auction for the surplus-to-dollars conversion, "
-                     "and run the rest of the workflow by hand.")
+                     "See the Auction scope in references/methodology.md; "
+                     "auction bidding is not implemented.")
         if dtype not in ("snake", "linear"):
             sys.exit(f"draft_type: {dtype} is not supported (use snake or linear).")
         self.snake = dtype != "linear"
         self.starters = starters(cfg)
         self.flex = self.starters["FLEX"]
         self.superflex = self.starters["SUPERFLEX"]
+        self.maxc = {"QB": 2 + self.superflex, "RB": 6, "WR": 7, "TE": 2, "K": 1, "DEF": 1}
+        self._validate_capacity()
         self.ranks, self.flex_fill = replacement_ranks(cfg, pool)
         self.repl = replacement_levels(pool, self.ranks)
         self.pool = pool
@@ -259,13 +275,13 @@ class Sim:
         self.keeper = keeper_name
         self.keeper_round = keeper_round
         self.n_keepers = int(cfg.get("keepers", {}).get("count", 0) or 0)
-        self.maxc = {"QB": 2 + self.superflex, "RB": 6, "WR": 7, "TE": 2, "K": 1, "DEF": 1}
         prefs = cfg.get("preferences", {}) or {}
         self.avoid = set(prefs.get("avoid_players") or [])
         self.qb_strategy = prefs.get("qb_strategy", "auto")
         self.te_strategy = prefs.get("te_strategy", "auto")
         self.risk = prefs.get("risk", "balanced")
         self.published_keepers = cfg.get("keepers", {}).get("league_keeper_list") or []
+        self._validate_keepers()
         # Names whose availability must always be reported (the user's own players and targets).
         self.watch = set()
         for e in (cfg.get("my_guys") or []) + (cfg.get("my_roster") or []):
@@ -276,6 +292,23 @@ class Sim:
         # Expected best surplus still available at each of my picks, by position — learned in a probe
         # run and used as the opportunity cost of waiting ("draft the position that's about to run out").
         self.pos_horizon: dict[int, dict[str, float]] = {}
+
+    def _validate_capacity(self):
+        """Reject structures the current fixed roster caps cannot represent."""
+        if self.teams < 1 or self.rounds < 1:
+            raise ValueError("league.teams and league.rounds must be positive")
+        if any(n < 0 for n in self.starters.values()):
+            raise ValueError("roster starter counts must be nonnegative")
+        if sum(self.starters.values()) > self.rounds:
+            raise ValueError("Starting roster needs more players than league.rounds permits")
+        if self.rounds > sum(self.maxc.values()):
+            raise ValueError("league.rounds exceeds the simulator's total roster capacity")
+        if any(self.starters[pos] > cap for pos, cap in self.maxc.items()):
+            raise ValueError("A dedicated starter count exceeds the simulator's position roster cap")
+        spare = {pos: self.maxc[pos] - self.starters[pos] for pos in self.maxc}
+        skill_spare = sum(spare[pos] for pos in ("RB", "WR", "TE"))
+        if self.flex > skill_spare or self.flex + self.superflex > skill_spare + spare["QB"]:
+            raise ValueError("FLEX/SUPERFLEX starter counts exceed remaining roster capacity")
 
     # ---- draft order ----
     def pick_order(self, forfeits: dict) -> list[tuple[int, int, int]]:
@@ -296,46 +329,76 @@ class Sim:
                 for r in range(1, self.rounds + 1) if r not in forfeit]
 
     # ---- keepers ----
-    def draw_keepers(self, rng: random.Random):
-        kept, forfeits = set(), {}
+    def _validate_keepers(self):
+        """Fail before simulation rather than silently approximating unsupported ownership."""
+        if self.n_keepers not in (0, 1):
+            raise ValueError("keepers.count must be 0 or 1; multi-keeper optimization is not supported")
+        if not 1 <= self.slot <= self.teams:
+            raise ValueError("league.draft_slot must identify a slot in this league")
         if self.keeper:
-            kept.add(self.keeper)
-            forfeits[self.slot] = {self.keeper_round} if self.keeper_round else set()
+            if not self.n_keepers:
+                raise ValueError("A keeper requires keepers.count: 1")
+            if self.keeper not in self.byname:
+                raise ValueError(f"Keeper '{self.keeper}' is not in players.csv")
+            if not isinstance(self.keeper_round, int) or not 1 <= self.keeper_round <= self.rounds:
+                raise ValueError("A keeper requires a cost round between 1 and league.rounds")
+        elif self.keeper_round is not None:
+            raise ValueError("keeper_round requires a keeper")
+        names, slots = set(), set()
+        for entry in self.published_keepers:
+            if not self.n_keepers:
+                raise ValueError("league_keeper_list requires keepers.count: 1")
+            slot = entry.get("draft_slot")
+            if not isinstance(slot, int) or isinstance(slot, bool) or not 1 <= slot <= self.teams:
+                raise ValueError("Every published keeper needs an explicit draft_slot between 1 and league.teams")
+            name, rnd = entry.get("player"), entry.get("round")
+            if name not in self.byname:
+                raise ValueError(f"Published keeper '{name}' is not in players.csv")
+            if not isinstance(rnd, int) or isinstance(rnd, bool) or not 1 <= rnd <= self.rounds:
+                raise ValueError("Every published keeper needs a round between 1 and league.rounds")
+            if name in names or slot in slots:
+                raise ValueError("Published keepers must have unique players and one keeper per draft_slot")
+            if name == self.keeper and slot != self.slot:
+                raise ValueError("Your selected keeper is already assigned to an opponent")
+            names.add(name)
+            slots.add(slot)
+
+    def draw_keepers(self, rng: random.Random):
+        """Return player-name → owning slot and slot → forfeited rounds.
+
+        A published entry at your own slot is ignored here: the explicit keeper argument
+        controls that seat, allowing honest keep-nobody and alternative-keeper scenarios.
+        A published list is treated as the supplied complete list; missing opponents keep nobody.
+        """
+        kept, forfeits = {}, {}
+        if self.keeper:
+            kept[self.keeper] = self.slot
+            forfeits[self.slot] = {self.keeper_round}
         if self.n_keepers == 0:
             return kept, forfeits
         opps = [t for t in range(1, self.teams + 1) if t != self.slot]
         if self.published_keepers:
-            # Use the league's real list. Assign rounds as given; map teams in order of appearance.
-            team_ids = {}
             for entry in self.published_keepers:
-                if entry.get("player") == self.keeper:
+                t = entry["draft_slot"]
+                if t == self.slot:
                     continue
-                team = entry.get("team", f"team{len(team_ids)}")
-                if team not in team_ids and opps:
-                    team_ids[team] = opps.pop(0)
-                t = team_ids.get(team)
-                if t is None:
-                    continue
-                kept.add(entry["player"])
-                forfeits.setdefault(t, set()).add(int(entry.get("round", 1)))
+                kept[entry["player"]] = t
+                forfeits[t] = {entry["round"]}
             return kept, forfeits
         cands = [p for p in self.pool if p["adp"] <= 110 and p["name"] not in kept and p["pos"] in ("RB", "WR", "TE", "QB")]
-        weights = [max(1.0, 130 - p["adp"]) for p in cands]
-        per_team = self.n_keepers
+        if len(cands) < len(opps):
+            raise ValueError("Not enough eligible players to draw one unique keeper per opponent")
         for t in opps:
-            for _ in range(per_team):
-                for _try in range(50):
-                    pl = rng.choices(cands, weights=weights)[0]
-                    if pl["name"] not in kept:
-                        kept.add(pl["name"])
-                        break
-                a = pl["adp"]
-                # keeper cost correlates with how good the player is (cheap keepers are mid-round hits)
-                rnd = (rng.choice([1, 1, 1, 2, 2]) if a <= 25 else
-                       rng.choice([2, 2, 3, 3, 4]) if a <= 55 else
-                       rng.choice([3, 4, 4, 5, 5]) if a <= 80 else
-                       rng.choice([5, 6, 6, 7, 8]))
-                forfeits.setdefault(t, set()).add(rnd)
+            pl = rng.choices(cands, weights=[max(1.0, 130 - p["adp"]) for p in cands])[0]
+            cands.remove(pl)
+            kept[pl["name"]] = t
+            a = pl["adp"]
+            # This is an assumed keeper-cost distribution, not inferred league rules.
+            rnd = (rng.choice([1, 1, 1, 2, 2]) if a <= 25 else
+                   rng.choice([2, 2, 3, 3, 4]) if a <= 55 else
+                   rng.choice([3, 4, 4, 5, 5]) if a <= 80 else
+                   rng.choice([5, 6, 6, 7, 8]))
+            forfeits[t] = {min(rnd, self.rounds)}
         return kept, forfeits
 
     # ---- lineup scoring ----
@@ -484,8 +547,8 @@ class Sim:
         kept, forfeits = self.draw_keepers(rng)
         avail = [p for p in self.pool if p["name"] not in kept]
         rosters = defaultdict(list)
-        if self.keeper and self.keeper in self.byname:
-            rosters[self.slot].append(self.byname[self.keeper])
+        for name, slot in kept.items():
+            rosters[slot].append(self.byname[name])
         order = self.pick_order(forfeits)
         return {"rng": rng, "avail": avail, "rosters": rosters, "order": order, "i": 0,
                 "my_overall": [ov for ov, r, t in order if t == self.slot], "picks": []}
@@ -522,13 +585,13 @@ class Sim:
 
         `targets` is the plan path: {overall pick: [names, best first]}. At one of your picks the
         state takes the first name still on the board and falls back to the heuristic only when none
-        of them is — which is exactly what you would do on the day. It has to be a list: a plan that
+        remain. This is an executable simulated policy, not a model of all human decisions. A plan that
         pins one name per pick walks past the better player who occasionally falls to you, and that
         costs more than the plan gains.
 
-        `market=True` drafts your seat off ADP like everyone else. That is how "still there at
-        your next pick" is measured: the question is whether the *room* lets a player last, and
-        the answer must not depend on whether your own plan already took him.
+        `market=True` drafts your seat off ADP like everyone else. This measures unconditional
+        pre-draft availability. Your seat can remove the player too; this is NOT survival
+        conditional on the player being available now and you passing on him.
         """
         avail, rosters, my_overall = st["avail"], st["rosters"], st["my_overall"]
         while st["i"] < len(st["order"]):
@@ -602,18 +665,15 @@ def rollout_pick_values(sim: Sim, ladder: list[tuple[int, int]], *, rollouts: in
     The question at a pick is not "who has the most surplus" — that is a value *level* and it
     depends on where you put replacement level. It is "which player leaves me with the best
     starting lineup in January". So: play the draft up to the pick, take the candidate, play the
-    rest out with the heuristic policy, and score the lineup. No baseline anywhere in the decision.
+    rest out with the heuristic policy, and score one fixed projected starting lineup.
+    Replacement assumptions still influence candidate shortlisting and continuation decisions.
 
-    Two things make the numbers comparable:
-
-    * **Common random numbers.** One prefix draft per sample, branched once per candidate, so every
-      candidate faces the same opponents doing the same things. The prefix is carried forward from
-      pick to pick, so the sample cost is paid once for the whole draft, not once per pick.
-    * **A matched control arm.** A candidate is only scored on the samples where he was actually
-      there, and a rare faller is only there in the drafts where the whole board fell — which would
-      make him look good for reasons that have nothing to do with him. So each sample is also played
-      out with no forced pick, and a candidate is measured by the *difference* he makes on his own
-      samples. The luck of the board cancels; what is left is the player.
+    Common prefixes and matched controls reduce some simulation variation. Random streams are
+    coupled, but later opponent choices can diverge after a candidate removes a player. Each
+    candidate is evaluated only where available; subtracting that state's control does not make
+    different availability populations exactly comparable or eliminate candidate-by-board effects.
+    Reported SE describes candidate-minus-control Monte Carlo variation, not total forecast error.
+    The two-SE flags are descriptive noise heuristics, not paired tests or proof of equivalence.
     """
     extra_names = extra_names or set()
     picks = [(ov, rd) for ov, rd in ladder if rd <= through_round]
@@ -767,8 +827,8 @@ def cost_of_waiting(pos_horizon: dict, ladder: list[tuple[int, int]], max_pick: 
 
     `pos_horizon[p][pos]` is the best surplus expected to still be there at pick p. Waiting costs
     the difference between this pick and your next one. Both terms carry the same replacement
-    level, so it cancels: cost of waiting is the one position-timing number the baseline argument
-    cannot touch.
+    level, which cancels in this subtraction for fixed simulated draft states. Replacement
+    assumptions still influence the upstream drafting policy and can change those states.
     """
     out = {}
     for i, (ov, _rd) in enumerate(ladder):
@@ -835,6 +895,13 @@ def main():
     ap.add_argument("--out", default="sim.json")
     ap.add_argument("--seed", type=int, default=1000)
     args = ap.parse_args()
+    for name in ("sims", "rollouts", "candidates", "through_round", "top"):
+        if getattr(args, name) <= 0:
+            ap.error(f"--{name.replace('_', '-')} must be positive")
+    if args.samples < 0:
+        ap.error("--samples must be nonnegative")
+    if not 0 <= args.plan_min_avail <= 1:
+        ap.error("--plan-min-avail must be between 0 and 1")
 
     cfg = load_league(args.league)
     pool = load_players(args.players)
@@ -909,6 +976,42 @@ def main():
             else:
                 keeper, keeper_round = None, None
 
+    # --- keeper scenarios: compare scenarios before committing to a board ---
+    scenarios = []
+    if args.keeper_scenarios:
+        if args.keeper_scenarios == "auto":
+            elig = [c for c in cands if c.get("cost_round") and c.get("in_pool")]
+            elig.sort(key=lambda c: -(next((r.get("surplus_points") or -999 for r in keeper_eval
+                                            if r["player"] == c["player"]), -999)))
+            want = [(c["player"], c["cost_round"]) for c in elig[:4]]
+        else:
+            want = []
+            for nm in [n.strip() for n in args.keeper_scenarios.split(",") if n.strip()]:
+                rd = next((c["cost_round"] for c in cands if c["player"] == nm), None)
+                if nm not in byname:
+                    sys.exit(f"Keeper scenario '{nm}' is not in players.csv")
+                if rd is None:
+                    sys.exit(f"Keeper scenario '{nm}' has no eligible cost round")
+                want.append((nm, rd))
+        want.append((None, None))
+        n_sc = min(args.sims, 1000)
+        for nm, rd in want:
+            print(f"Keeper scenario: {nm or 'nobody'}…", file=sys.stderr, flush=True)
+            scenarios.append(scenario_totals(cfg, pool, nm, rd, n_sc, args.seed))
+        scenarios.sort(key=lambda s: -s["mean"])
+        top = scenarios[0]
+        for s in scenarios:
+            s["delta_vs_best"] = round(s["mean"] - top["mean"], 1)
+            s["within_noise"] = (s is not top and
+                                 abs(s["mean"] - top["mean"]) <= 2 * math.sqrt(s["se"] ** 2 + top["se"] ** 2))
+
+    if scenarios and not args.no_keeper and not args.keeper:
+        keeper, keeper_round = scenarios[0]["keeper"], scenarios[0]["keeper_round"]
+    keeper_selection = ("explicit no-keeper override" if args.no_keeper else
+                        "explicit keeper override" if args.keeper else
+                        "highest simulated mean among requested scenarios" if scenarios else
+                        "positive isolated surplus estimate (scenarios not requested)")
+
     sim = Sim(cfg, [dict(p) for p in pool], keeper, keeper_round)
 
     # --- probe with the chosen keeper: learn the per-position horizon (opportunity cost of waiting)
@@ -919,9 +1022,8 @@ def main():
 
     ladder = sim.my_ladder()
 
-    # --- availability: how often the room leaves each player on the board at each of your picks.
-    # Your own seat drafts off ADP here on purpose. "Still there at your next pick" has to be a
-    # fact about the other managers, not about what your own plan already took.
+    # Unconditional pre-draft availability with every seat (including yours) using the ADP bot.
+    # This is not the probability a currently available player survives if you pass on him.
     coll = defaultdict(Counter)
     min_adp = defaultdict(list)
     for s in range(args.sims):
@@ -958,7 +1060,7 @@ def main():
     # to it; the picks forfeited for keepers subtract from it. Pick p effectively buys the ADP-(p + X) player.
     inflation = {ov: round(max(0.0, statistics.mean(v)), 1) for ov, v in min_adp.items() if ov <= teams * 9}
 
-    # "Will he still be there at my next pick" — measured on the same pass the board reads.
+    # Unconditional availability at the next pick, from the same pre-draft market pass.
     for ov_s, rows in pick_values.items():
         i = next((j for j, (o, _r) in enumerate(ladder) if o == int(ov_s)), None)
         nxt = ladder[i + 1][0] if (i is not None and i + 1 < len(ladder)) else None
@@ -997,33 +1099,6 @@ def main():
         avail[overall] = [{"name": nm, "pos": sim.byname[nm]["pos"], "team": sim.byname[nm]["team"],
                            "proj": round(sim.byname[nm]["proj"]), "surplus": round(sim.byname[nm]["vor"]),
                            "there": round(pr * 100), "watch": nm in sim.watch} for nm, pr in keep]
-
-    # --- keeper scenarios: the verdict in the same units as the draft ---
-    scenarios = []
-    if args.keeper_scenarios:
-        if args.keeper_scenarios == "auto":
-            elig = [c for c in cands if c.get("cost_round") and c.get("in_pool")]
-            elig.sort(key=lambda c: -(next((r.get("surplus_points") or -999 for r in keeper_eval
-                                            if r["player"] == c["player"]), -999)))
-            want = [(c["player"], c["cost_round"]) for c in elig[:4]]
-        else:
-            want = []
-            for nm in [n.strip() for n in args.keeper_scenarios.split(",") if n.strip()]:
-                rd = next((c["cost_round"] for c in cands if c["player"] == nm), None)
-                if nm not in byname:
-                    sys.exit(f"Keeper scenario '{nm}' is not in players.csv")
-                want.append((nm, rd))
-        want.append((None, None))
-        n_sc = min(args.sims, 1000)
-        for nm, rd in want:
-            print(f"Keeper scenario: {nm or 'nobody'}…", file=sys.stderr, flush=True)
-            scenarios.append(scenario_totals(cfg, pool, nm, rd, n_sc, args.seed))
-        scenarios.sort(key=lambda s: -s["mean"])
-        top = scenarios[0]
-        for s in scenarios:
-            s["delta_vs_best"] = round(s["mean"] - top["mean"], 1)
-            s["within_noise"] = (s is not top and
-                                 abs(s["mean"] - top["mean"]) <= 2 * math.sqrt(s["se"] ** 2 + top["se"] ** 2))
 
     # What the plan is worth against simply drafting well. The control arm at your first pick is
     # exactly "play this out with nobody forced in", so it is the free-policy baseline.
@@ -1103,14 +1178,17 @@ def main():
         "samples": samples,
         "settings": {"sims": args.sims, "seed": args.seed, "outcome_sims": n_out,
                      "keeper_model": "published list" if sim.published_keepers else "weighted draw",
-                     "availability_model": "your seat drafts off ADP so availability measures the room, not your plan"},
+                     "keeper_selection": keeper_selection,
+                     "keeper_scope": "zero or one keeper per team; published owners use explicit draft_slot",
+                     "availability_model": "unconditional pre-draft frequency with all seats using the ADP bot; not conditional pass-up survival",
+                     "objective": "sum of projections for one best legal starting lineup; excludes weekly substitutions, injuries and bench coverage"},
     }
     Path(args.out).write_text(json.dumps(out, indent=1), encoding="utf-8")
 
     # Full name × pick availability matrix (every player, every one of your picks), for lookups.
     mpath = Path(args.out).with_name(Path(args.out).stem + "_availability.csv")
     with open(mpath, "w", newline="", encoding="utf-8") as fh:
-        w = csv.writer(fh)
+        w = csv.writer(fh, lineterminator="\n")
         cols = [ov for ov, _ in ladder if ov in coll]
         w.writerow(["name", "pos", "adp", "proj", "surplus"] + [f"there@{ov}" for ov in cols])
         for p in sorted(sim.pool, key=lambda x: x["adp"]):
@@ -1118,6 +1196,7 @@ def main():
                        [round(coll[ov].get(p["name"], 0) / args.sims * 100) for ov in cols])
 
     # --- console summary (markdown) ---
+    print('Interpretation: totals score one fixed projected starting lineup. Legacy tie/level/within-noise flags are descriptive Monte Carlo heuristics, not equivalence tests or total forecast uncertainty.\n')
     print(f"# Draft simulation — {teams} teams, slot {slot}, {args.sims} runs")
     print(f"Keeper: {keeper or 'none'}" + (f" (round {keeper_round})" if keeper_round else ""))
 
@@ -1151,7 +1230,7 @@ def main():
             rows.append((ov, d.get("QB", ""), d.get("RB", ""), d.get("WR", ""), d.get("TE", ""), worst))
         print(fmt_table(rows, ["Pick", "QB", "RB", "WR", "TE", "Running out"]))
         print("The 'running out' position is the one that costs you most to wait on.")
-    print("\n## Replacement level (position → points of the last weekly starter) — explanation, not a decision")
+    print("\n## Replacement level (position → seasonal projection at the modeled starter cutoff) — explanation, not a decision")
     print(fmt_table([(k, v, f"{k}{sim.ranks[k]}") for k, v in out["replacement"].items()], ["Pos", "Replacement", "Who"]))
     ff = sim.flex_fill
     print(f"Flex slots league-wide fill as RB {ff['RB']} / WR {ff['WR']} / TE {ff['TE']} (equilibrium: best remaining player takes the flex).")
@@ -1181,7 +1260,7 @@ def main():
     print(", ".join(f"pick {ov}: X={inflation[ov]:+}" for ov, _ in ladder if ov in inflation and ov <= teams * 8))
     if pick_values:
         print(f"\n## Pick values — top {args.top} at each pick, ranked by the lineup they leave you with")
-        print("Now = points behind the best choice here. Next = how often he is still there at your following pick.")
+        print("Now = points behind the best choice here. Next = unconditional pre-draft availability at your following pick; not survival if you pass.")
         for ov, r in ladder:
             rows = pick_values.get(str(ov))
             if not rows:
@@ -1217,4 +1296,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ValueError as exc:
+        sys.exit(f"Invalid input: {exc}")

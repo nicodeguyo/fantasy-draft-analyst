@@ -1,347 +1,133 @@
-# Methodology — how a league-winner thinks at the draft table
+# Methodology
 
-This is the reasoning behind every recommendation the skill makes. It's written so you can explain each decision to a novice in one sentence and defend it to a data scientist in three.
+Use this reference before producing a draft plan. The objective is to help a user explore what a pick does to the rest of their draft, using explicit league rules, projections, and opponent assumptions.
 
-Contents
+## 1. Price this league
 
-1. The three ideas that do all the work
-2. Pick value by rollout: simulating the rest of the draft
-3. Replacement level and surplus: what they explain, and what they no longer decide
-4. Keeper math: cost, market value, inflation, and the flip conditions
-5. Pick geometry: snake picks, turns, and what keepers do to the board
-6. Availability: Monte Carlo, and the pencil-and-paper shortcut
-7. Tiers and cliffs
-8. Scarcity by position: what usually holds, and how scoring bends it
-9. Reach rules
-10. Building projections you can defend
-11. Cost of waiting, sample drafts, and the target build
-12. Late rounds: handcuffs and next-year keepers
-13. Superflex, 2QB, TE-premium, best ball, auction
-14. Sensitivity: the assumption that flips the board
-15. Signal versus noise in the room
+Use projections scored for the user's lineup and scoring rules, and ADP (average draft position) from the closest available platform and format. Keep source dates. A descriptive note about a QB-happy league does not automatically change simulator behavior: either encode a supported input change and rerun, or present the tendency as an unmodeled sensitivity.
 
----
+## 2. Pick value by rollout
 
-## 1. The three ideas that do all the work
+For each pick and candidate:
 
-**The lineup, not the player.** A pick is not a purchase, it's a branch. What you want to know on the clock is which of the players in front of you leaves you with the best starting lineup in January — after the rest of the draft happens. That is a question you can answer by playing the rest of the draft out, many times, once for each candidate, and looking at the lineups. It needs no theory of what a player is "worth" and no parameter you have to guess. §2 is how.
+1. Simulate the draft to that pick, including keeper ownership and forfeited picks.
+2. Branch from the saved state when the candidate is available.
+3. Draft that candidate and let a lineup-aware heuristic complete the roster.
+4. Score the sum of season projections for one best legal starting lineup.
+5. Compare this result with an unforced continuation from the same state.
 
-**Price the market you're in.** ADP tells you what a generic drafter pays. Your league is not generic: it has this platform's default rankings pulling on the room, this many teams, these keepers already gone, and these specific humans with their specific habits. A player's "value" is what he costs *here*, at *your* picks. Keeper removals alone can shift the effective board by half a round or more.
+The reported estimate is `mean(all controls) + mean(candidate − matched control | candidate available)`. It estimates a candidate's contribution on states where that candidate was available, then adds the common control mean to retain projected-lineup units.
 
-**Say the bear case out loud.** Every verdict comes with the strongest argument against it and the one fact that would change it. This is not hedging — it's how you avoid the season-losing mistake, which is almost always a confident pick made without checking the thing that was checkable.
+**Shared randomness.** Candidates share the prefix state and copied random-generator state. Later picks can diverge, and candidate removals can change which players receive later random draws. This coupling reduces some simulation variation; it does not imply identical opponent decisions throughout each branch.
 
-## 2. Pick value by rollout: simulating the rest of the draft
+**Conditional samples.** A rare fall can happen in a different kind of draft from a common availability. Matched controls reduce additive board effects, but cannot guarantee comparable candidate effects across different availability populations. Candidate-by-board interactions can change rankings. Increasing rollouts reduces Monte Carlo noise, not that modeling bias.
 
-At every pick you are choosing between four or five plausible players. The honest question is not
-"who is worth more" in the abstract — it is **which of them leaves me with the best starting lineup
-once this draft finishes**. That question has a direct answer, and the answer needs no baseline.
+**Uncertainty.** `se` describes noise in the candidate-minus-control estimate under fixed inputs. It excludes projection error, opponent-model error, and uncertainty in the common control mean. The board labels an absolute gap below one projected point “close” as a rounding convention, not a standard-error test or proof of equivalence. Use “no clear model preference” for small differences, especially with low `n`. Shared candidates require covariance-aware paired contrasts for formal inference; selecting a winner also introduces selection uncertainty.
 
-The method, per pick *p* and candidate *c*:
+**Read within a pick.** Each pick has its own control population and assumed earlier plan. Compare candidate estimates within the pick with the above limitations. Do not subtract across pick tables or compare their values directly with keeper-scenario totals. A target must meet the configured availability floor (50% by default); the target is promoted to the first displayed row, and better but less available candidates are shown as upside alternatives.
 
-```
-1. Draft from the start to pick p — keepers removed, the other teams drafting off ADP with noise,
-   and you taking your plan targets at your earlier picks (the heuristic policy when a target is gone).
-2. If c isn't on the board at p in this sample, this sample can't say anything about him. Skip it.
-3. Take c. Draft the rest of the way out: you on the heuristic policy, the room on ADP as before.
-4. Score your best legal starting lineup.
-5. pick_value(p, c) = the average of step 4 over the samples where c was there.
-```
+**What performance means.** `scripts/compare_policies.py` compares the displayed board policy, a noisy ADP-based draft bot, and the simulator's adaptive policy. The board follows displayed order, including expanded rows, obeys configured exclusions and position caps, and reserves remaining picks for unfilled starting slots. When its displayed candidates are exhausted, it uses the documented shared surplus fallback. Written late targets must be part of that displayed policy. Use results generated from the current sample and code; the historical experiment predates the keeper and policy-alignment repairs.
 
-Rank the candidates at *p* by that number. The top one is the plan target, the second is Plan B, and
-the plan path moves on with the target on your roster.
+Report mean projected-lineup points and the paired benchmark difference with its stated interval. This is an internal model comparison, not a real-draft backtest or a comparison with actual ESPN autopick. Variation across draft simulations is draft-model variation, not season consistency. The score omits weekly lineup changes, injuries after drafting, byes, waivers, and the insurance value of bench players. A backup can be useful in fantasy while adding zero to this particular fixed-lineup objective.
 
-Three details make the numbers mean something:
+The continuation heuristic and candidate shortlist still use replacement-based surplus. Their assumptions can change the explored candidates, later roster construction, and rankings. Scoring final lineups reduces direct dependence on replacement; it does not eliminate all dependence or establish that rankings survive policy bias. Test sensitivity and benchmark the delivered policy on separate seeds.
 
-**Common random numbers.** Draw each sample's draft *once* up to pick *p* and branch that same state
-for every candidate. Every candidate then faces the same room doing the same things, so the
-differences between them are about the players and not about which sample they happened to land in.
-It is also what makes the whole thing affordable: the prefix is carried forward from one of your
-picks to the next, so a sample's draft is played once, not once per pick and not once per candidate.
+## 3. Replacement level and surplus
 
-**A matched control arm.** A candidate is only scored on the drafts where he was actually available —
-and a player who falls to you one time in five only falls in the drafts where *the whole board* fell.
-Compare raw averages and he looks like a genius for something that had nothing to do with him. So each
-sample is also played out with nobody forced in, and a candidate is measured by the **difference** he
-makes on his own samples. The luck of the board sits in both terms and cancels. What's reported is
-that difference added back to the control average, so the number still reads as a projected lineup.
+`surplus = projection − replacement[position]`. Replacement is an estimate of the marginal starter's projection, not a promise that a player with that score will be available on waivers.
 
-**Noise.** Every value comes with a standard error. Two candidates inside about two standard errors of
-each other are not distinguishable — say so ("level with"), and break the tie on scarcity, role
-certainty, or who is less likely to be there next time. Reporting a 1.4-point edge as a decision is
-how a simulation starts lying to you.
+Flex-equilibrium calculation:
 
-**What the number is, and what it is not.** A pick value is the projected lineup *at that pick*,
-measured against a control arm — the same drafts played out with nobody forced in — on the same
-samples. That makes candidates at one pick exactly comparable with each other, which is the
-comparison the board asks you to make. It does **not** make picks comparable with each other. Each
-pick's control arm already assumes you followed the plan to get there, so the column drifts downward
-as the draft goes on; a 1,858 at pick 5 and a 1,842 at pick 101 are not a decline in your team, they
-are two different baselines. `control` and `vs_control` are in the output so you can see it. Never
-subtract one pick's value from another's, and never read a pick value against a keeper-scenario
-total — those come from a free-running policy and sit on a different scale again.
+1. Allocate each position's dedicated starting slots league-wide.
+2. Allocate flexible slots to the strongest eligible remaining players.
+3. Add the configured allowance for depth/bye coverage.
+4. Use the marginal allocated player at each position as replacement.
 
-**What the board is worth, and one honest limit.** Run three drafters in your seat over the same 800
-simulated drafts — `scripts/compare_policies.py` reproduces this — and only the way you pick changes:
+Read `flex_fill` and the replacement output for this league. A cliff in projections can make a small rank change move every player's surplus substantially. The earlier eight-RB failure motivated scoring complete lineups instead of directly sorting every pick by surplus. Surplus remains useful for describing depth and for the engine's candidate/fallback choices.
 
-| drafter in your seat | mean lineup | spread (sd) | vs autodraft, paired |
-|---|---|---|---|
-| ADP autodraft | 1,729 | ±81 | — |
-| **following the board** | **1,838** | **±19** | **+109 ± 6** |
-| the heuristic policy, free | 1,864 | ±18 | +135 ± 6 |
+## 4. Keeper decisions
 
-Following the board is worth about **109 points over autopicking** — six and a half a week — and it is
-four times more consistent. That spread column deserves as much attention as the mean: an autopick
-roster is not merely worse on average, it is unpredictable, and you cannot tell in advance which
-season you drew. Note what this is: the simulator grading itself, with the same projections and the
-same model of the room for all three rows. A valid internal comparison, not a backtest against real
-drafts. If the projections are wrong, all three move together.
+The simulator supports **zero or one keeper per team**. Every keeper consumes one valid round. Multi-keeper combinations, traded pick costs, and auction keeper budgets are outside this implementation.
 
-Now the limit. A drafter following the plan gets 1,838; the same drafter choosing freshly at every
-pick with the heuristic policy gets 1,864 — 26 points better. The tool's own written recommendation
-trails the tool's own adaptive policy. Two things are going on and only one of them is benign:
+A published `league_keeper_list` entry has `draft_slot` (one-based original draft position), `player` (exact CSV name), `round` (pick cost), and optional descriptive `team`. Use unique player names and draft slots. A non-empty supplied list is complete for opponents: omitted teams keep nobody. An empty list means unknown opponent keepers and uses modeled draws. An entry for the user's slot does not override the keeper being evaluated by the CLI.
 
-* A plan is a ranking computed *before* the draft. Someone reacting to the actual board can always do
-  a little better, and no written plan can capture that. That part is the price of having a plan at
-  all, and the board recovers most of it by being adaptive: it shows the whole ranked list and tells
-  you to take the top row *still on the board*, which is the policy those 1,838 points already
-  assume.
-* The rest-of-draft policy inside a rollout is the same heuristic. When a rollout forces in a player
-  that heuristic would not have taken, the heuristic then has to repair a roster shape it did not
-  plan, and it repairs imperfectly. So a candidate is charged for the policy's rigidity as well as
-  for his own merits. That is a real bias against exactly the picks where the rollouts disagree most
-  interestingly with the heuristic — and it is the first thing to fix in a v2.1.
+With `--keeper-scenarios`, the engine evaluates up to four eligible candidates shortlisted by isolated surplus plus keeping nobody, **before building the board**, and automatically selects the highest simulated mean. `--keeper NAME` and `--no-keeper` retain explicit user control. Without scenario evaluation, automatic selection uses positive isolated surplus. The shortlist is not an exhaustive search of all eligible keepers; manually evaluate a relevant omitted candidate rather than claiming global optimality.
 
-What survives both: the *ranking* and the *gaps* within a pick, which is all the board asks you to
-read. What does not: treating the plan's projected lineup as a promise, or as better than what a
-sharp drafter would have done anyway.
+Lead with separate full-draft scenario scores and their Monte Carlo uncertainty. Then explain cost (round converted to the user's pick), platform ADP, projected points, and surplus relative to what that pick could buy. Surplus explains the decision but does not replace the scenario comparison.
 
-Reading the output: `pick_values[p]` is the ranked list with `value`, `vs_control`, `control`,
-`delta_vs_best` (the board's **Now** column), `se`, `n`, `avail_pct` and `next_pct`; `plan_path` is the greedy path with its Plan B
-and its "if he falls" upside. A plan target has to be someone you can realistically expect to be
-there — the default floor is 50%. A better player available one draft in five is *upside*, not a plan,
-and belongs in the row as "Bijan if he falls (21%)".
-
-What the rollouts do **not** remove: the rest-of-draft policy is still the lineup-aware heuristic, and
-that heuristic uses surplus internally. That is fine, and it is worth being clear about why. The
-policy is a stand-in for "you draft sensibly from here"; the *evaluation* is the final lineup, which
-is a fact about the roster and involves no baseline at all. A mediocre policy makes every candidate
-look similar (it shrinks the differences); a biased baseline inside the policy cannot make a bad
-lineup score well. The decision no longer depends on the parameter that used to decide it.
-
-## 3. Replacement level and surplus: what they explain, and what they no longer decide
-
-Replacement level at a position is the projected total of the worst player who still has to be in
-someone's starting lineup every week. **Surplus** is a player's projection minus that number. Together
-they are the clearest one-glance answer to "which positions are deep this year" — which is why they
-are still the tier boards' column and still the thing to quote when explaining why a 215-point
-receiver can be a worse pick than a 203-point back. They are no longer what ranks a pick.
-
-Compute it by **flex equilibrium**, which is how lineups actually get filled:
-
-```
-1. Fill the dedicated slots: teams × slots at each position (the 28 best RBs in a 14-team, 2-RB league).
-2. Pool everyone left at the flex-eligible positions (RB/WR/TE) and give every flex slot league-wide
-   to the best remaining player, regardless of position.
-3. Add a few "virtual" flex slots for byes and injuries (2 in a 10-team league, 3 in 12, 4 in 14).
-4. replacement[pos] = projection of the last player at that position who got a slot.
-```
-
-The marginal RB and the marginal WR end up worth about the same — in a 14-team, two-flex league with
-this year's pool, RB38 ≈ 132 and WR50 ≈ 130, with the 32 flex-and-pad slots filling 10 RB / 22 WR
-because the receiver pool is deeper. Superflex/OP slots are filled by QBs ~85% of the time; treat them
-as 0.85 of an extra QB starter. Read the flex fill the simulator reports (`flex_fill`) — it tells you
-which position the league's depth actually lives in.
-
-**Why this stopped being the decision.** Replacement level is an estimate, and this year it lands on a
-cliff in the running-back projections: RB37 projects 132 and RB40 projects 111. Move the baseline
-three ranks — which is well inside honest disagreement — and every back on the board gains or loses
-twenty points of surplus at once. Two defensible ways of drawing the line produced opposite plans for
-the same league: one drafted eight running backs, the other took receivers in rounds 2 and 3. Nothing
-about the players changed. That is the signature of a decision resting on a parameter rather than on
-evidence, and it is why v2 measures lineups instead. The fixed-share model that caused the worse of
-those two plans (`roster.flex_mode: fixed_share`) is still available for a league you know flexes
-irrationally, and `replacement_rank` overrides any position outright — but neither moves the pick
-tables now, only the tiers' column and the appendix.
-
-Never rank a decision by "picks of value" (ADP minus cost) either. Points-per-pick is steepest at the
-top of the board: the gap between WR3 and WR12 overall is far larger than the gap between RB25 and
-RB35. A keeper who saves you four picks on a top-5 player is worth more than one who saves you twenty
-picks in round 8. Translate every "he's a steal" claim into points before you believe it.
-
-Deeper leagues push replacement down at every position and make scarce positions scarcer; that is why
-the same player is a round more valuable in a 14-team league than a 10-team league. Scoring bends it:
-full PPR lifts pass-catching backs and slot receivers; TE premium moves the second TE tier into flex
-territory; 6-point passing TDs pull QBs up.
-
-
-## 4. Keeper math
-
-For each candidate:
-
-1. **Cost** — the pick number the keeper consumes. Convert the keeper's round to the user's overall pick in that round (snake order). Round-minus-one rules mean a player drafted in round 3 costs the round-2 pick; check `references/keeper-rules.md` for the taxonomy.
-2. **Market value** — the player's current ADP on the user's platform, expressed as an overall pick.
-3. **Inflation adjustment** — with K keepers removed from the pool before the draft, the player actually on the board at pick p is worse than ADP p suggests. How much worse depends on whether keepers *cost picks*:
-   - In leagues where each keeper consumes that team's pick in the keeper's round (same-round, round-minus-one, and similar), inflation is **front-loaded**: keepers are mostly top-60 players, so the top of the board is thinned, but every forfeited pick puts a player back. Net inflation at pick p ≈ (keepers already "ahead" of p) − (forfeited picks before p). Measured by simulation in a 12-team one-keeper league: about +11 at pick 5, +8 at pick 20, +6 at 29, +4 at 44, and roughly zero from round 6 on. So pick 20 delivers the ADP-28 player, and a round-6 pick delivers a true round-6 player.
-   - In leagues where keepers are free (no pick forfeited — a fixed last-round cost, or an extra roster slot), inflation is close to K at every pick and doesn't fade.
-   - `draft_sim.py` measures the inflation actually in force at each of your picks (`inflation_at_pick`); quote that rather than a rule of thumb whenever you have it.
-   - The consequence for keeper valuation: a keeper who costs an early pick is competing against an inflated board (his surplus is a little better than the raw pick-vs-ADP comparison shows); a keeper who costs a mid-round pick is competing against an almost un-inflated board (the raw comparison is about right).
-4. **Surplus in points** — projection of the keeper minus projection of the player you'd realistically get with that pick after inflation. This is the number that *explains* the verdict.
-
-The number that *decides* it is the same one the pick tables use: run the whole draft under each scenario — keep X, keep Y, keep nobody — and compare the mean projected final starting lineup (`--keeper-scenarios`, which writes `keeper_scenarios` to `sim.json`). That puts the keeper call in the same units as every other decision on the board, and it prices the thing the isolated surplus table can't: the pick you forfeit, the inflation it creates, and what the rest of your draft looks like without him. Lead with those totals and their standard errors ("keep JSN 1,914 · keep Warren 1,908 · nobody 1,904"), then show the surplus table underneath as the explanation. When two scenarios sit inside two standard errors of each other, the honest verdict is "close" — say it, and let the tiebreak be the bear case rather than the third decimal.
-
-Then run the flip checks:
-
-- **Eligibility.** Waiver pickups, traded players, or players kept last year may be ineligible or priced differently. This is the single most common "the whole analysis changes" fact; ask before you compute.
-- **Superflex / 2QB.** A QB keeper's surplus roughly doubles because the replacement QB drops from the 12th-best to the 24th-best. Josh Allen at a round-2 cost is a fade in 1QB and an easy keep in superflex.
-- **Escalation.** If a kept player's cost rises a round each year, a round-1 keeper has nowhere to go and the "keep him again next year" option is worthless — a mild argument for taking value elsewhere, rarely enough to change this season's call.
-- **Keeping nobody.** Always price it. It's usually dominated — you forfeit surplus for nothing — but if every candidate is negative, keeping nobody and drafting the round is correct.
-- **Next-year optionality.** A cheap late-round keeper that you can hold for years is worth more than its one-season surplus. Note it; don't let it override a large one-season gap.
-
-Present the scenario totals first, then the table: Player | Cost (round → pick) | ADP | Surplus in picks | Surplus in points | Verdict. Then the verdict paragraph, the bear case on the chosen keeper, and "the one thing to confirm."
+Keeper removals thin the pool; forfeited picks partly offset that effect later in the draft. Read simulated inflation at each pick rather than adding the keeper count to every pick. Confirm eligibility, escalation, and waiver-acquisition rules before selecting. Next-year keeper optionality is useful football judgment but is outside the one-season score.
 
 ## 5. Pick geometry
 
-Snake draft, T teams, slot s: round r pick is `(r−1)×T + s` when r is odd and `r×T − s + 1` when r is even. Slot 11 of 14: 11, 18, 39, 46, 67, 74, 95, 102, 123, 130, …
+For a snake draft with `N` teams and slot `s`, round `r` is `(r−1)N+s` for odd rounds and `rN−s+1` for even rounds. Linear drafts use `(r−1)N+s` throughout. Remove keeper-forfeited turns. Long gaps at the turn make fallback depth useful; middle slots permit more frequent decisions. Explain actual pick numbers, not a generic “round three” recommendation.
 
-Two things to read off the ladder:
+## 6. Pre-draft availability and the analytical shortcut
 
-- **Turn tightness.** Slots at the ends have paired picks (1 and 28 in a 14-team league; 14 and 15). Middle slots have evenly spaced picks (~14 apart). Paired picks let you plan two-player combinations ("RB + RB at 33/40"); evenly spaced picks mean you cannot count on anyone surviving a full round.
-- **Keeper forfeits.** Each team loses the round its keeper cost. Remove those picks from the order. The user's own forfeited round shifts nothing for them but changes what's on the board for everyone else — the sim handles this; by hand, just note that K picks are missing.
+The simulator measures how often a player remains undrafted immediately before each user pick across all modeled drafts. The user's seat also drafts using the ADP-based market policy during this availability pass. `avail_pct` and `next_pct` are **unconditional pre-draft frequencies**.
 
-`references/draft-slot-playbook.md` walks through early, middle, and late slots by league size.
+Say “available before pick 29 in X% of simulated drafts.” They are not the probability that a player survives after the user sees him available and deliberately passes on him. The user may draft him in some simulated paths, which also removes him from later availability. Tapping the board does not update these estimates. Finite-sample 0% and 100% do not establish impossibility or certainty.
 
-## 6. Availability: Monte Carlo, and the pencil-and-paper shortcut
+A proper live pass-up probability would branch only from current states where the player is available, force an alternative pick, and simulate intervening opponents. This implementation does not estimate that quantity. Use pre-draft frequencies to prepare alternatives and understand typical windows, not as a stand-alone “take now or lose him” rule.
 
-**With the script.** `draft_sim.py` removes keepers (weighted toward better players, with keeper rounds correlated to player quality — or the league's published list if you have it), then drafts the other teams on ADP plus noise scaled to each player's observed ADP spread (capped, so deep sleepers aren't drafted in round 5), with a positional-need bias from round 8 on and a realistic K/DEF curve, and records who is on the board at each of the user's picks across 1,500 runs. "There %" is that frequency. Below 50%: plan for him being gone. Above 80%: no reason to reach. The script always reports the user's own players and "my guys" at every pick, and writes a full name × pick availability matrix (`sim_availability.csv`) for anyone else you need to look up.
+The opponent policy combines noisy ADP with positional-need and K/DEF rules. It is not a calibrated replica of a platform's autopick or a known distribution of real managers. Evaluate plausible alternative room assumptions when a recommendation depends on them.
 
-The "you" in the availability pass drafts off ADP like everyone else, on purpose: "will he still be there at my next pick" has to be a fact about the other managers, not about whether your own plan already took him. Inside the rollouts (§2) the simulated you drafts by the lineup-aware heuristic — surplus, adjusted for lineup need and for the opportunity cost of waiting — because there it is a stand-in for you drafting sensibly, not the thing being measured.
+Without scripts, a rough normal approximation is `P(available at p) ≈ 1 − Φ((p_eff − ADP)/σ_eff)`, where effective pick includes a stated keeper-inflation approximation. Label this as an analytical estimate; a normal approximation to ADP is not validated live survival probability.
 
-**Without the script.** Availability at pick p for a player with ADP a and spread σ is approximately `P(available) = 1 − Φ((p_eff − a)/σ_eff)` where Φ is the standard normal CDF, `p_eff = p + inflation at that pick` (from §4), and `σ_eff = max(σ, 4) + 0.15 × inflation` to reflect keeper uncertainty. Quick table for `(p − a_eff)/σ_eff`: −2 → 98%, −1 → 84%, 0 → 50%, +1 → 16%, +2 → 2%. A player with ADP 49, σ 5, at pick 44 with +4 inflation (p_eff 48): z = (48 − 49)/5.6 ≈ −0.2 → ~57% available. A coin flip — take him now if he's the target, because the same player at your next pick is a ~5% shot.
-
-**Deciding without the script: dynamic VBD.** You can't roll out a hundred drafts by hand, but you can do the same idea one pick ahead, which is most of the value. A player's take-now value is his projection minus the projection of the best player *at his own position* you expect to still be there at your next pick:
-
-```
-take_now(player) = projection − E[best same-position projection at your next pick]
-```
-
-Estimate that expectation with the availability shortcut above: walk down the position list and take the first player whose availability at your next pick is comfortably over 50%. Then filter by your lineup: a player who would not start for you, at a position where your slots are already filled, is worth roughly nothing this pick no matter how the arithmetic looks.
-
-Why this beats plain surplus in a chat-only setting: it is a *difference between two things that will actually be on your board*, not a difference against an assumed league-wide baseline. Two candidates at different positions get compared on what each one costs you to pass up, which is the question the rollouts answer properly. It is the same idea, one pick ahead, by hand.
-
-Its limits, stated honestly: it looks one turn forward instead of to the end of the draft, so it undervalues the second and third player at a position that is about to collapse, and it can't see roster interactions past the next pick. Where code execution is available, the scripted rollouts are strictly more accurate and should be used — say which method produced the numbers.
-
-Real leaguemates are less rational than ADP bots. Value falls further than the model predicts, so when a tier-3 player is somehow there two rounds late, take him.
+A chat-only decision can compare a candidate's projection with the best same-position alternative expected one turn later, then account for open roster slots. This dynamic-VBD approximation sees only one turn and has not been established as equivalent to the full rollout method. State the method actually used.
 
 ## 7. Tiers and cliffs
 
-Tiers are groups of players close enough in projection that which one you get barely matters. Build them from projection gaps, not from rounds and not from ADP. Rules:
+Build tiers from projection gaps within a position, keeping role and projection uncertainty visible. A useful starting rule is a gap of at least eight points and 1.5 times nearby gaps, but do not treat the rule as statistical evidence. Label actual point drops and broad ADP windows. Within a close tier, consider roster need and role certainty; lower pre-draft availability suggests a narrower expected window but does not settle a live decision.
 
-- Sort the position by projection. Start a new tier wherever the gap to the next player is meaningfully larger than the gaps inside the group: at least 8 points *and* more than 1.5× the median of the neighboring gaps. Never split on a gap under 6 points — the flat middle of the WR and RB rankings has dozens of 3-point gaps, and splitting there produces tiers that mean nothing.
-- Label the cliff with the point drop. Cliffs are where paying up or deliberately waiting matters; inside a tier, take the scarcer position or the safer role.
-- Note where a tier spans many rounds of ADP. That is the market mispricing the position and it is where your surplus comes from.
-- Draft across tiers, never within them: if two players are in the same tier at your pick, the tiebreak is position scarcity, then role certainty, then the higher There % at your next pick (take the one who won't be there).
+## 8. Scarcity by position
 
-## 8. Scarcity by position: what usually holds, and how scoring bends it
-
-Patterns that recur most seasons, to be verified against this year's data rather than assumed:
-
-- **RB** has a cliff where bell-cow roles end and committees begin, then a long dead zone of camp battles and timeshares. Two flex spots and 14 teams strip the dead zone before ADP says they will.
-- **WR** is deep and forgiving in the middle rounds; a dozen receivers within 15 points of each other from ADP 45 to 75 is common. That depth is exactly why not to spend early picks there unless the scoring is full PPR with three WR slots.
-- **TE** is barbell-shaped: one to three elite options with a two-round edge on the field, then a long usable middle. Pay at the top or wait; never pay in between.
-- **QB** is the deepest position in 1QB leagues, and 4-point passing TDs with an interception penalty compress QB1-to-QB8 to under two points a week. The correct QB round is usually 7 or later. Superflex inverts this entirely.
-- **K/DEF** are near-interchangeable; the spread between the best and the fifteenth is small and unpredictable. Final two rounds.
-
-Scoring bends all of this: full PPR lifts pass-catching backs and slot receivers; 6-point passing TDs pull QBs up two rounds; TE premium (1.5 PPR for TEs) makes the second TE tier startable at flex; big-play bonuses favor deep threats. Re-derive replacement levels rather than remembering last year's conclusions.
+Recompute for the current pool. Deep WR groups, thin RB workloads, and concentrated elite-TE value are hypotheses to check, not fixed draft orders. One-QB formats often allow later quarterbacks; a particular projection or scoring system may justify an earlier pick. Superflex and two-QB lineups change demand substantially. Explicit league scoring belongs in player projections before simulation.
 
 ## 9. Reach rules
 
-A reach is paying a pick earlier than a player's realistic availability. It is earned by one thing: **role certainty in a tier that's about to run out**. It is never earned by upside in the first three rounds — those picks must be weekly starters with a locked role.
+Explain the opportunity cost of taking a player early relative to ADP. Evaluate role certainty, alternative targets, available starter slots, and the next gap between picks. Refresh injury and depth-chart sources before a reach. Avoid mechanical rules based only on an unconditional next-pick percentage.
 
-- Cap any reach at one round.
-- Never reach for a player whose There % at your next pick is above ~80%; you're paying for something you'd get free.
-- The endorsed reach is usually a bell-cow-shaped back sitting in the dead zone at the price of a committee back.
-- Before reaching, check the injury feed for that player from the last 72 hours. Reaching for a player who missed practice Wednesday is how seasons are lost.
+## 10. Build projections you can defend
 
-## 10. Building projections you can defend
+Start from sourced stat lines and score them in the league's settings. Date every input. Adjust projections only with an explicit reason: role changes, expected games, efficiency regression, or team context. Keep source facts separate from analyst assumptions. If data is unavailable, identify the gap; sample inputs are saved examples, not a current consensus feed.
 
-Start from a consensus stat line (targets, receptions, yards, touchdowns, attempts) — consensus is a better median than any single source. Then adjust, with a written reason each time, for:
+Expected-game discounts can be built into season totals, but that does not simulate injured weeks or substitute bench players. Run sensitivity cases for the projections driving the recommendation. A tight Monte Carlo SE can coexist with a badly wrong player projection.
 
-- Role changes with evidence: a coordinator quote, a trade, draft capital spent, a depth-chart move, a camp report from a beat reporter.
-- Expected games played, as an injury discount. Don't model injury separately; bake it into expected games.
-- Regression toward career norms on efficiency stats (yards per route run, touchdown rate) that came from small samples or unsustainable target shares.
-- Team context: projected pass rate over expectation, pace, offensive line health, win total (winning run-first teams throw less).
+## 11. Cost of waiting and sample drafts
 
-Score the stat line in the league's exact settings. Never accept a vendor's point total when the scoring differs; a −2 INT, 4-point-TD league reorders the quarterbacks.
+`cost_of_waiting[pick][pos] = E[best surplus available now] − E[best surplus available next turn]`.
 
-Write the three or four projections you most changed from consensus into the appendix with the reason. That's what makes the analysis yours and checkable.
+The shared replacement constant cancels in the direct subtraction, but changed assumptions can affect simulated paths and hence the output. Interpret this as modeled loss of available positional talent over a draft interval, not a guaranteed cost of a live decision. Roster fit still matters: the biggest positional drop does not automatically identify the best player for an already-filled lineup.
 
-## 11. Cost of waiting, sample drafts, and the target build
+Use the current output to describe the strongest positional windows. Sample drafts illustrate possible rosters; report which policy produced them, their projected-lineup range, and repeated choices. A few examples do not establish a general performance distribution. The target plan should include reachable alternatives, not depend on the best observed lucky fall.
 
-**Cost of waiting** answers "when do I take which position" with numbers instead of a slogan, and it
-is the one position-timing view the replacement-level argument cannot touch. For each of your picks
-and each position, it is the drop between what is expected to be on the board now and what is expected
-to be there at your *next* turn:
+## 12. Late rounds
 
-```
-cost_of_waiting[pick][pos] = E[best surplus available at this pick]
-                           − E[best surplus available at your next pick]
-```
+Useful bench picks can provide injury cover, a path to a larger role, or future keeper value. The fixed-lineup score incompletely values these benefits. Explain them as football judgment and identify where the plan departs from pure starter scoring.
 
-Both terms carry the same replacement level, so it cancels. That is not a hand-wave — it's measured.
-Override `roster.replacement_rank` for RB by ±20 ranks in the sample league (moving the RB baseline
-from 164 points to 92 and to 229) and the RB cost-of-waiting cells move by at most 4 points, all of it
-second-order noise from the simulated you drafting slightly differently. The same override moves the
-*surplus levels* those cells are built from by up to 73 points. That gap is the whole argument for
-showing one on the board and not the other. Read it as: the outlined cell in each row is the position about to
-run out, and the number is what one more turn of waiting costs you in points.
-
-A typical 12-team reading: "waiting on a back costs 47 points at your first pick and almost nothing at
-your third; tight end has a 22-point window at 20 and another at 53; quarterback never costs more than
-six until round 5, so it can wait." In a superflex league the QB column dominates the early rows; in TE
-premium the TE column does. The table changes with the league, which is why the skill never hard-codes
-"RB early" or "WR late."
-
-Two rules for reading it: (1) the lineup must still get filled — you take a second RB by the last pick
-where waiting on one still costs you something, even if WR costs more there; (2) a position whose row
-cells are all small (QB, usually) can wait until the last of those picks. And note what it is *not*:
-cost of waiting says which position is draining, `pick_values` says who to take. When they disagree,
-the rollouts win — they are the ones that measured a lineup.
-
-**Sample drafts.** Run 8–10 full drafts (script or by hand), with the plan path in place so they show
-what following the plan actually produces. Report:
-
-- The range of projected starter points across runs, and what it means per week. A 46-point spread across ten drafts is under three points a week — that's the message that the *structure* matters more than any single pick.
-- The most-owned players across runs: these are the players the math keeps choosing, and they should headline the target list.
-- What happened in every draft (e.g., "QB always waited", "no WR before pick 93 in seven of ten"). Those are the strategic conclusions.
-- The single roster to aim for — which is `plan_path` — its projected lineup, why it beats the alternatives at each step, and its known weakness with a concrete hedge ("Pittman at 93 instead costs 8 points and buys a real WR3").
-
-Don't present the top-scoring draft as the plan if it depends on a 34%-likely fall. Present it as the upside case.
-
-
-## 12. Late rounds: handcuffs and next-year keepers
-
-In deep leagues the waiver wire is close to empty by October, so:
-
-- The backup to each of your own starting backs is defensive value, not a luxury.
-- Second-year players with a path to volume beat veterans with a known, capped role.
-- In keeper leagues where waiver pickups can't be kept, a breakout drafted in round 11 becomes a round-11 (or round-10) keeper next season — the only cheap keeper you can manufacture. Bias the last four rounds hard toward that.
-- K and DEF in the final two rounds. Streaming defenses by matchup beats drafting one early in almost every scoring system.
+The displayed board policy is authoritative for a board-following benchmark: follow its ordered candidates, including expanded rows; skip configured exclusions or full position caps; reserve enough picks to fill the starting lineup. If its candidates are exhausted, use the shared surplus fallback shown in the board. Put any specific late-round target into the displayed plan so a benchmark and the user receive the same instruction. The adaptive rollout heuristic is a separate policy and may reserve K/DEF for its final picks.
 
 ## 13. Superflex, 2QB, TE-premium, best ball, auction
 
-- **Superflex / 2QB**: treat the flex as a QB starter when computing replacement. QBs become the scarcest position; take two in the first five rounds in most 12-team superflex formats; a QB keeper is almost always the keep.
-- **TE premium**: the premium has to be in `players.csv` — `scoring.py` applies it when it scores stat lines, and the simulator will say so if `scoring.te_premium` is set. Once it is in the projections, TE replacement recomputes on its own, the second tier becomes flex-worthy and the elite tier gains value. Be aware the effect is smaller than it looks: points and receptions scale together at tight end, so a per-reception premium lifts the whole pool nearly proportionally and moves replacement almost as much as it moves the elite.
-- **Best ball**: no waivers, no lineup decisions — draft for weekly ceiling and stacking; late-round upside matters more, handcuffs matter less. Replacement level is lower because you start your best scores automatically.
-- **Auction**: `draft_sim.py` stops on `draft_type: auction` rather than pretending — it drafts picks, not dollars. Convert surplus to dollars by hand. Total league budget minus $1 per bench slot gives the money that buys starters; each player's share of total starter surplus times that pool is his fair price. Keeper leagues in auction formats price keepers at last year's cost versus this year's fair price. The rest of the reasoning (tiers, cliffs, scarcity) is unchanged.
+Superflex and two-QB slots change legal lineup scoring and demand; recompute rather than multiplying QB value by a fixed factor. TE-premium must be reflected in the input projections. Confirm the scoring helper's supported fields for custom bonuses.
 
-## 14. Sensitivity: the assumption that flips the board
+Best ball requires weekly scoring and is outside the fixed-season-lineup objective. Dynasty requires multi-year player value. Auction requires a bidding model; the pick simulator rejects auction mode. A surplus-to-budget allocation can be offered as a separately labeled approximation, not as an auction simulation.
 
-Every analysis ends with the one estimate everything else depends on. It used to be the RB-versus-WR replacement gap; measuring lineups instead of levels took that one off the table, and what is left is more honest and more interesting: **the projections themselves**. If receiver projections are systematically 8–10% low, the rollouts will happily build you the wrong roster, because they take the projections as given. Name the two or three projections the plan leans on hardest, say what changes if they're wrong, and tell the user to disagree with them *before* the draft rather than during.
+### Auction
 
-Other common flip assumptions: a keeper's eligibility, a superflex slot the user forgot to mention, an injury designation announced draft morning, and the platform's default rankings pulling a QB up a round.
+The pick simulator rejects `draft_type: auction`; it does not model nominations, bids, opponent budgets, or auction keeper inflation. For auction users, offer a separately labeled **pricing approximation** only:
 
-## 15. Signal versus noise in the room
+1. Confirm each team's budget, roster size, minimum bid, scoring, and any kept players and costs.
+2. Reserve the minimum bid for every remaining roster slot, then calculate the remaining discretionary league budget.
+3. Define the available draft pool and replacement assumptions. Allocate that discretionary budget in proportion to positive projected surplus among the players expected to be drafted, adding the minimum bid to each price.
+4. Check that the resulting prices sum to the stated remaining league budget. Show how alternative projections, player pools, and replacement assumptions change the prices.
 
-What moves the needle: role (route share, snap share, touch share), earned volume (targets per route run, target share), the team's pass volume and pace, capital committed to the player, red-zone share, and expected games played. What doesn't, or barely: preseason box scores, a single big game, "hype", yards per route run on fewer than ~250 routes, and last year's touchdown total. `references/metrics.md` gives the ranking with the reasoning.
+These are budget-allocation estimates, not predicted clearing prices or a validated bidding strategy. Keeper leagues need explicit remaining budgets and an available-player pool after keepers; the snake-draft keeper scenarios do not supply that auction calculation. Direct users who need bidding or nomination advice to an auction-specific model.
 
-The market is smart about the top of the board and lazy about the middle. Your edge lives in the middle — the dead zone, the tier that spans four rounds, the platform-specific mispricing — and in the two or three checks nobody else made.
+## 14. Sensitivity
+
+Name the assumptions most likely to change the pick: important player projections, opponent ADP/needs, keeper eligibility, roster rules, and continuation/fallback policy. Change plausible inputs and rerun when a decision is fragile. Replacement assumptions can still affect shortlisting and continuation. The deliverable should let the user disagree with a specific assumption and understand what to test next.
+
+## 15. Player research
+
+Check role, route/snap share, earned targets, team volume, red-zone opportunities, and expected games using dated sources. Treat small samples and camp quotes cautiously. Betting lines can be a cross-check with their own assumptions; they are not automatically player medians or proof of a projection. See `metrics.md` and `data-sources.md` for research guidance, verifying current availability rather than treating older source descriptions as a live audit.

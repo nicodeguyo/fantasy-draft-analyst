@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "drafts": 800,
+  "seed": 1000,
+  "evaluation_seed_range": [
+    901000,
+    901799
+  ],
+  "horizon_probes": 300,
+  "top": 5,
+  "policy_version": "saved-board-v1",
+  "policy_description": "Follow the first available eligible row, including the more rows. Skip avoid-list players and filled position caps (QB 2 plus superflex, RB 6, WR 7, TE 2, K 1, DEF 1). When remaining picks equal unfilled starting slots, choose only a player who fills one. If no row qualifies, use the fallback order below. Marking picks does not recalculate values.",
+  "complete_lineups": {
+    "Noisy ADP-based draft bot": 800,
+    "Saved-board policy": 800,
+    "Adaptive heuristic": 800
+  },
+  "baseline_description": "Noisy ADP-based draft bot with the same avoid list, position caps and last-pick starter-completion guard as the saved-board policy. Not a platform autopick.",
+  "metric": "Sum of projections for one best legal starting lineup",
+  "scope": "Internal draft-model test on held-out seeds; fixed projections and modeled opponents. Not weekly or real-season gains, model validation, or platform-autopick performance.",
+  "interval_scope": "Approximate 95% normal interval of paired mean differences from draft-sampling variation only; excludes projection, model and selection uncertainty.",
+  "source_sha256": {
+    "league": "212a8a1ba93dfc538598589e0e19a592e163e05eb623195ab6a7a2ca53ced061",
+    "players": "bdfecc09a0a841d30f59b0ae4a7670dad54f8f4ff7f97b0552d4cde59babd25d",
+    "sim": "f08008059dd138b1d4e3ef3d3188c89108a31c008f645d62213df3f4028d39e0",
+    "notes": "e15a9a872e2a00cf0355cccabaa5ee449055aeec7619111118142205c52a30e8",
+    "benchmark": "75e5830a47fac67436fa1d1849e7c3dc50d48ac7cf8058acece36abc4ba4ee4b",
+    "board_policy": "145d8819f58cdb94965fd6289cac1ce2c6a1910aa2d0f6f71e7b1c0aa33246d4",
+    "renderer": "e044beb5906555f30cf3c221e9dd6e8a29727349e007d56e0f85852283492d58",
+    "simulator": "7f65a89939f9112344ea5accf915950b2afb6eb6ad43ec672e8246f99287812d"
+  },
+  "policies": [
+    {
+      "name": "Noisy ADP-based draft bot",
+      "mean": 1760.94375,
+      "sd": 46.932351165667164,
+      "vs_baseline": 0.0,
+      "paired_half_width": 0.0,
+      "paired_interval": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "Saved-board policy",
+      "mean": 1851.07125,
+      "sd": 17.729387283194534,
+      "vs_baseline": 90.1275,
+      "paired_half_width": 3.48104606326974,
+      "paired_interval": [
+        86.64645393673025,
+        93.60854606326974
+      ]
+    },
+    {
+      "name": "Adaptive heuristic",
+      "mean": 1864.18875,
+      "sd": 17.209463194344558,
+      "vs_baseline": 103.245,
+      "paired_half_width": 3.2641492410404167,
+      "paired_interval": [
+        99.98085075895959,
+        106.50914924104042
+      ]
+    }
+  ]
+}

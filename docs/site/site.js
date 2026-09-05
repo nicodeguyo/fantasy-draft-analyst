@@ -30,9 +30,13 @@ if (dataElement) {
     total.textContent = number(branch.projected_lineup_points);
     const diff = branch.projected_lineup_points - other.projected_lineup_points;
     status.textContent = `${branch.candidate.name}: ${number(branch.projected_lineup_points)} projected points. ${number(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} than the other branch in this one example.`;
-    document.getElementById('branch-explanation').textContent = id === 'rb'
-      ? 'Start with Achane. In this continuation, the simulator adds Tetairoa McMillan in round 4 to fill out your receivers.'
-      : 'Start with Nacua. In this continuation, the simulator adds Breece Hall in round 4 to fill out your running backs.';
+    document.getElementById('result-name').textContent = `Start with ${branch.candidate.name}`;
+    document.getElementById('result-points').textContent = number(branch.projected_lineup_points);
+    document.getElementById('result-difference').textContent = diff === 0 ? 'Same total in this example' : `${number(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} than the other branch`;
+    const later = branch.draft_picks.find(p => p.round > data.method.round && !other.draft_picks.some(q => q.overall === p.overall && q.name === p.name));
+    document.getElementById('branch-explanation').textContent = later
+      ? `After ${branch.candidate.name}, this continuation takes ${later.name} in round ${later.round}. Explore the resulting lineup; other simulated drafts can unfold differently.`
+      : 'The later picks match in this example. Other simulated drafts can unfold differently.';
   }
   data.branches.forEach(branch => {
     const button = document.createElement('button'); button.type = 'button'; button.dataset.pick = branch.id;

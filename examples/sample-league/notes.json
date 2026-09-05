@@ -1,712 +1,615 @@
 {
- "title": "Replacement Level",
- "subtitle": "2026 draft board · pick 5 of 12 · ESPN · Sunday Sept 6",
- "chips": [
-  "Half PPR · 0.5 per catch",
-  "4-pt passing TD · −2 INT",
-  "1 flex · 1 QB / 2 RB / 2 WR / 1 TE",
-  "Keeping Chase Brown (R6 · pick 68)",
-  "Picks ranked by rollout · 1,500 sims · ESPN ADP"
- ],
- "howto": null,
- "plan_sub": "Your target at every pick, the starting lineup it projects, and the fallback if he's gone. Receivers at 5, 20 and 29; the quarterback at 44; the tight end at 53; your second back at 77.",
- "plan": [
-  {
-   "pick": "KEEP",
-   "player": "Chase Brown",
-   "alt": "",
-   "note": "+54 lineup points over keeping nobody"
-  },
-  {
-   "pick": "5",
-   "player": "Jaxon Smith-Njigba",
-   "alt": "Ja'Marr Chase (−5.6, 31%), then Puka Nacua (40%)",
-   "note": "WR1 — the tier-1 cliff ends here"
-  },
-  {
-   "pick": "20",
-   "player": "Drake London",
-   "alt": "Brock Bowers — level, take whichever is there (50%); then Trey McBride (−5, 71%)",
-   "note": "London and Bowers are level; London is there more often"
-  },
-  {
-   "pick": "29",
-   "player": "Zay Flowers",
-   "alt": "Trey McBride (−3.8, 20%), just outside the noise; then Breece Hall (88%) or Tetairoa McMillan (88%)",
-   "note": "WR3 — eleven picks cheaper on ESPN than in mocks"
-  },
-  {
-   "pick": "44",
-   "player": "Jayden Daniels",
-   "alt": "Bucky Irving (−3.7, 73%); Jalen Hurts (−11, 82%)",
-   "note": "the QB wall sits between 53 and 77"
-  },
-  {
-   "pick": "53",
-   "player": "Kyle Pitts Sr.",
-   "alt": "Tyler Warren — level (70%)",
-   "note": "TE — six names are level here; the empty slot breaks the tie"
-  },
-  {
-   "pick": "77",
-   "player": "Jaylen Warren",
-   "alt": "Rhamondre Stevenson (−3.7, 49%); TreVeyon Henderson (−3.9, 64%)",
-   "note": "RB2 — the last turn with a startable back"
-  },
-  {
-   "pick": "92",
-   "player": "Alec Pierce",
-   "alt": "Brian Thomas Jr. — level (48%); DK Metcalf level too (80%)",
-   "note": "WR4 — four names level; Pierce is there most often"
-  },
-  {
-   "pick": "101",
-   "player": "Chuba Hubbard",
-   "alt": "J. Croskey-Merritt — level (70%)",
-   "note": "RB3 — eight names level; a coin flip"
-  },
-  {
-   "pick": "116",
-   "player": "Travis Kelce",
-   "alt": "Isaiah Likely (79%); Mark Andrews (55%)",
-   "note": "TE2 insurance behind Pitts"
-  },
-  {
-   "pick": "125",
-   "player": "Michael Pittman Jr.",
-   "alt": "Jayden Reed (98%); Isaiah Likely (62%)",
-   "note": "WR5"
-  },
-  {
-   "pick": "140",
-   "player": "Brandon Aubrey",
-   "alt": "Cameron Dicker (68%); Jake Bates (85%)",
-   "note": "the one kicker worth a pick early — 155 vs a 130 replacement"
-  },
-  {
-   "pick": "149",
-   "player": "Woody Marks",
-   "alt": "Zach Charbonnet (53%); Mike Washington Jr. (56%)",
-   "note": "RB4 with a path to volume"
-  },
-  {
-   "pick": "164",
-   "player": "Jordyn Tyson",
-   "alt": "Travis Hunter (100%)",
-   "note": "next-year keeper ticket"
-  },
-  {
-   "pick": "173",
-   "player": "Baltimore Defense",
-   "alt": "Buffalo Defense (98%)",
-   "note": "defense last, stream from Week 1"
-  }
- ],
- "plan_total": "1,839 projected starting lineup",
- "target_note": "Across the simulated drafts that follow this plan the starting lineup ran 1,763 to 1,877, mean 1,839 (sd 19.2); the ten sample drafts spanned 1,814 to 1,867. Read the plan as an ordering, not as a total: the same simulated drafter choosing freshly at every pick scores 1,863, so the plan trails the tool's own default policy by 24 points, about a point and a half a week. Part of that is the price of having a plan at all — the board recovers most of it by telling you to take the top row still on the board — and part is a real bias in the engine, which charges a forced pick for the rigidity of the policy that has to repair the roster around him. If every target lands the nine starters sum to 1,871. The known weakness is RB2: Jaylen Warren is a timeshare and everything behind him is 27 points below replacement, and the hedge is Breece Hall at 44 when he falls (34%), which pushes the quarterback to 53 and the tight end to 77.",
- "waiting_note": "Running back drains fastest at pick 5 (47 points) and again at 77 (27) — the first is Bijan and Taylor leaving, the second is the last turn with a startable back, which is why your RB2 comes at 77 and not before. Tight end has exactly two windows, 22 points at pick 20 and 17 at 53; quarterback never costs more than seven until 53, where it jumps to 16, so the quarterback has to be taken at 44 or 53; receiver costs 38 at pick 5 and then sits between 6 and 16 all draft, which is what a deep position looks like. Cost of waiting says which position is draining — the pick tables say who to take, and when they disagree the pick tables win.",
- "headline_rule": {
-  "heading": "What replacement level tells you here, and what it no longer decides",
-  "paragraphs": [
-   "In this 12-team league with one flex, the 28th running back (164 points) and the 35th receiver (156) are the worst players anyone has to start every week — computed by giving each of the twelve flex slots and three bye slots to the best remaining player regardless of position. Those flex slots fill <b>4 RB / 11 WR / 0 TE</b>, which is the clearest one-glance statement that the receiver pool is the deeper one: the marginal back and the marginal receiver land eight points apart. That is the <b>vs. free</b> column on the tier boards.",
-   "It is not what ranks your picks any more. Move the running-back baseline three ranks — well inside honest disagreement, since RB28 projects 164 and RB31 projects 148 — and every back on the board gains or loses sixteen points of surplus at once. The pick tables above never move, because a final starting lineup is a fact about a roster and involves no baseline at all. The clearest example on this board: Brock Bowers is +76 vs. free and Drake London +71, and at pick 20 they are level — three tenths of a point apart — because tier-2 tight end is 85% available at pick 53."
-  ]
- },
- "pick_notes": {
-  "5": {
-   "note": "Wide receiver. Bijan Robinson if he fell (21%) — he is genuinely the best pick here. Otherwise Jaxon Smith-Njigba, 63% and the last of the receiver tier.",
-   "plan_b": "Ja'Marr Chase (31%), then Puka Nacua (40%). Jonathan Taylor (52%) is the safe fallback and costs 22 points — he and Amon-Ra St. Brown produce the same lineup, 23 behind."
-  },
-  "20": {
-   "note": "Wide receiver or tight end, whichever is there. Drake London and Brock Bowers are level (three tenths apart); take London if both are, because he is there 62% against 50%.",
-   "plan_b": "Trey McBride (71%) — five behind and the only one of the three who reaches 29; Zay Flowers waits (85% at 29)."
-  },
-  "29": {
-   "note": "Wide receiver. Zay Flowers (85%) — 5% at 44, so it is now. Check his Friday practice status (lower body, Sept 1–2).",
-   "plan_b": "Trey McBride (20%), 3.8 behind and just outside the noise; otherwise Breece Hall (88%) or Tetairoa McMillan (88%), who also survives to 44."
-  },
-  "44": {
-   "note": "Quarterback. Jayden Daniels (81%) — the QB wall sits between 53 and 77, and he is 57% at your next pick. Breece Hall if he falls (34%): the best single pick value at any pick after 20.",
-   "plan_b": "Bucky Irving (73%), 3.7 behind Daniels and no longer level with him; Jalen Hurts (82%) is five behind."
-  },
-  "53": {
-   "note": "Tight end, and round 5 is a shrug — six names are level with the best here (Josh Jacobs, Kyle Pitts Sr., Tyler Warren, Bucky Irving, Emeka Egbuka, Garrett Wilson). Take Pitts at 85%: you have no tight end, waiting costs 17 points and he is 18% at 77.",
-   "plan_b": "Tyler Warren (70%) — a tenth of a point apart, the same pick · Josh Jacobs if he falls (27%). Bhayshul Tuten is 8 behind and outside the band."
-  },
-  "77": {
-   "note": "Running back. Jaylen Warren (90%) — 3.7 clear of the field, and every back above him is gone by 92. This is the last turn where a startable second back exists.",
-   "plan_b": "Rhamondre Stevenson (49%) or TreVeyon Henderson (64%); Tony Pollard (80%) is five behind."
-  },
-  "92": {
-   "note": "Wide receiver. Alec Pierce (55%) — four names are level here (Brian Thomas Jr., Alec Pierce, DK Metcalf, Courtland Sutton), so take the one you can actually get.",
-   "plan_b": "Brian Thomas Jr. (48%) is level but under the 50% floor; DK Metcalf (80%) is level and is 40% at 101, so he can wait a round."
-  },
-  "101": {
-   "note": "Running back, and this is a coin flip: eight names are level with the best. Chuba Hubbard (93%) has the clearest path to volume and the best chance of being there.",
-   "plan_b": "J. Croskey-Merritt (70%) — level · RJ Harvey if he falls (17%). Kenny Gainwell, Kyle Monangai and Michael Pittman Jr. are all the same pick."
-  },
-  "116": {
-   "note": "Tight end 2 behind Pitts — Travis Kelce (49%) if he is there, Isaiah Likely (79%) if not. Atlanta's quarterback situation is why this slot matters.",
-   "plan_b": "Mark Andrews (55%) or Jake Ferguson (80%)."
-  },
-  "125": {
-   "note": "Receiver depth. Michael Pittman Jr. (76%) — nothing here is above replacement, so take the clearest role.",
-   "plan_b": "Jayden Reed (98%); Isaiah Likely (62%) if you still have no second tight end."
-  },
-  "140": {
-   "note": "Kicker, and this is the one defensible break from 'kicker last'. Brandon Aubrey (56%) projects 155 against a replacement kicker's 130 — the top surplus row on the board here, worth about 19 points over a round-14 kicker.",
-   "plan_b": "Cameron Dicker (68%) or Jake Bates (85%) if Aubrey is gone; do not reach back for him at 149 (23%)."
-  }
- },
- "late_note": "Picks 140–173: the kicker exception at 140, then next-year keeper tickets, then the defense last.",
- "late_body": "Brandon Aubrey is the single defensible break from 'kicker last': 155 projected against a replacement kicker's 130, 56% available at pick 140 and 2% at 164, and the pick he costs is a bench lottery ticket worth nothing to your lineup. That is about 19 points, a little over one a week. If he is gone at 140, take Cameron Dicker (68%) or Jake Bates (85%) rather than reaching back at 149 (23%). Waiver pickups cannot be kept here, so 149–173 is where you manufacture next year's cheap keeper: Jordyn Tyson is 99% at 164 and 96% at 173, and Travis Hunter is 100% at every one of your picks — the draft ends before ADP reaches him. Woody Marks (66% at 149), Zach Charbonnet (53%) and Mike Washington Jr. (56%) are the back-end depth; Kyle Monangai (31% at 116) and Rachaad White (71% at 125) are the bench backs with a path to volume. The room starts on kickers and defenses in round 11, so Seattle, Denver and Houston are all under 5% by 140; Baltimore is 86% at 164 and 79% at 173, Buffalo 99% and 98%. Claim Samaje Perine off waivers in Week 1 — he is Brown's backup, he is not in the draft pool, and he is the one handcuff that matters to this roster.",
- "tiers": {
-  "RB": {
-   "subtitle": "vs. free = points over RB28 (164), the last back anyone has to start · flex fills 4 RB",
-   "bands": [
-    {
-     "label": "Tier 1",
-     "note": "win the league by themselves",
-     "players": [
-      "Jahmyr Gibbs",
-      "Bijan Robinson"
-     ]
-    },
-    {
-     "cliff": "−41",
-     "cliff_note": "The largest gap at any position. Gibbs gone before your pick in 86% of drafts, Bijan in 79% — but Bijan at 5 is the best pick value on your whole board."
-    },
-    {
-     "label": "Tier 2",
-     "note": "the only backs worth a first-round pick",
-     "players": [
-      "Jonathan Taylor",
-      "James Cook III",
-      "Christian McCaffrey",
-      "De'Von Achane",
-      "Chase Brown",
-      "Saquon Barkley"
-     ]
-    },
-    {
-     "cliff": "−13",
-     "cliff_note": "Chase Brown at a round-6 keeper cost is this tier for free. It is why the rest of this board leans receiver."
-    },
-    {
-     "label": "Tier 3",
-     "note": "starters, and 27 points behind the best pick at 5",
-     "players": [
-      "Derrick Henry",
-      "Omarion Hampton",
-      "Kenneth Walker",
-      "Kyren Williams",
-      "Breece Hall"
-     ]
-    },
-    {
-     "cliff": "−10",
-     "cliff_note": "Hall is the tier's outlier by price: 88% at 29, 34% at 44, and the best pick value at 44 when he falls."
-    },
-    {
-     "label": "Tier 4",
-     "note": "committee backs",
-     "players": [
-      "Javonte Williams",
-      "Ashton Jeanty",
-      "Travis Etienne Jr.",
-      "D'Andre Swift",
-      "Cam Skattebo",
-      "Jeremiyah Love",
-      "Bucky Irving",
-      "Josh Jacobs"
-     ]
-    },
-    {
-     "cliff": "−8",
-     "cliff_note": "Irving (73%) and Jacobs (57%) are the only two who reach pick 44; Jacobs is also the top row at 53 when he lasts (27%)."
-    },
-    {
-     "label": "Tier 5",
-     "note": "your RB2 tier, rounds 5–7",
-     "players": [
-      "Quinshon Judkins",
-      "David Montgomery",
-      "Bhayshul Tuten",
-      "Jaylen Warren"
-     ]
-    },
-    {
-     "cliff": "−8",
-     "cliff_note": "Three identical 176 projections across 29 picks of ADP. Warren is 90% at 77; Tuten is 0%. Same points, 22 picks apart."
-    },
-    {
-     "label": "Tier 6",
-     "note": "replacement",
-     "players": [
-      "TreVeyon Henderson",
-      "Rhamondre Stevenson",
-      "Tony Pollard"
-     ]
-    },
-    {
-     "cliff": "−11",
-     "cliff_note": "Everything below is bench depth — 16 to 27 points under replacement."
-    },
-    {
-     "label": "Tier 7",
-     "note": "bench with a path to volume",
-     "players": [
-      "Jadarian Price",
-      "Rico Dowdle",
-      "J.K. Dobbins",
-      "RJ Harvey",
-      "J. Croskey-Merritt",
-      "Chuba Hubbard",
-      "Kenny Gainwell",
-      "Kyle Monangai",
-      "Woody Marks",
-      "Zach Charbonnet"
-     ]
-    }
-   ]
-  },
-  "WR": {
-   "subtitle": "vs. free = points over WR35 (156), the last receiver anyone has to start · flex fills 11 WR",
-   "bands": [
-    {
-     "label": "Tier 1",
-     "note": "",
-     "players": [
-      "Jaxon Smith-Njigba",
-      "Ja'Marr Chase",
-      "Puka Nacua"
-     ]
-    },
-    {
-     "cliff": "−16",
-     "cliff_note": "Chase (leg) and Nacua (psoas) carry a draft-week flag; Smith-Njigba does not, and he is 63% at pick 5."
-    },
-    {
-     "label": "Tier 2",
-     "note": "",
-     "players": [
-      "Amon-Ra St. Brown",
-      "CeeDee Lamb",
-      "Justin Jefferson",
-      "Drake London"
-     ]
-    },
-    {
-     "cliff": "−12",
-     "cliff_note": "London is the tier's last member and the one an ESPN room lets slide to pick 20 (62%). St. Brown at pick 5 is worth the same lineup as Jonathan Taylor."
-    },
-    {
-     "label": "Tier 3",
-     "note": "the ESPN discount tier",
-     "players": [
-      "Zay Flowers",
-      "Rashee Rice",
-      "A.J. Brown",
-      "George Pickens",
-      "Nico Collins"
-     ]
-    },
-    {
-     "cliff": "−11",
-     "cliff_note": "Flowers goes eleven picks later on ESPN than in mocks and is 85% at pick 29; the other four are 1–20%. That gap is the plan."
-    },
-    {
-     "label": "Tier 4",
-     "note": "deep and flat, rounds 3–5",
-     "players": [
-      "Tetairoa McMillan",
-      "Malik Nabers",
-      "Tee Higgins",
-      "Emeka Egbuka",
-      "Garrett Wilson",
-      "Chris Olave",
-      "Ladd McConkey",
-      "DeVonta Smith",
-      "Jameson Williams",
-      "Davante Adams"
-     ]
-    },
-    {
-     "cliff": "−6",
-     "cliff_note": "Ten receivers inside 14 points across 28 picks of ADP — and not one of them is the pick at 44 or 53. That is what a tier this flat means."
-    },
-    {
-     "label": "Tier 5",
-     "note": "WR4 and flex, rounds 6–9",
-     "players": [
-      "Terry McLaurin",
-      "Rome Odunze",
-      "Parker Washington",
-      "Jaylen Waddle",
-      "Mike Evans",
-      "Brian Thomas Jr.",
-      "DJ Moore",
-      "Luther Burden III",
-      "Marvin Harrison Jr.",
-      "Courtland Sutton",
-      "Alec Pierce",
-      "DK Metcalf"
-     ]
-    },
-    {
-     "cliff": "−8",
-     "cliff_note": "Christian Watson (156) is replacement. Pierce, Sutton and Metcalf are priced 20-plus picks below the mock market on ESPN — that is why four names are level at pick 92."
-    }
-   ]
-  },
-  "TE": {
-   "subtitle": "vs. free = points over TE13 (116), the last tight end anyone has to start · no flex fills TE",
-   "bands": [
-    {
-     "label": "Tier 1",
-     "note": "",
-     "players": [
-      "Brock Bowers",
-      "Trey McBride"
-     ]
-    },
-    {
-     "cliff": "−25",
-     "cliff_note": "The clearest case of surplus and pick value disagreeing: Bowers is +76 vs. free and Drake London +71, and at pick 20 they are level — because tier 2 is 85% there at pick 53."
-    },
-    {
-     "label": "Tier 2",
-     "note": "",
-     "players": [
-      "Colston Loveland",
-      "Tyler Warren",
-      "Kyle Pitts Sr."
-     ]
-    },
-    {
-     "cliff": "−14",
-     "cliff_note": "Loveland 82% at 29 and 15% at 44; Tyler Warren 70% at 53; Pitts 85% at 53 and 18% at 77 — and 19 picks of ADP cheaper than the tier."
-    },
-    {
-     "label": "Tier 3",
-     "note": "usable",
-     "players": [
-      "Tucker Kraft",
-      "Harold Fannin Jr.",
-      "George Kittle",
-      "Sam LaPorta",
-      "Travis Kelce"
-     ]
-    },
-    {
-     "cliff": "−4",
-     "cliff_note": "Kelce is 49% at 116 — the TE2 insurance this build wants, because it starts a 150-point tight end."
-    },
-    {
-     "label": "Tier 4",
-     "note": "free",
-     "players": [
-      "Dallas Goedert",
-      "Isaiah Likely",
-      "Mark Andrews",
-      "Jake Ferguson"
-     ]
-    }
-   ]
-  },
-  "QB": {
-   "subtitle": "vs. free = points over QB12 (312), the last quarterback anyone has to start",
-   "bands": [
-    {
-     "label": "Tier 1",
-     "note": "",
-     "players": [
-      "Josh Allen"
-     ]
-    },
-    {
-     "cliff": "−10",
-     "cliff_note": "Allen is 13% at pick 20 and gone by 29. Not your problem."
-    },
-    {
-     "label": "Tier 2",
-     "note": "the window",
-     "players": [
-      "Jayden Daniels",
-      "Lamar Jackson",
-      "Jalen Hurts"
-     ]
-    },
-    {
-     "cliff": "−9",
-     "cliff_note": "Daniels 81% and Hurts 82% at pick 44 — and both under 1% at 77. There is no gradual decline, just a wall."
-    },
-    {
-     "label": "Tier 3",
-     "note": "",
-     "players": [
-      "Drake Maye",
-      "Joe Burrow",
-      "Patrick Mahomes",
-      "Dak Prescott"
-     ]
-    },
-    {
-     "cliff": "−6",
-     "cliff_note": "Mahomes is 82% at pick 92 — the whole fallback plan if the room runs on quarterbacks early."
-    },
-    {
-     "label": "Tier 4",
-     "note": "replacement",
-     "players": [
-      "Jaxson Dart",
-      "Justin Herbert",
-      "Caleb Williams",
-      "Kyler Murray"
-     ]
-    }
-   ]
-  }
- },
- "mine": [
-  "Chase Brown",
-  "Jaxon Smith-Njigba",
-  "Drake London",
-  "Zay Flowers",
-  "Jayden Daniels",
-  "Kyle Pitts Sr.",
-  "Jaylen Warren",
-  "DK Metcalf",
-  "J. Croskey-Merritt",
-  "Brock Bowers",
-  "Tetairoa McMillan",
-  "Courtland Sutton",
-  "Travis Etienne Jr.",
-  "Bhayshul Tuten",
-  "Luther Burden III",
-  "Emeka Egbuka",
-  "Jaylen Waddle",
-  "Colston Loveland",
-  "Alec Pierce",
-  "Chuba Hubbard",
-  "Breece Hall",
-  "Josh Jacobs"
- ],
- "shortlist_sub": "Your six, plus the keeper and the players the rollouts kept choosing — each priced to the pick where you would actually take him. The number beside each name is vs. free, which explains the pool he comes from; the call comes from the pick tables.",
- "shortlist": [
-  {
-   "player": "Chase Brown",
-   "call": "KEEP (R6) · +54",
-   "tag": "take"
-  },
-  {
-   "player": "Jaxon Smith-Njigba",
-   "call": "TAKE AT 5",
-   "tag": "take"
-  },
-  {
-   "player": "Drake London",
-   "call": "TAKE AT 20 · DON'T KEEP",
-   "tag": "take"
-  },
-  {
-   "player": "Brock Bowers",
-   "call": "LEVEL WITH LONDON AT 20",
-   "tag": "ok"
-  },
-  {
-   "player": "Trey McBride",
-   "call": "OK AT 20 · PLAN B AT 29",
-   "tag": "ok"
-  },
-  {
-   "player": "Zay Flowers",
-   "call": "TAKE AT 29",
-   "tag": "take"
-  },
-  {
-   "player": "Jayden Daniels",
-   "call": "TAKE AT 44",
-   "tag": "take"
-  },
-  {
-   "player": "Breece Hall",
-   "call": "TAKE AT 44 IF HE FALLS (34%)",
-   "tag": "ok"
-  },
-  {
-   "player": "Kyle Pitts Sr.",
-   "call": "TAKE AT 53",
-   "tag": "take"
-  },
-  {
-   "player": "Tyler Warren",
-   "call": "OK AT 53 — LEVEL",
-   "tag": "ok"
-  },
-  {
-   "player": "Josh Jacobs",
-   "call": "OK AT 53 IF HE FALLS (27%)",
-   "tag": "ok"
-  },
-  {
-   "player": "Jaylen Warren",
-   "call": "TAKE AT 77",
-   "tag": "take"
-  },
-  {
-   "player": "Alec Pierce",
-   "call": "TAKE AT 92",
-   "tag": "take"
-  },
-  {
-   "player": "Brian Thomas Jr.",
-   "call": "OK AT 92 — LEVEL (48%)",
-   "tag": "ok"
-  },
-  {
-   "player": "DK Metcalf",
-   "call": "OK AT 92 OR 101 — LEVEL",
-   "tag": "ok"
-  },
-  {
-   "player": "Chuba Hubbard",
-   "call": "TAKE AT 101",
-   "tag": "take"
-  },
-  {
-   "player": "J. Croskey-Merritt",
-   "call": "OK AT 101 — LEVEL",
-   "tag": "ok"
-  },
-  {
-   "player": "Tetairoa McMillan",
-   "call": "OK AT 29 · OK AT 44",
-   "tag": "ok"
-  },
-  {
-   "player": "Emeka Egbuka",
-   "call": "PASS AT 29 AND 44 · LEVEL AT 53 (23%)",
-   "tag": "ok"
-  },
-  {
-   "player": "Jaylen Waddle",
-   "call": "PASS AT 44 AND 53",
-   "tag": "pass"
-  },
-  {
-   "player": "Colston Loveland",
-   "call": "PASS AT 29",
-   "tag": "pass"
-  },
-  {
-   "player": "Bhayshul Tuten",
-   "call": "PASS — 8.5 BEHIND AT 53",
-   "tag": "pass"
-  },
-  {
-   "player": "Luther Burden III",
-   "call": "PASS — 17 BEHIND AT 53",
-   "tag": "pass"
-  }
- ],
- "vegas": [
-  {
-   "value": "824.5",
-   "text": "Chase Brown rushing yards (−110), 5.5 rushing TDs (−125), 1,000+ at +210 — Sharp Football, Aug 31. The market's median is 10–20 points below mine. Knock fifteen off and he is still the keep by more than thirty."
-  },
-  {
-   "value": "10.5",
-   "text": "Bengals win total, under −120 (BetMGM via VegasInsider, Sept 2). A mild negative for a back whose value came partly from pass-catching in shootouts."
-  },
-  {
-   "value": "11.5",
-   "text": "Ravens win total, tied-highest in the league, over −155. Flowers is the unquestioned WR1 on the best game script in football — and he is 85% there at pick 29 and 5% at 44."
-  },
-  {
-   "value": "10.5",
-   "text": "Seahawks, over −125. Smith-Njigba led the NFL in receiving yards on an offense with the fourth-fewest pass attempts; the volume risk is already inside his 268."
-  },
-  {
-   "value": "6.5",
-   "text": "Falcons win total, over −140, with no starting quarterback named as of Sept 2 (Penix's knee vs Tua). Pitts is the plan's tight end at 53 — this is the line to watch on Saturday, because a 125-point Pitts means the tight end had to come at 20."
-  },
-  {
-   "value": "612",
-   "text": "Bo Nix's 2025 pass attempts — most in the NFL — at 6.4 yards per attempt, 28th of 33. The Waddle premise is right about volume and silent about efficiency. Denver's total is 9.5 (over −125)."
-  },
-  {
-   "value": "899.5",
-   "text": "Waddle receiving yards (Yahoo, Aug 24) — consistent with my 174, and 28 points of lineup behind the best choice at pick 44."
-  },
-  {
-   "value": "8.5",
-   "text": "Jaguars (over −140) and Buccaneers (under −135). Jacksonville's offense is real; Tuten gets a third of it and Brian Thomas a quarter. Tampa's is a coin flip with Egbuka's toe."
-  },
-  {
-   "value": "9.5",
-   "text": "Bears win total, under −125; Caleb Williams over 3,645 passing yards is a featured play. Enough volume for two of Odunze, Loveland and Burden — not for three."
-  }
- ],
- "appendix": {
-  "terms": [
-   {
-    "term": "Pick value",
-    "def": "The projected final starting lineup you finish with if you take this player at this pick and draft sensibly afterwards, averaged over 200 simulated completions of the draft. Every pick table on this sheet is sorted by it, and it needs no assumption about what a player is 'worth'."
-   },
-   {
-    "term": "Control / vs. control",
-    "def": "The same simulated drafts played out with nobody forced in at that pick, and the difference the candidate makes on his own samples. Pick values are measured against that arm, which is why they compare within a pick and never across picks."
-   },
-   {
-    "term": "Now",
-    "def": "Points of final starting lineup behind the best choice at that pick. 'best' appears on the top row and on any row inside the noise band with it — a ≈ mark means the simulation cannot tell them apart."
-   },
-   {
-    "term": "Next",
-    "def": "How often the player is still on the board at your following pick, across 1,500 simulated drafts in which your own seat drafts off ADP — so the number is about the room, not about your plan. Amber under 50%: take him now or lose him."
-   },
-   {
-    "term": "Level (≈)",
-    "def": "Two candidates within about two standard errors of each other. Break the tie on scarcity, role certainty or who is less likely to last — never on the decimal."
-   },
-   {
-    "term": "Replacement level / vs. free",
-    "def": "The score of the worst player at a position who still has to be in someone's starting lineup every week, by flex equilibrium: dedicated slots first, then every flex slot league-wide plus three bye slots to the best remaining player regardless of position. RB 164 (RB28), WR 156 (WR35), TE 116 (TE13), QB 312 (QB12). 'vs. free' is projection minus that number. It is the tier boards' column and it ranks nothing."
-   },
-   {
-    "term": "Flex fill",
-    "def": "How the flex slots split by position at equilibrium: 4 RB / 11 WR / 0 TE here. The receiver pool is the deeper one, which is why the marginal back and the marginal receiver land eight points apart."
-   },
-   {
-    "term": "Cost of waiting",
-    "def": "Points of value lost at a position by waiting until your next turn. The same replacement level sits in both terms and cancels, so this table does not move when the baseline does — unlike a surplus heatmap."
-   },
-   {
-    "term": "Keeper inflation",
-    "def": "With twelve keepers removed and twelve picks forfeited, the player available at a pick is worse than ADP suggests. Measured here: +11 picks at 5, +8 at 20, +6 at 29, +4 at 44, +3 at 53, half a pick at 77, nothing from 92 on."
-   }
+  "title": "Sample League",
+  "subtitle": "Saved 2026 example · pick 5 of 12 · ESPN half-PPR",
+  "chips": [
+    "Half PPR · 0.5 per catch",
+    "4-pt passing TD · −2 INT",
+    "1 flex · 1 QB / 2 RB / 2 WR / 1 TE",
+    "One keeper per team · same-round cost",
+    "Saved analyst projections · pre-draft model"
   ],
-  "how_built": [
-   "Projections are mine, built Sept 3, 2026 from 2025 production and 2026 roles, scored in this league's exact settings (0.5 PPR, 4-pt pass TD, −2 INT). Five were changed after draft-week research: Egbuka 206→192 (toe, no team drills as of Sept 2), Tuten 200→176 (Coen: 'more by committee', Aug 26), Irving 201→188 (Gainwell and Tucker have real roles), Nabers 207→197 (ACL, Week 1 uncommitted), Jeanty 199→191 (ankle).",
-   "Pick values: for each of your picks, up to eight candidates plus every player on your roster and your list were planted at that pick and the rest of the draft simulated 200 times, then the best legal starting lineup scored. Common random numbers across candidates, a matched no-forced-pick control arm on the same drafts, and a two-standard-error noise threshold. The rollouts run through round 9 (pick 101); the tables at 116 and 125 fall back to vs. free plus availability, because no pick values were computed that deep.",
-   "Availability: 1,500 drafts with twelve keepers drawn (weighted toward better players, keeper rounds correlated to quality), opponents on ESPN ADP plus noise scaled to each player's spread and capped, positional need from round 8, kickers and defenses on a rising curve from round 11. In this pass your own seat drafts off ADP like everyone else, on purpose — 'will he still be there' has to be a fact about the room.",
-   "The keeper verdict: 1,000 full drafts per scenario. Keeping Chase Brown projects 1,864; Daniels 1,827, Bowers 1,824, McMillan 1,813, keeping nobody 1,810. Three different scales live on this sheet and none of them subtract: pick values are measured against that pick's own control arm and compare only within a pick; the plan total is 1,839; the keeper scenarios come from their own free-running pass.",
-   "ADP: ESPN column of the Footballguys cross-platform table for the top 100 (fetched Sept 3, 2026); FantasyFootballCalculator half-PPR 12-team mocks Aug 28–Sep 2 for the spread and for players beyond the top 100. ESPN rooms take quarterbacks and tight ends a round early and let receivers slide: Metcalf +25 picks, Pierce +22, Jameson Williams +17, Flowers +11 against the mock market.",
-   "Betting lines: VegasInsider win totals (BetMGM, Sept 2, 2026); season props from Sharp Football Analysis (Aug 31) and Yahoo (Aug 24). Used as a check on medians, never as projections.",
-   "News and usage: FantasyPros and RotoWire feeds, FantasyFootballCalculator player-news pages, PFF, Bleacher Nation, Pewter Report and team sites — all fetched Sept 3, 2026, items dated June 9 to Sept 3.",
-   "The honest limitation: following the plan simulates to 1,839, while the same drafter choosing freshly at every pick scores 1,863 — the tool's recommendation trails its own default policy by 24 points, about a point and a half a week. Part of that is unavoidable (a plan is a pre-draft ranking; the adaptive board, 'take the top row still on the board', recovers most of it) and part is a real defect: the rest-of-draft policy inside a rollout is the same heuristic, so a forced pick leaves that heuristic repairing a roster shape it did not plan, and the candidate is charged for that rigidity as well as his own merits. It is the top item for v2.1. The rankings and the within-pick gaps survive it; the totals do not."
+  "howto": null,
+  "plan_sub": "Follow the displayed order at each pick, expand the alternatives when needed, and keep your remaining starting slots in view.",
+  "plan": [
+    {
+      "pick": "KEEP",
+      "player": "Chase Brown",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "5",
+      "player": "Jaxon Smith-Njigba",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "20",
+      "player": "Drake London",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "29",
+      "player": "Zay Flowers",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "44",
+      "player": "Jayden Daniels",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "53",
+      "player": "Kyle Pitts Sr.",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "77",
+      "player": "Jaylen Warren",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "92",
+      "player": "Alec Pierce",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "101",
+      "player": "Chuba Hubbard",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "116",
+      "player": "Travis Kelce",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "125",
+      "player": "Michael Pittman Jr.",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "140",
+      "player": "Brandon Aubrey",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "149",
+      "player": "Woody Marks",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "164",
+      "player": "Jordyn Tyson",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    },
+    {
+      "pick": "173",
+      "player": "Baltimore Defense",
+      "alt": "",
+      "note": "Prepared target; follow the displayed alternatives if unavailable."
+    }
   ],
-  "assumptions": [
-   "Starting lineup assumed: 1 QB, 2 RB, 2 WR, 1 TE, 1 RB/WR/TE flex, K, DEF; six bench. No superflex — a superflex slot would make Jayden Daniels the keeper conversation instead of Chase Brown.",
-   "Keeper rule assumed: one keeper at the original draft round, waiver pickups not keepable, Brown at round 6 (pick 68 forfeited). Confirm on the commissioner's sheet before Sunday.",
-   "Injuries are baked into expected games rather than modelled separately. Re-check Flowers (lower body), Egbuka (toe), Nabers, Jeanty, Tuten, Nacua, Chase, Hall and Henderson on Saturday's report.",
-   "Kickers and defenses are treated as near-interchangeable and drafted last, with one priced exception: Brandon Aubrey at pick 140 is worth 19 points over the round-14 kickers and costs a bench lottery ticket.",
-   "Fifteen rounds means anyone with an ADP past about 155 goes undrafted — which is why Jordyn Tyson and Travis Hunter are effectively free at 164 and 173.",
-   "ESPN pricing covers the top 100 only; players 101 and deeper carry mock ADP, so availability past pick 100 is approximate."
+  "plan_total": "Projected-lineup totals come from the current simulation.",
+  "target_note": "This is a prepared ordering, not a forecast of your actual season. The score sums season projections for one best legal starting lineup. Weekly substitutions, byes, new injuries, waivers, and bench insurance are outside that score. The board benchmark follows the displayed choices and documented fallback; the adaptive simulation policy is a separate comparison.",
+  "waiting_note": "Larger values show positions where the best available projected talent drops more between your turns in the model. Use the table to prepare alternatives, then consider roster fit. It does not estimate the chance that a player you see available now will survive if you pass.",
+  "headline_rule": {
+    "heading": "Explore the whole draft, then challenge the assumptions",
+    "paragraphs": [
+      "The pick tables compare <b>projected starting lineups after simulated draft continuations</b>. Replacement-based surplus still helps describe positional depth and influences candidate selection and later picks. Changing those assumptions can change the plan.",
+      "A small estimated gap means <b>no clear model preference</b>, not proof that two players are equivalent. Candidate availability populations can differ; a precise simulation is only as useful as its projections and opponent assumptions."
+    ]
+  },
+  "pick_notes": {},
+  "late_note": "Late picks follow the displayed targets and the same documented fallback used by the benchmark.",
+  "late_body": "Use the displayed candidates in order, including expanded rows. Skip configured exclusions and full position caps; reserve enough picks to fill missing starting slots. If every displayed candidate is gone, use the shared surplus fallback shown on this board. The prepared sample includes Brandon Aubrey as a round-12 target; that choice is part of the policy being tested, not a separate claim of guaranteed kicker value. Bench cover and next-year keeper upside can matter even when the fixed starting-lineup score gives them no extra points.",
+  "tiers": {
+    "RB": {
+      "subtitle": "Saved projection groups · vs. free means projection minus estimated replacement",
+      "bands": [
+        {
+          "label": "Tier 1",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jahmyr Gibbs",
+            "Bijan Robinson"
+          ]
+        },
+        {
+          "cliff": "−41",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 2",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jonathan Taylor",
+            "James Cook III",
+            "Christian McCaffrey",
+            "De'Von Achane",
+            "Chase Brown",
+            "Saquon Barkley"
+          ]
+        },
+        {
+          "cliff": "−13",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 3",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Derrick Henry",
+            "Omarion Hampton",
+            "Kenneth Walker",
+            "Kyren Williams",
+            "Breece Hall"
+          ]
+        },
+        {
+          "cliff": "−10",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 4",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Javonte Williams",
+            "Ashton Jeanty",
+            "Travis Etienne Jr.",
+            "D'Andre Swift",
+            "Cam Skattebo",
+            "Jeremiyah Love",
+            "Bucky Irving",
+            "Josh Jacobs"
+          ]
+        },
+        {
+          "cliff": "−8",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 5",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Quinshon Judkins",
+            "David Montgomery",
+            "Bhayshul Tuten",
+            "Jaylen Warren"
+          ]
+        },
+        {
+          "cliff": "−8",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 6",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "TreVeyon Henderson",
+            "Rhamondre Stevenson",
+            "Tony Pollard"
+          ]
+        },
+        {
+          "cliff": "−11",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 7",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jadarian Price",
+            "Rico Dowdle",
+            "J.K. Dobbins",
+            "RJ Harvey",
+            "J. Croskey-Merritt",
+            "Chuba Hubbard",
+            "Kenny Gainwell",
+            "Kyle Monangai",
+            "Woody Marks",
+            "Zach Charbonnet"
+          ]
+        }
+      ]
+    },
+    "WR": {
+      "subtitle": "Saved projection groups · vs. free means projection minus estimated replacement",
+      "bands": [
+        {
+          "label": "Tier 1",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jaxon Smith-Njigba",
+            "Ja'Marr Chase",
+            "Puka Nacua"
+          ]
+        },
+        {
+          "cliff": "−16",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 2",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Amon-Ra St. Brown",
+            "CeeDee Lamb",
+            "Justin Jefferson",
+            "Drake London"
+          ]
+        },
+        {
+          "cliff": "−12",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 3",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Zay Flowers",
+            "Rashee Rice",
+            "A.J. Brown",
+            "George Pickens",
+            "Nico Collins"
+          ]
+        },
+        {
+          "cliff": "−11",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 4",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Tetairoa McMillan",
+            "Malik Nabers",
+            "Tee Higgins",
+            "Emeka Egbuka",
+            "Garrett Wilson",
+            "Chris Olave",
+            "Ladd McConkey",
+            "DeVonta Smith",
+            "Jameson Williams",
+            "Davante Adams"
+          ]
+        },
+        {
+          "cliff": "−6",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 5",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Terry McLaurin",
+            "Rome Odunze",
+            "Parker Washington",
+            "Jaylen Waddle",
+            "Mike Evans",
+            "Brian Thomas Jr.",
+            "DJ Moore",
+            "Luther Burden III",
+            "Marvin Harrison Jr.",
+            "Courtland Sutton",
+            "Alec Pierce",
+            "DK Metcalf"
+          ]
+        },
+        {
+          "cliff": "−8",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        }
+      ]
+    },
+    "TE": {
+      "subtitle": "Saved projection groups · vs. free means projection minus estimated replacement",
+      "bands": [
+        {
+          "label": "Tier 1",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Brock Bowers",
+            "Trey McBride"
+          ]
+        },
+        {
+          "cliff": "−25",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 2",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Colston Loveland",
+            "Tyler Warren",
+            "Kyle Pitts Sr."
+          ]
+        },
+        {
+          "cliff": "−14",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 3",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Tucker Kraft",
+            "Harold Fannin Jr.",
+            "George Kittle",
+            "Sam LaPorta",
+            "Travis Kelce"
+          ]
+        },
+        {
+          "cliff": "−4",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 4",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Dallas Goedert",
+            "Isaiah Likely",
+            "Mark Andrews",
+            "Jake Ferguson"
+          ]
+        }
+      ]
+    },
+    "QB": {
+      "subtitle": "Saved projection groups · vs. free means projection minus estimated replacement",
+      "bands": [
+        {
+          "label": "Tier 1",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Josh Allen"
+          ]
+        },
+        {
+          "cliff": "−10",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 2",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jayden Daniels",
+            "Lamar Jackson",
+            "Jalen Hurts"
+          ]
+        },
+        {
+          "cliff": "−9",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 3",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Drake Maye",
+            "Joe Burrow",
+            "Patrick Mahomes",
+            "Dak Prescott"
+          ]
+        },
+        {
+          "cliff": "−6",
+          "cliff_note": "Gap between these saved projection groups; revisit when player inputs change."
+        },
+        {
+          "label": "Tier 4",
+          "note": "Similar saved projections; compare role and price.",
+          "players": [
+            "Jaxson Dart",
+            "Justin Herbert",
+            "Caleb Williams",
+            "Kyler Murray"
+          ]
+        }
+      ]
+    }
+  },
+  "mine": [
+    "Chase Brown",
+    "Jaxon Smith-Njigba",
+    "Drake London",
+    "Zay Flowers",
+    "Jayden Daniels",
+    "Kyle Pitts Sr.",
+    "Jaylen Warren",
+    "DK Metcalf",
+    "J. Croskey-Merritt",
+    "Brock Bowers",
+    "Tetairoa McMillan",
+    "Courtland Sutton",
+    "Travis Etienne Jr.",
+    "Bhayshul Tuten",
+    "Luther Burden III",
+    "Emeka Egbuka",
+    "Jaylen Waddle",
+    "Colston Loveland",
+    "Alec Pierce",
+    "Chuba Hubbard",
+    "Breece Hall",
+    "Josh Jacobs"
   ],
-  "flip_warning": "The projections themselves. Measuring lineups instead of replacement levels took the old flip-assumption (the RB-versus-WR baseline) off the table; what is left is the three numbers this plan leans on hardest. Jaxon Smith-Njigba 268 — if he is really a 240-point receiver, pick 5 is Bijan-or-nothing. Jayden Daniels 347 — if the rushing floor regresses, the quarterback slides to 53 and pick 44 becomes Breece Hall. Kyle Pitts 150 — if Atlanta starts Tua and Pitts is a 125-point tight end, the tight end had to come at pick 20 and this build is wrong by about 25 points. Disagree with those three before Sunday, not during.",
-  "gold_warning": "The simulated opponents draft rationally off ESPN ADP. Your actual leaguemates don't — two of them take a quarterback by round 4 every year — so Daniels at 81% at pick 44 is optimistic and Hurts at 82% is your realistic floor. The compensation is that receivers fall further than the model predicts: when a tier-3 receiver is somehow there two rounds late, take him."
- },
- "repo": "nicodeguyo/fantasy-draft-analyst"
+  "shortlist_sub": "A research watchlist. Use the current pick tables for the prepared ordering and gaps, and refresh roles and injuries before making a real plan.",
+  "shortlist": [
+    {
+      "player": "Chase Brown",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Jaxon Smith-Njigba",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Drake London",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Brock Bowers",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Trey McBride",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Zay Flowers",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Jayden Daniels",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Breece Hall",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Kyle Pitts Sr.",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Tyler Warren",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Josh Jacobs",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Jaylen Warren",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Alec Pierce",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Brian Thomas Jr.",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "DK Metcalf",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Chuba Hubbard",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "J. Croskey-Merritt",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Tetairoa McMillan",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Emeka Egbuka",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Jaylen Waddle",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Colston Loveland",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Bhayshul Tuten",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    },
+    {
+      "player": "Luther Burden III",
+      "call": "CHECK CURRENT PICK TABLE",
+      "tag": "ok"
+    }
+  ],
+  "vegas": [],
+  "appendix": {
+    "terms": [
+      {
+        "term": "Pick value",
+        "def": "A matched-control estimate of projected points for one best legal starting lineup after taking this candidate and simulating the remaining draft. Compare within one pick with the stated model limitations."
+      },
+      {
+        "term": "Gap",
+        "def": "The modeled projected-lineup difference versus the prepared target at this pick. TAKE identifies that target. A small difference is not a proven real-season edge."
+      },
+      {
+        "term": "Pre-draft availability",
+        "def": "The fraction of all simulated drafts in which a player remains undrafted immediately before a pick. Your own seat also drafts from ADP in this pass. This is not conditional survival after deliberately passing on an available player."
+      },
+      {
+        "term": "Monte Carlo noise",
+        "def": "Variation from a finite number of simulated continuations with fixed inputs. The standard error does not include uncertainty in projections or the opponent model."
+      },
+      {
+        "term": "Surplus / vs. free",
+        "def": "Projection minus estimated replacement at a position. It describes depth and contributes to shortlisting and fallback choices; replacement does not guarantee an equivalent player on waivers."
+      },
+      {
+        "term": "Cost of waiting",
+        "def": "The modeled drop in best available positional surplus between your picks. The replacement constant cancels directly, but changed draft paths can still move the result."
+      }
+    ],
+    "how_built": [
+      "Saved player inputs were assembled September 3, 2026. Projections are analyst/model-authored from earlier production and role assumptions, not an official ESPN projection feed or independently validated consensus. The source record is in RUNLOG.md; this launch review did not independently reverify its player-news claims.",
+      "The top 100 ADPs use the saved ESPN column of the Footballguys cross-platform table; deeper names retain FantasyFootballCalculator half-PPR mock ADP and spread. Platform coverage is incomplete. New league plans need fresh, dated inputs.",
+      "Candidate continuations use shared prefix states and matched unforced controls. Each player is evaluated only in states where available. Different candidate populations and the later drafting heuristic can affect rankings, even with many simulations.",
+      "The keeper scenario pass compares a shortlist of eligible single keepers and keeping nobody before building the plan. Known keepers occupy their teams’ rosters and consume their specified round. The sample models unknown opponent keepers.",
+      "Availability is an unconditional pre-draft frequency. Picks marked on this HTML board update tracking only; the simulations and advice remain the saved pre-draft plan.",
+      "Benchmark evidence must be generated from the same model and displayed policy. Its score is the sum of season projections for one best legal starting lineup, not weekly fantasy results or measured performance against a commercial draft assistant."
+    ],
+    "assumptions": [
+      "Sample League is fictional: 12 teams, ESPN half-PPR, pick 5, one QB, two RB, two WR, one TE, one RB/WR/TE flex, K, DEF, and six bench spots.",
+      "One keeper per team costs the original draft round; waiver pickups are not eligible. Confirm real rules and explicit keeper ownership before using this setup.",
+      "Season projections may incorporate expected-game assumptions, but the simulator does not model weekly injuries, replacements, byes, waivers, or the value of bench insurance.",
+      "Opponent drafts follow noisy ADP and positional rules. They are not a calibrated replica of ESPN autopick or known behavior of real leaguemates.",
+      "The saved player inputs are for reproducing this example. Refresh source dates, roles, injury status, and scoring for your own league."
+    ],
+    "flip_warning": "Challenge the player projections, opponent pricing, and later drafting policy that drive the choices. Rerun plausible alternatives when a recommendation depends on one assumption. Low Monte Carlo noise does not establish projection accuracy.",
+    "gold_warning": "Actual draft rooms can diverge from this opponent model in either direction. Descriptive leaguemate preferences are research context unless encoded in supported inputs and rerun. Prepare backups and use the current board and your roster when making a live choice."
+  },
+  "repo": "nicodeguyo/fantasy-draft-analyst"
 }

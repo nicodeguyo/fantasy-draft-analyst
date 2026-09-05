@@ -1,82 +1,106 @@
 #!/usr/bin/env python3
-"""
-compare_policies.py — the receipt for "is this board actually worth following?"
+"""Internal held-out draft-model comparison of the exact saved-board policy.
 
-Runs three different drafters in YOUR seat over the same simulated drafts, so the only
-thing that changes is how you pick. Everything else — the opponents, the keeper draw,
-the randomness — is identical, and the comparison is paired seed by seed.
-
-  1. ADP autodraft   your seat picks off the platform's ranking with noise, like an autopick
-  2. Heuristic       the simulator's own in-draft policy: adaptive, re-decides every pick
-  3. Board-following what you do with the board open — take the top available row of the
-                     pick tables the rollouts produced
-
-Usage, from a folder holding league.yaml, players.csv and a sim.json built with --pick-values:
-
-    python3 scripts/compare_policies.py --league league.yaml --players players.csv \
-        --sim sim.json --drafts 800
-
-This is the simulator grading itself: same projections and the same model of the room for
-all three. It is a valid internal comparison, not a backtest against real drafts. If the
-projections are wrong, all three rows move together.
+Scores the sum of projections for one best legal starting lineup. These are simulated
+draft rooms, not seasons, weekly results or a comparison to a platform's actual autopick.
+Paired seeds couple randomness; different decisions can change later opponent draws.
 """
 from __future__ import annotations
-
-import argparse, json, math, statistics, sys
+import argparse
 from collections import defaultdict
+import hashlib
+import json
+import math
 from pathlib import Path
+import statistics
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'skills/fantasy-draft-analyst/scripts'))
+import draft_sim as ds
+from board_policy import row_groups, fallback_order, run_board, POLICY_DESCRIPTION, POLICY_VERSION, filled_slots
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent /
-                       "skills" / "fantasy-draft-analyst" / "scripts"))
-import draft_sim as ds  # noqa: E402
+
+def summarize(runs):
+    base = next(iter(runs.values()))
+    out = []
+    for name, vals in runs.items():
+        diffs = [a-b for a, b in zip(vals, base)]
+        half = 1.96 * statistics.stdev(diffs) / math.sqrt(len(diffs)) if len(diffs) > 1 else None
+        delta = statistics.mean(diffs)
+        out.append({'name': name, 'mean': statistics.mean(vals), 'sd': statistics.pstdev(vals),
+                    'vs_baseline': delta, 'paired_half_width': half,
+                    'paired_interval': [delta-half, delta+half] if half is not None else None})
+    return out
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--league", required=True)
-    ap.add_argument("--players", required=True)
-    ap.add_argument("--sim", required=True, help="sim.json built with --pick-values")
-    ap.add_argument("--drafts", type=int, default=800)
-    ap.add_argument("--seed", type=int, default=1000)
+    ap = argparse.ArgumentParser(description=__doc__)
+    for field in ('league', 'players', 'sim'):
+        ap.add_argument('--'+field, required=True)
+    ap.add_argument('--notes', help='The exact notes used to render the board; default: notes.json beside sim')
+    ap.add_argument('--top', type=int, default=5, help='Must match build_board --top')
+    ap.add_argument('--drafts', type=int, default=800)
+    ap.add_argument('--seed', type=int, default=1000)
+    ap.add_argument('--horizon-probes', type=int, default=300)
+    ap.add_argument('--output', help='Write machine-readable evidence JSON')
     args = ap.parse_args()
-
-    cfg = ds.load_league(args.league)
-    pool = ds.load_players(args.players)
-    sim = json.loads(Path(args.sim).read_text(encoding="utf-8"))
-    if not sim.get("pick_values"):
-        sys.exit("That sim.json has no pick_values — re-run draft_sim.py with --pick-values.")
-
-    s = ds.Sim(cfg, [dict(p) for p in pool], sim["league"].get("keeper"), sim["league"].get("keeper_round"))
+    if args.drafts < 2:
+        ap.error('--drafts must be at least 2 for paired uncertainty')
+    if args.top < 1 or args.horizon_probes < 1:
+        ap.error('--top and --horizon-probes must be positive')
+    notes_path = Path(args.notes) if args.notes else Path(args.sim).with_name('notes.json')
+    cfg, pool = ds.load_league(args.league), ds.load_players(args.players)
+    sim = json.loads(Path(args.sim).read_text())
+    notes = json.loads(notes_path.read_text())
+    if not sim.get('pick_values'):
+        ap.error('sim.json needs --pick-values')
+    s = ds.Sim(cfg, [dict(p) for p in pool], sim['league'].get('keeper'), sim['league'].get('keeper_round'))
     pos_best = defaultdict(lambda: defaultdict(list))
-    for i in range(300):
+    for i in range(args.horizon_probes):
         s.run(args.seed + 70000 + i, pos_best=pos_best)
     s.pos_horizon = {ov: {p: statistics.mean(v) for p, v in d.items()} for ov, d in pos_best.items()}
-
-    # following the board = take the highest-ranked row still available at each of your picks
-    board = {int(pk): [r["name"] for r in rows] for pk, rows in sim["pick_values"].items()}
-
+    players = {p['name']: p for p in pool}
+    board = {}
+    for pick in sim['ladder']:
+        pk = int(pick['pick'])
+        top, rest, _ = row_groups(sim, notes, players, pk, args.top)
+        board[pk] = [r['name'] for r in top+rest]
+    fallback = fallback_order(sim, players)
     seeds = [args.seed + 900000 + i for i in range(args.drafts)]
-    runs = {
-        "ADP autodraft":    [s.run(sd, market=True)[2] for sd in seeds],
-        "Board-following":  [s.run(sd, targets=board)[2] for sd in seeds],
-        "Heuristic (free)": [s.run(sd)[2] for sd in seeds],
-    }
+    runs = {'Noisy ADP-based draft bot': [], 'Saved-board policy': [], 'Adaptive heuristic': []}
+    complete = {name: 0 for name in runs}
+    for seed in seeds:
+        results = [run_board(s, seed, board, fallback, adp_baseline=True),
+                   run_board(s, seed, board, fallback), s.run(seed)]
+        for name, (_, roster, total, _) in zip(runs, results):
+            runs[name].append(total)
+            complete[name] += filled_slots(roster, s.starters) == sum(s.starters.values())
+            if len(roster) != s.rounds or len({p['name'] for p in roster}) != len(roster):
+                raise ValueError(f'Invalid roster for {name} at seed {seed}')
+    for name in list(runs)[:2]:
+        if complete[name] != args.drafts:
+            raise ValueError(f'Incomplete starting lineups for primary policy {name}')
+    source_paths = {'league': Path(args.league), 'players': Path(args.players), 'sim': Path(args.sim),
+                    'notes': notes_path, 'benchmark': Path(__file__),
+                    'board_policy': Path(ds.__file__).with_name('board_policy.py'),
+                    'renderer': Path(ds.__file__).with_name('build_board.py'), 'simulator': Path(ds.__file__)}
+    result = {'schema_version': 1, 'drafts': args.drafts, 'seed': args.seed,
+              'evaluation_seed_range': [seeds[0], seeds[-1]], 'horizon_probes': args.horizon_probes,
+              'top': args.top, 'policy_version': POLICY_VERSION, 'policy_description': POLICY_DESCRIPTION,
+              'complete_lineups': complete,
+              'baseline_description': 'Noisy ADP-based draft bot with the same avoid list, position caps and last-pick starter-completion guard as the saved-board policy. Not a platform autopick.',
+              'metric': 'Sum of projections for one best legal starting lineup',
+              'scope': 'Internal draft-model test on held-out seeds; fixed projections and modeled opponents. Not weekly or real-season gains, model validation, or platform-autopick performance.',
+              'interval_scope': 'Approximate 95% normal interval of paired mean differences from draft-sampling variation only; excludes projection, model and selection uncertainty.',
+              'source_sha256': {k: hashlib.sha256(p.read_bytes()).hexdigest() for k,p in source_paths.items()},
+              'policies': summarize(runs)}
+    if args.output:
+        Path(args.output).write_text(json.dumps(result, indent=2)+'\n')
+    print(f"{args.drafts} held-out simulated drafts; paired seed range {seeds[0]}–{seeds[-1]}")
+    print(result['metric'])
+    for r in result['policies']:
+        print(f"{r['name']:<27} {r['mean']:7.1f} (draft SD {r['sd']:.1f}); vs baseline {r['vs_baseline']:+.1f} ± {r['paired_half_width']:.1f}")
+    print(result['scope'])
+    print(result['interval_scope'])
 
-    base = runs["ADP autodraft"]
-    print(f"{args.drafts} drafts each, identical seeds and opponents\n")
-    print(f"{'drafter in your seat':<20} {'mean':>7} {'sd':>6}   {'vs autodraft (paired)':>22}")
-    for name, vals in runs.items():
-        m, sd = statistics.mean(vals), statistics.pstdev(vals)
-        if name == "ADP autodraft":
-            tail = "—"
-        else:
-            d = [a - b for a, b in zip(vals, base)]
-            se = statistics.stdev(d) / math.sqrt(len(d))
-            tail = f"{statistics.mean(d):+.1f} ± {2 * se:.1f}"
-        print(f"{name:<20} {m:7.0f} {sd:6.1f}   {tail:>22}")
-    print("\nThe spread column matters as much as the mean: an autopick roster is not just worse "
-          "on average,\nit is far less predictable, and you cannot tell in advance which season you got.")
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

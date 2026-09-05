@@ -26,18 +26,18 @@
     "keeper_round": 6
   },
   "inputs_sha256": {
-    "league.yaml": "7ae5c121b17cb9704ae68b7228e0ed7f2bec1fc0088dcad8cdcfa7ffad29e079",
+    "league.yaml": "212a8a1ba93dfc538598589e0e19a592e163e05eb623195ab6a7a2ca53ced061",
     "players.csv": "bdfecc09a0a841d30f59b0ae4a7670dad54f8f4ff7f97b0552d4cde59babd25d",
-    "sim.json": "37eb9d0672156298e8809dddd14e6457c56f2a07ddf7e587c26664edb97e4194"
+    "sim.json": "f08008059dd138b1d4e3ef3d3188c89108a31c008f645d62213df3f4028d39e0"
   },
   "branches": [
     {
       "id": "rb",
       "candidate": {
-        "name": "De'Von Achane",
+        "name": "Jonathan Taylor",
         "position": "RB"
       },
-      "projected_lineup_points": 1828.0,
+      "projected_lineup_points": 1839.0,
       "starting_lineup": [
         {
           "slot": "QB",
@@ -47,9 +47,9 @@
         },
         {
           "slot": "RB1",
-          "name": "De'Von Achane",
+          "name": "Jonathan Taylor",
           "position": "RB",
-          "projected_points": 234.0
+          "projected_points": 241.0
         },
         {
           "slot": "RB2",
@@ -71,14 +71,14 @@
         },
         {
           "slot": "TE",
-          "name": "Trey McBride",
+          "name": "Brock Bowers",
           "position": "TE",
-          "projected_points": 184.0
+          "projected_points": 192.0
         },
         {
           "slot": "FLEX",
-          "name": "Parker Washington",
-          "position": "WR",
+          "name": "Jaylen Warren",
+          "position": "RB",
           "projected_points": 176.0
         },
         {
@@ -89,22 +89,22 @@
         },
         {
           "slot": "DEF",
-          "name": "New England Defense",
+          "name": "Pittsburgh Defense",
           "position": "DEF",
-          "projected_points": 108.0
+          "projected_points": 104.0
         }
       ],
       "draft_picks": [
         {
           "overall": 5,
           "round": 1,
-          "name": "De'Von Achane",
+          "name": "Jonathan Taylor",
           "position": "RB"
         },
         {
           "overall": 20,
           "round": 2,
-          "name": "Trey McBride",
+          "name": "Brock Bowers",
           "position": "TE"
         },
         {
@@ -128,37 +128,37 @@
         {
           "overall": 77,
           "round": 7,
-          "name": "Parker Washington",
-          "position": "WR"
+          "name": "Jaylen Warren",
+          "position": "RB"
         },
         {
           "overall": 92,
           "round": 8,
-          "name": "Brian Thomas Jr.",
+          "name": "DK Metcalf",
           "position": "WR"
         },
         {
           "overall": 101,
           "round": 9,
-          "name": "J.K. Dobbins",
-          "position": "RB"
+          "name": "Michael Pittman Jr.",
+          "position": "WR"
         },
         {
           "overall": 116,
           "round": 10,
-          "name": "Chuba Hubbard",
+          "name": "Kyle Monangai",
           "position": "RB"
         },
         {
           "overall": 125,
           "round": 11,
-          "name": "Michael Pittman Jr.",
+          "name": "Jayden Reed",
           "position": "WR"
         },
         {
           "overall": 140,
           "round": 12,
-          "name": "Jayden Reed",
+          "name": "Josh Downs",
           "position": "WR"
         },
         {
@@ -170,25 +170,38 @@
         {
           "overall": 164,
           "round": 14,
-          "name": "New England Defense",
-          "position": "DEF"
+          "name": "Tyler Loop",
+          "position": "K"
         },
         {
           "overall": 173,
           "round": 15,
-          "name": "Tyler Loop",
-          "position": "K"
+          "name": "Pittsburgh Defense",
+          "position": "DEF"
         }
       ],
       "bench": [
-        "Brian Thomas Jr.",
-        "J.K. Dobbins",
-        "Chuba Hubbard",
+        "DK Metcalf",
         "Michael Pittman Jr.",
+        "Kyle Monangai",
         "Jayden Reed",
+        "Josh Downs",
         "Woody Marks"
       ],
-      "published_board_average": null
+      "published_board_average": {
+        "name": "Jonathan Taylor",
+        "pos": "RB",
+        "value": 1834.9,
+        "vs_control": -27.7,
+        "se": 1.5,
+        "n": 101,
+        "avail_pct": 51,
+        "rare": false,
+        "delta_vs_best": -26.8,
+        "within_noise": false,
+        "control": 1862.7,
+        "next_pct": 0
+      }
     },
     {
       "id": "wr",
@@ -196,7 +209,7 @@
         "name": "Puka Nacua",
         "position": "WR"
       },
-      "projected_lineup_points": 1858.0,
+      "projected_lineup_points": 1866.0,
       "starting_lineup": [
         {
           "slot": "QB",
@@ -230,27 +243,27 @@
         },
         {
           "slot": "TE",
-          "name": "Trey McBride",
+          "name": "Brock Bowers",
           "position": "TE",
-          "projected_points": 184.0
+          "projected_points": 192.0
         },
         {
           "slot": "FLEX",
-          "name": "Parker Washington",
-          "position": "WR",
+          "name": "Jaylen Warren",
+          "position": "RB",
           "projected_points": 176.0
         },
         {
           "slot": "K",
-          "name": "Chase McLaughlin",
+          "name": "Jake Bates",
           "position": "K",
-          "projected_points": 136.0
+          "projected_points": 140.0
         },
         {
           "slot": "DEF",
-          "name": "New England Defense",
+          "name": "Pittsburgh Defense",
           "position": "DEF",
-          "projected_points": 108.0
+          "projected_points": 104.0
         }
       ],
       "draft_picks": [
@@ -263,7 +276,7 @@
         {
           "overall": 20,
           "round": 2,
-          "name": "Trey McBride",
+          "name": "Brock Bowers",
           "position": "TE"
         },
         {
@@ -287,37 +300,37 @@
         {
           "overall": 77,
           "round": 7,
-          "name": "Parker Washington",
-          "position": "WR"
+          "name": "Jaylen Warren",
+          "position": "RB"
         },
         {
           "overall": 92,
           "round": 8,
-          "name": "Brian Thomas Jr.",
+          "name": "DK Metcalf",
           "position": "WR"
         },
         {
           "overall": 101,
           "round": 9,
-          "name": "J.K. Dobbins",
-          "position": "RB"
+          "name": "Michael Pittman Jr.",
+          "position": "WR"
         },
         {
           "overall": 116,
           "round": 10,
-          "name": "Chuba Hubbard",
+          "name": "Kyle Monangai",
           "position": "RB"
         },
         {
           "overall": 125,
           "round": 11,
-          "name": "Michael Pittman Jr.",
+          "name": "Jayden Reed",
           "position": "WR"
         },
         {
           "overall": 140,
           "round": 12,
-          "name": "Jayden Reed",
+          "name": "Josh Downs",
           "position": "WR"
         },
         {
@@ -329,41 +342,41 @@
         {
           "overall": 164,
           "round": 14,
-          "name": "New England Defense",
-          "position": "DEF"
+          "name": "Jake Bates",
+          "position": "K"
         },
         {
           "overall": 173,
           "round": 15,
-          "name": "Chase McLaughlin",
-          "position": "K"
+          "name": "Pittsburgh Defense",
+          "position": "DEF"
         }
       ],
       "bench": [
-        "Brian Thomas Jr.",
-        "J.K. Dobbins",
-        "Chuba Hubbard",
+        "DK Metcalf",
         "Michael Pittman Jr.",
+        "Kyle Monangai",
         "Jayden Reed",
+        "Josh Downs",
         "Woody Marks"
       ],
       "published_board_average": {
         "name": "Puka Nacua",
         "pos": "WR",
-        "value": 1849.9,
-        "vs_control": -12.8,
-        "se": 1.3,
-        "n": 87,
-        "avail_pct": 40,
+        "value": 1852.0,
+        "vs_control": -10.7,
+        "se": 1.0,
+        "n": 85,
+        "avail_pct": 41,
         "rare": false,
-        "delta_vs_best": -12.0,
+        "delta_vs_best": -9.7,
         "within_noise": false,
         "control": 1862.7,
         "next_pct": 0
       }
     }
   ],
-  "wr_minus_rb_projected_points": 30.0,
+  "wr_minus_rb_projected_points": 27.0,
   "changed_slots": [
     "RB1",
     "RB2",

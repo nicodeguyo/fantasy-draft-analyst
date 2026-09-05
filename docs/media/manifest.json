@@ -1,0 +1,70 @@
+{
+  "status": "Prepared for launch; public deployment pending approval",
+  "sample_evidence": "../site/launch-evidence.json",
+  "assets": [
+    {
+      "file": "docs/media/draft-board-demo.mp4",
+      "purpose": "Primary LinkedIn/X video and website walkthrough",
+      "bytes": 573371,
+      "sha256": "9bd994b7141d60cb60a9a3a58b9959123c38a438e4d9ff6b5e755e8a7c681736",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 540,
+            "height": 960,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "26.000000"
+        }
+      }
+    },
+    {
+      "file": "docs/media/draft-board-demo-poster.jpg",
+      "purpose": "Deliberate video cover",
+      "bytes": 114013,
+      "sha256": "7d82bff8ff0bec433490b5903e85aabf9d634497e4336a86e46720287fbe65e9"
+    },
+    {
+      "file": "docs/media/draft-board-demo.gif",
+      "purpose": "Eight-second README loop",
+      "bytes": 957880,
+      "sha256": "0715fcdcfea215d811f778414100781c17a641a9c0f446872fb3ca0e02bec840",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 540,
+            "height": 960,
+            "r_frame_rate": "12/1"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      }
+    },
+    {
+      "file": "docs/media/draft-board-demo.vtt",
+      "purpose": "Optional accessible website captions",
+      "bytes": 640,
+      "sha256": "4e929ec0412df4f9cedc5eca4bd694e2a582a3cec0356ae2082573451822bdc8"
+    },
+    {
+      "file": "docs/media/social-preview.png",
+      "purpose": "GitHub and website link preview",
+      "bytes": 114337,
+      "sha256": "f22cf29c06de1d3d965ca60be49a2d8af28475989e088ade0254212002e7e32d"
+    },
+    {
+      "file": "docs/media/decision-card.png",
+      "purpose": "Single saved-draft comparison follow-up",
+      "bytes": 67668,
+      "sha256": "853049d279a1080e177e2882eccc63701a123930bfd6e0db53cb7808291623a0"
+    }
+  ]
+}

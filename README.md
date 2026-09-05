@@ -1,16 +1,15 @@
 <h1 align="center">Fantasy Draft Analyst</h1>
 
-<p align="center"><b>Your league. Your picks. Your draft plan.</b></p>
+<p align="center"><b>Don’t just rank players. Explore what your next pick does to the rest of your draft.</b></p>
 
-<p align="center">Can you wait another round on your guy?<br>
-Compare your options, see the cost of waiting, and bring a plan to draft night.</p>
+<p align="center">Compare draft paths, understand the tradeoffs, and bring a plan to draft night.</p>
 
 <p align="center">
 <b><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">Explore the sample demo</a></b> ·
 <b><a href="#setup">Make my draft plan</a></b>
 </p>
 
-<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/board-in-10-seconds.gif" width="480" alt="A sample draft board: compare recommendations, cross off taken players, and add your pick to your lineup. Click to explore the demo."></a></p>
+<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="A sample draft board: compare recommendations, cross off taken players, and add your pick to your lineup. Click to explore the demo."></a></p>
 
 <p align="center">Free, open-source project · No account needed for the demo · No coding needed for the guided setup</p>
 
@@ -23,8 +22,8 @@ The demo uses a fictional 12-team ESPN half-PPR keeper league with saved 2026 pl
 ## What you get
 
 - **A pick-by-pick plan.** Compare players by the projected starting lineup you could finish with. `TAKE` marks the recommendation; `−14` means an estimated 14 fewer projected lineup points across the season if you choose that alternative.
-- **“Can I wait?” with a number.** See each player's modeled chance of reaching your next pick, plus the estimated cost of waiting at each position.
-- **Keeper decisions explained.** Compare keepers against each other and keeping nobody, including the draft pick each costs.
+- **See when targets tend to go.** Explore pre-draft availability at your picks and the modeled drop in available talent at each position. These frequencies do not update when you mark picks.
+- **Keeper decisions explained.** Compare keepers against each other and keeping nobody, including the draft pick each costs. The simulator supports zero or one keeper per team.
 - **Your shortlist, checked.** Ask the assistant to verify the role, injury, and usage claims behind the players you like, with dated sources and an honest bear case.
 - **A board for your phone.** Download one HTML file, track picks manually, and keep your lineup visible. Picks are saved in that browser when local storage is available.
 
@@ -55,7 +54,7 @@ Starting lineup: [QB, RB, WR, TE, FLEX, superflex, K, DEF counts]
 Bench spots: [number]
 Keepers: [none, or number allowed and cost rules]
 My keeper options: [player and round cost, or none]
-Known league keepers: [players and costs, or unknown]
+Known league keepers: [draft slot, player, round cost for each; or unknown]
 Players I like or want to avoid: [names and why, or none]
 Draft-room tendencies: [anything I know, or unknown]
 Board colors: [favorite NFL team or colors]
@@ -70,17 +69,25 @@ league's saved player data as current data for my league.
 
 Already use a coding assistant? See [Claude Code](docs/install.md#claude-code), [Codex or another coding assistant](docs/install.md#codex-or-another-coding-assistant), or [run the scripts yourself](docs/install.md#running-the-scripts-yourself). For chat without code execution, use the [paste-anywhere prompt](prompt/fantasy-draft-analyst-prompt.md); that route provides an analytical approximation, not the full simulation.
 
-## The evidence: 109 projected points in a simulation
+## Test the strategy, not just the rankings
 
-In **800 simulated drafts**, following the sample board added **109 projected starting-lineup points** versus modeled autopicking. Each policy faced the same seeds and opponents.
+<!-- benchmark:start -->
+Across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.
 
-| Policy in your draft seat | Mean projected starting-lineup points |
+| Drafting policy | Mean projected lineup total |
 |---|---:|
-| Modeled platform autopick | 1,729 |
-| Following the prepared board | **1,838** |
-| Simulator's adaptive policy | 1,864 |
+| Noisy ADP-based draft bot | 1,761 |
+| Saved-board policy | 1,851 |
+| Adaptive heuristic | 1,864 |
 
-This is an **internal comparison using the same projections and opponent model**, not a backtest against real drafts or a promise of points in your season. The adaptive policy changes its decisions as each simulated draft unfolds; the downloadable board does not. [Reproduce the comparison](#reproduce-every-number).
+**Internal simulation, not real-season results.** The metric is the sum of projections for one best legal starting lineup. The paired difference is +90.1 ± 3.5 points (approximately 95% Monte Carlo interval). This interval excludes projection and model uncertainty. Weekly substitutions, injury coverage and bench value are not scored. The baseline is our noisy ADP-based draft bot, not verified platform autopick.
+
+The benchmark follows the same saved player order and documented fallback as the displayed board. It does not model every choice a human user might make. [Exact results and input hashes](examples/sample-league/benchmark.json).
+<!-- benchmark:end -->
+
+The repository includes a reproducible policy benchmark: the prepared board, a noisy ADP-based draft bot, and the simulator’s adaptive policy draft against the same opponent model. The board policy follows the displayed ordering, roster constraints, and documented late-round fallback.
+
+The score is the **sum of season projections for one best legal starting lineup**. This is an internal simulation comparison, not a real-season backtest or a test against a platform’s actual autopick. Weekly substitutions, injuries, waivers, and the insurance value of the bench are outside that score. Shared seeds couple randomness; the resulting draft rooms can diverge after different picks. [Reproduce the comparison](#reproduce-every-number).
 
 ## Why I built it
 
@@ -99,10 +106,10 @@ The method still depends on projections, modeled opponents, and the policy makin
 | Drafts | Snake and linear; redraft and keeper leagues |
 | Scoring | Standard, half-PPR, PPR, passing-TD settings, bonuses, TE premium |
 | Lineups | QB / RB / WR / TE / K / DEF, FLEX, superflex |
-| Keepers | Multiple cost rules; supplied keeper lists or modeled unknown keepers |
+| Keepers | Zero or one per team, with a round cost; compare eligible user candidates and keeping nobody; known keepers use explicit draft slots |
 | Platforms | Platform-specific average draft position (ADP), when usable public data is available |
 
-Auction has a pricing approximation in the methodology, **not a bidding simulator**. Dynasty is outside the model's scope. Unusual rules and data sources may require adjustments; the assistant should identify those before promising a complete plan.
+Auction has a pricing approximation in the methodology, **not a bidding simulator**. Multi-keeper optimization, best ball’s weekly scoring, and dynasty are outside the model’s scope. Unusual rules and data sources may require adjustments; the assistant should identify those before promising a complete plan.
 
 ## Reproduce every number
 

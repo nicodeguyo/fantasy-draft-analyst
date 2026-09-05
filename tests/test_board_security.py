@@ -1,6 +1,7 @@
 """Regression checks for the board's text, script, and CSS trust boundaries."""
 import csv
 import json
+from html.parser import HTMLParser
 from pathlib import Path
 import subprocess
 import sys
@@ -61,6 +62,47 @@ class BoardSecurityTests(unittest.TestCase):
                 proc, page = self.render(mutate)
                 self.assertNotEqual(proc.returncode, 0)
                 self.assertEqual(page, '')
+
+    def test_rich_text_fields_neutralize_active_and_malformed_markup(self):
+        class FragmentElements(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.elements = []
+            def handle_starttag(self, tag, attrs):
+                self.elements.append((tag, attrs))
+            def handle_startendtag(self, tag, attrs):
+                self.handle_starttag(tag, attrs)
+
+        payloads = [
+            '<script>alert(1)</script><img src=x onerror=alert(1)>',
+            '<svg><a xlink:href="javascript:alert(1)">click</a></svg>',
+            '<b onclick="alert(1)" style="position:fixed">bold</b><br onmouseover="alert(1)">',
+            '&lt;img src=x onerror=alert(1)&gt; &amp;lt;script&amp;gt;',
+            '<b><i>nested</b> tail</i></li><script>alert(1)</script>',
+            '<!-- hidden --><iframe srcdoc="<script>alert(1)</script>"></iframe>',
+            '<math><mtext><table><mglyph><style><!--</style><img title="--><img src=x onerror=alert(1)>">',
+            '<![CDATA[<script>alert(1)</script>]]> <b>okay</b>',
+        ]
+        for section, field in (('appendix', 'how_built'), ('appendix', 'assumptions'), ('headline_rule', 'paragraphs')):
+            for payload in payloads:
+                with self.subTest(field=field, payload=payload):
+                    def mutate(cfg, notes, players):
+                        notes.setdefault(section, {})[field] = ['RICHSTART' + payload + 'RICHEND']
+                    proc, page = self.render(mutate)
+                    self.assertEqual(proc.returncode, 0, proc.stderr)
+                    fragment = page.split('RICHSTART', 1)[1].split('RICHEND', 1)[0]
+                    parsed = FragmentElements()
+                    parsed.feed(fragment)
+                    self.assertTrue(all(tag in {'b', 'strong', 'em', 'i', 'br', 'code'} and not attrs
+                                        for tag, attrs in parsed.elements), parsed.elements)
+                    self.assertEqual(page.count('<script>'), 1)
+
+    def test_rich_text_keeps_safe_formatting_and_balances_tags(self):
+        def mutate(cfg, notes, players):
+            notes['appendix']['how_built'] = ['<strong>Strong</strong><em>Em</em><i>I</i><code>Code</code><br><b>Open']
+        proc, page = self.render(mutate)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn('<li><strong>Strong</strong><em>Em</em><i>I</i><code>Code</code><br><b>Open</b></li>', page)
 
     def test_documented_rich_text_is_preserved(self):
         def mutate(cfg, notes, players):

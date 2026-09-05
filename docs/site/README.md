@@ -6,7 +6,7 @@ The homepage is a static, account-free explanation of the existing draft planner
 
 `pick-comparison.json` contains two branches of one saved sample draft, using seed `20260905` and the [sample league](../../examples/sample-league/). Before either branch, the code selects the highest projected available running back and wide receiver at pick 5. It does not search for a favorable result. Both branches copy the same draft state and random-generator state, then use the simulator's adaptive policy to finish the draft. Opponent decisions can diverge as the remaining player pool changes.
 
-The Achane branch projects 1,828 starting-lineup points; the Nacua branch projects 1,858. That 30-point difference is **one illustrative outcome**, not an averaged advantage or a recommendation. The published board averages many rollouts and may rank candidates differently. The homepage highlights players absent from the other branch, rather than treating a player moving between RB1 and RB2 as a different player.
+The exact saved candidates and totals are generated in `pick-comparison.json` and displayed on the homepage. Their difference is **one illustrative outcome**, not an averaged advantage or a recommendation. The objective sums projections for one best legal starting lineup; it does not simulate weekly substitutions, injuries or bench coverage. The published board averages many rollouts and may rank candidates differently. The homepage highlights players absent from the other branch, rather than treating a player moving between RB1 and RB2 as a different player.
 
 From the repository root, with PyYAML installed:
 
@@ -21,7 +21,7 @@ The first command records the input hashes and validates legal lineups. The seco
 
 Changing the selected candidate animates the saved lineup for about a quarter second. Scroll progress draws a small underline beneath the example heading. No essential text depends on either effect; reduced motion disables positional animation. The walkthrough video is user-controlled with captions. Copying an example link includes only the saved branch (`rb` or `wr`), never a visitor's editable league prompt. The page has no analytics, account login, or form submission.
 
-The 10-second recording is trimmed from the original real sample-board recording. It demonstrates manual pick tracking; it does not imply recalculated advice.
+The 26-second recording uses the regenerated sample board, deliberate readable holds, and captions embedded in the picture. It demonstrates manual pick tracking; it does not imply recalculated advice. The initial frame is also a deliberate cover showing a draft decision. Separate WebVTT captions remain available for the website.
 
 ## Local preview and deployment
 

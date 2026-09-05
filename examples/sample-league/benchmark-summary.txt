@@ -1,0 +1,7 @@
+800 held-out simulated drafts; paired seed range 901000–901799
+Sum of projections for one best legal starting lineup
+Noisy ADP-based draft bot    1760.9 (draft SD 46.9); vs baseline +0.0 ± 0.0
+Saved-board policy           1851.1 (draft SD 17.7); vs baseline +90.1 ± 3.5
+Adaptive heuristic           1864.2 (draft SD 17.2); vs baseline +103.2 ± 3.3
+Internal draft-model test on held-out seeds; fixed projections and modeled opponents. Not weekly or real-season gains, model validation, or platform-autopick performance.
+Approximate 95% normal interval of paired mean differences from draft-sampling variation only; excludes projection, model and selection uncertainty.
