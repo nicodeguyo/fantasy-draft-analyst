@@ -2,6 +2,18 @@
 
 ## 2.0.0 — pick values by rollout
 
+**Launch readiness.** Added an account-free sample homepage, a reproducible two-pick
+comparison, a captioned 10-second board demonstration, guided setup, and issue forms
+that ask for sanitized examples. The README now distinguishes internal simulation
+results from real-season outcomes and makes clear that marking picks does not rerun
+the model. The five-minute sample simulation and its availability CSV reproduce
+byte-for-byte from a clean clone.
+
+The board renderer now escapes custom instructions and tier labels, safely embeds
+JSON in HTML, and validates custom colors. The three documented rich-HTML appendix
+fields remain trusted author input. Long shortlist verdicts can wrap, fixing a
+42-pixel horizontal overflow on the sample board at a 390-pixel viewport.
+
 **What changed.** The skill used to rank every pick by *surplus* — a player's projection minus the
 "replacement level" at his position. That baseline is chosen, not measured, and this year it lands on
 a cliff in the running-back projections (RB37 projects 132, RB40 projects 111). Two defensible ways of

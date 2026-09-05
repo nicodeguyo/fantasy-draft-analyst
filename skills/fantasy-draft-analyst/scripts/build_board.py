@@ -87,6 +87,9 @@ def theme_from(cfg: dict) -> dict:
         primary, secondary, accent = c.get("primary", "#00338D"), c.get("secondary", "#C60C30"), c.get("accent", "#E8B21A")
     else:
         primary, secondary, accent = TEAM_COLORS[team]
+    for name, color in (("primary", primary), ("secondary", secondary), ("accent", accent)):
+        if not isinstance(color, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", color):
+            raise ValueError(f"theme.custom.{name} must be a six-digit hex color, such as #00338D")
     sec_text = secondary if luminance(secondary) < 0.5 else darken(secondary, 0.45)
     if luminance(secondary) < 0.08:
         sec_text = "#333333"
@@ -147,6 +150,12 @@ def lineup_total(plan_players, slots):
             total += best
             byp[best_pos].pop(0)
     return total
+
+
+def script_json(value):
+    """JSON embedded in HTML must not be able to close its script element."""
+    return (json.dumps(value).replace("<", "\\u003c").replace(">", "\\u003e")
+            .replace("&", "\\u0026").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029"))
 
 
 def main():
@@ -507,7 +516,7 @@ def main():
                                f'<span class="pa">{esc(team)} · adp {adp}</span><span class="pp">{round(proj)}</span><span class="ps{" strong" if vor >= 60 else ""}">{vor:+d}</span>{me_btn(n)}</li>')
                 bands.append(f'<div class="bandhd">{lbl}{bnote}</div><ul class="plist">{"".join(lis)}</ul>')
         sub = tdata.get("subtitle") or f'vs. free = points over {pos}{sim["replacement_rank"].get(pos, "")} ({repl.get(pos, "")}), the last {pos} anyone has to start'
-        tier_html.append(f'<div class="tier" id="tier-{esc(pos)}"><div class="th"><span>{POS_NAMES.get(pos, pos)}</span><em>{esc(sub)}</em></div><div class="band">{"".join(bands)}</div></div>')
+        tier_html.append(f'<div class="tier" id="tier-{esc(pos)}"><div class="th"><span>{esc(POS_NAMES.get(pos, pos))}</span><em>{esc(sub)}</em></div><div class="band">{"".join(bands)}</div></div>')
 
     # ---------- shortlist / vegas ----------
     sl = []
@@ -529,20 +538,21 @@ def main():
     title = notes.get("title") or cfg["league"].get("team_name", "Draft board")
     subtitle = notes.get("subtitle") or f'{cfg["league"].get("season", "")} draft board · pick {sim["league"]["slot"]} of {teams}'
     repo = notes.get("repo") or ax.get("repo") or "nicodeguyo/fantasy-draft-analyst"
-    howto = notes.get("howto") or [
+    custom_howto = notes.get("howto")
+    howto = custom_howto or [
         ("Before the draft", "Read the plan once: your target at every pick and the fallback if he's gone. The cost-of-waiting table under it shows which position is about to run out at each of your turns."),
         ("On the clock", "Tap your pick in the top bar and take the top row still on the board. <b>Now</b> is how many points of final starting lineup you give up by taking that row instead of the best one — <b>best</b> means take him. <b>Next</b> is how often a player is still there at your following pick; under 50% (amber) means take him now or lose him."),
         ("Someone else drafts a player", "Tap his row. He greys out on every list. Undo is in the footer for a few seconds."),
         ("You draft a player", "Tap ✓ on his row. The footer lineup fills in, and the top bar moves to your next pick."),
     ]
-    howto_html = "".join(f'<li><b>{i + 1}</b><div><h4>{esc(h)}</h4><p>{b}</p></div></li>' for i, (h, b) in enumerate(howto))
+    howto_html = "".join(f'<li><b>{i + 1}</b><div><h4>{esc(h)}</h4><p>{esc(b) if custom_howto else b}</p></div></li>' for i, (h, b) in enumerate(howto))
     ladder_links = '<a href="#plan" data-tab="plan">PLAN</a>' + "".join(
         f'<a href="#p{l["pick"]}" data-tab="{l["pick"]}" title="Round {l["round"]}">{l["pick"]}</a>' for l in ladder if show_pick(l["pick"]))
     ladder_links += '<a href="#late">LATE</a><a href="#names">CALLS</a><a href="#appx">NOTES</a>'
     strip_html = "".join(f'<span class="lslot" data-slot="{s}"><s>{"FLX" if s == "FLEX" else "SFX" if s == "SFLEX" else s}</s><b>·</b></span>' for s in slots)
     rnums = " ".join(f'<span><b>{repl.get(pos, "")}</b> {pos}{sim["replacement_rank"].get(pos, "")}</span>' for pos in ("RB", "WR", "TE", "QB") if pos in repl)
-    replacement_json = json.dumps({k: v for k, v in repl.items()})
-    players_json = json.dumps({n: {"pos": p.get("pos", "?"), "proj": round(float(p.get("proj", 0) or 0))} for n, p in players.items()})
+    replacement_json = script_json({k: v for k, v in repl.items()})
+    players_json = script_json({n: {"pos": p.get("pos", "?"), "proj": round(float(p.get("proj", 0) or 0))} for n, p in players.items()})
     storage_key = "fda-" + re.sub(r"[^a-z0-9]+", "-", (title + "-" + subtitle).lower())[:60]
 
     page = f'''<!DOCTYPE html>
@@ -697,7 +707,7 @@ def main():
   .plist .pn{{flex:1;font-weight:600;min-width:0}} .plist .pa{{color:var(--slate);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}}
   .plist .pp{{font-family:var(--disp);font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:28px;text-align:right;color:#38507A}}
   .plist .ps{{font-family:var(--disp);font-weight:500;font-size:14px;min-width:34px;text-align:right;color:#38507A}} .plist .ps.strong{{font-weight:700;color:var(--royal)}}
-  .verd td:nth-child(3){{white-space:nowrap}}
+  .verd td:nth-child(3){{white-space:normal}}
   .tag{{display:inline-block;padding:2px 7px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff}}
   .tag.take{{background:#0E7C6B}} .tag.ok{{background:var(--royal)}} .tag.pass{{background:var(--red-tx)}}
   .vg{{margin:0;padding:0;list-style:none}}
@@ -819,12 +829,12 @@ def main():
 
 <script>
 (function(){{
-  var KEY = {json.dumps(storage_key)};
+  var KEY = {script_json(storage_key)};
   var PLAYERS = {players_json};
   var REPL = {replacement_json};
-  var SLOTS = {json.dumps(slots)};
-  var KEEPER = {json.dumps(keeper)};
-  var MYPICKS = {json.dumps(my_picks)};
+  var SLOTS = {script_json(slots)};
+  var KEEPER = {script_json(keeper)};
+  var MYPICKS = {script_json(my_picks)};
   var gone = new Set(), mine = new Set(), history = [];
   if (KEEPER) mine.add(KEEPER);
   try {{ var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved) {{ gone = new Set(saved.gone||[]); mine = new Set(saved.mine||[]); if (KEEPER) mine.add(KEEPER); }} }} catch(e) {{}}

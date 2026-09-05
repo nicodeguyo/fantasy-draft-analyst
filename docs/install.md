@@ -1,56 +1,121 @@
-# Installing the skill
+# Make your draft plan
 
-The skill is a folder: `skills/fantasy-draft-analyst/` containing `SKILL.md`, reference files, and scripts. Where you put it depends on where you use Claude.
+First, [explore the sample demo](https://nicodeguyo.github.io/fantasy-draft-analyst/). No account or installation is needed to try it. Your own plan requires an assistant that can read the instructions, research public data, and run the bundled Python scripts.
 
-## Claude.ai (web) and the Claude desktop app, including Cowork
+## Claude in your browser (recommended)
 
-Cowork and claude.ai load the skills enabled on your account, not files on your computer.
+You do not need to install Python or use a terminal for this route. A *skill* is the downloadable package of instructions and scripts you give Claude.
 
-1. Download the packaged skill: [`dist/fantasy-draft-analyst.zip`](../dist/fantasy-draft-analyst.zip). (The zip's root is the `fantasy-draft-analyst/` folder — that's what the uploader expects. If you zip it yourself, zip the folder, not its contents.)
-2. Turn on **Settings → Capabilities → Code execution and file creation**. The simulator and the board renderer are Python scripts; they run in Claude's code sandbox when this is on. Without it the skill still works — it does the math analytically and skips the HTML board.
-3. Open **Customize → Skills** (left sidebar on claude.ai; the Customize entry in the desktop app's sidebar) → **+** → **Create skill** → **Upload a skill** → choose the zip. Toggle it on.
-4. Start a chat and describe your draft. The skill triggers on its own when you mention a draft, keepers, a pick number, ADP, tiers, or targets; you can also say "use the fantasy draft analyst skill".
+**Prerequisites, checked September 5, 2026:** Anthropic lists custom skills for Free, Pro, Max, Team, and Enterprise. Code execution must be enabled; organization settings may restrict uploads. Your account's usage limits still apply. [Anthropic's setup requirements](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
 
-Plan notes as of September 2026: Anthropic's support docs say skills are available on Free, Pro, Max, Team and Enterprise with code execution enabled; the developer docs list custom skills as Pro and up. If the upload option isn't there on a free plan, use the [paste-anywhere prompt](../prompt/fantasy-draft-analyst-prompt.md) instead.
+1. [Download fantasy-draft-analyst.zip](https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip). Keep it zipped.
+2. In Claude, enable **Settings → Capabilities → Code execution and file creation**. For a work account, check your organization's Skills settings if this is unavailable.
+3. Open **Customize → Skills → + → Create skill → Upload a skill**, choose the ZIP, and enable it. [Official upload instructions](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
+4. Start a new chat. Paste the [league-description prompt](../README.md#setup) with your settings and ask Claude to use the fantasy draft analyst skill. Enable web search for fresh sources when available.
+5. Check the settings Claude gathers. Then have it run the simulator, explain the recommendations, and create a downloadable HTML board.
+6. Download and open the HTML file in your browser. Try crossing off a player and marking your pick before draft night. Open that same file in the same browser to continue tracking.
+
+**What success looks like:** a written analysis, dated sources, and an HTML board tailored to your rules. A chat answer alone is not the completed board. If Claude cannot run code or access a necessary source, ask it to explain the missing step instead of treating an approximation as a simulation.
+
+The board stores your marks locally when your browser allows storage. It does not sync across devices, connect to your fantasy platform, or recalculate advice as you mark picks. Check that persistence works in your browser before relying on it.
+
+### If you get stuck
+
+- **Upload missing or disabled:** check code execution and your organization's skill permissions. Use Anthropic's linked troubleshooting guide for account-specific restrictions.
+- **ZIP rejected:** use the packaged download without unzipping it. It contains one `fantasy-draft-analyst/` folder, including `SKILL.md` and the scripts. [Required package structure](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills).
+- **Claude replies without running the simulation:** ask, “Use the installed skill, run its simulator, and create the downloadable HTML board. Tell me what is blocking you if you cannot.”
+- **Current data is unavailable:** provide a public source or a sanitized export of player data. Do not reuse the sample league's old data as if it were current.
+- **No code execution available:** use the [paste-anywhere prompt](../prompt/fantasy-draft-analyst-prompt.md). It offers an analytical approximation; it does not run the full simulator.
 
 ## Claude Code
 
-Personal (every project):
+Requires Claude Code, Git, Python 3.10+, and PyYAML in the Python environment used to run the scripts.
 
 ```bash
 git clone https://github.com/nicodeguyo/fantasy-draft-analyst.git
+cd fantasy-draft-analyst
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install pyyaml
 mkdir -p ~/.claude/skills
-cp -r fantasy-draft-analyst/skills/fantasy-draft-analyst ~/.claude/skills/
-pip install pyyaml
+cp -r skills/fantasy-draft-analyst ~/.claude/skills/
 ```
 
-Project-only: copy the folder to `.claude/skills/fantasy-draft-analyst/` inside the project instead.
+Start Claude Code with that environment active. Invoke `/fantasy-draft-analyst` and paste the [league description](../README.md#setup). For a project-only install, copy the skill folder into `.claude/skills/` inside that project instead.
 
-Invoke with `/fantasy-draft-analyst`, or just describe your league — Claude reads the skill's description and picks it up. Scripts run with `python3 ${CLAUDE_SKILL_DIR}/scripts/draft_sim.py ...`; Claude handles that.
+Alternatively, install this repository's plugin from Claude Code:
 
-As a plugin (so updates come through `/plugin update`):
-
-```
+```text
 /plugin marketplace add nicodeguyo/fantasy-draft-analyst
 /plugin install fantasy-draft-analyst@fantasy-draft-analyst
 ```
 
-## Any other assistant (ChatGPT, Gemini, a plain chat)
+The plugin still needs a Python environment with PyYAML to run its scripts.
 
-Open [`prompt/fantasy-draft-analyst-prompt.md`](../prompt/fantasy-draft-analyst-prompt.md), fill in the league block at the top, and paste the whole thing. Turn on web browsing if the assistant has it; if not, paste your platform's top-150 ADP and the last few days of injury news for your targets into the chat. You get the same method with pencil-and-paper math instead of a 1,500-draft simulation.
+## Codex or another coding assistant
+
+Clone the repository and create the Python environment using the commands above, stopping before the `mkdir` and `cp` commands. Then ask your assistant:
+
+```text
+Read skills/fantasy-draft-analyst/SKILL.md and follow it for my league.
+Use the repository's .venv Python environment to run the scripts.
+Ask about missing rules before simulating. Here are my settings:
+[paste the league description from the README]
+```
+
+The assistant needs permission to read the repository, execute Python, and research current public sources. No connection to your private fantasy account is required.
+
+## Any assistant without code execution
+
+Open the [paste-anywhere prompt](../prompt/fantasy-draft-analyst-prompt.md), fill in its league block, and paste the whole thing. Enable browsing if available; otherwise supply current public player data and news yourself.
+
+This route uses a one-pick-ahead analytical approximation. It is useful for discussing a decision, but its results are not the full rollout simulation used in the sample benchmark. Do not expect the generated HTML board from this route.
 
 ## Running the scripts yourself
 
-Everything is standard-library Python plus PyYAML.
+Requires Python 3.10+ and PyYAML. From a cloned repository, create and activate a virtual environment:
 
 ```bash
-cd examples/sample-league
-python3 ../../skills/fantasy-draft-analyst/scripts/draft_sim.py --league league.yaml --players players.csv --sims 1500 --pick-values --keeper-scenarios --out sim.json
-python3 ../../skills/fantasy-draft-analyst/scripts/build_board.py --league league.yaml --sim sim.json --notes notes.json --players players.csv --out draft-board.html
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install pyyaml
 ```
 
-`draft_sim.py` prints a markdown summary (the plan path with its projected lineups, keeper scenarios, cost of waiting, the pick-value table at each of your picks, replacement levels, sample drafts) and writes `sim.json` plus `sim_availability.csv`, a full name × pick availability matrix. Budget five to six minutes for a 12-team league; `--rollouts 60` gives a rough answer in under two, and `--no-pick-values` skips the rollouts entirely. `fetch_adp.py` pulls current ADP from FantasyFootballCalculator, ESPN, the Footballguys cross-platform table, or Sleeper trending; `scoring.py` turns stat-line projections into points in your scoring; `merge_adp.py` reprices a player pool with your platform's ADP.
+On Windows, use `.venv\Scripts\Activate.ps1` in PowerShell for activation. Use `python` in place of `python3` to create the environment if that is your Python 3 command.
+
+Regenerate the example into a separate output folder:
+
+```bash
+mkdir -p output
+python skills/fantasy-draft-analyst/scripts/draft_sim.py \
+  --league examples/sample-league/league.yaml \
+  --players examples/sample-league/players.csv \
+  --sims 1500 --pick-values --keeper-scenarios \
+  --out output/sim.json
+python skills/fantasy-draft-analyst/scripts/build_board.py \
+  --league examples/sample-league/league.yaml \
+  --sim output/sim.json \
+  --notes examples/sample-league/notes.json \
+  --players examples/sample-league/players.csv \
+  --out output/draft-board.html
+```
+
+These multi-line commands use macOS/Linux shell syntax. In PowerShell, put each command on one line without the trailing backslashes. Open `output/draft-board.html` in a browser to inspect the result.
+
+The simulator prints a summary and writes the JSON results plus an availability CSV. Budget several minutes depending on your hardware; `--rollouts 60` is quicker but less precise, and `--no-pick-values` skips the full candidate comparisons. The sample uses saved inputs so you can reproduce it. For a real league, update the settings and fetch fresh data first.
+
+To reproduce the README's policy comparison using the committed sample output:
+
+```bash
+python scripts/compare_policies.py \
+  --league examples/sample-league/league.yaml \
+  --players examples/sample-league/players.csv \
+  --sim examples/sample-league/sim.json \
+  --drafts 800
+```
+
+The scripts in `skills/fantasy-draft-analyst/scripts/` include ADP fetching, projection scoring, and ADP merging. Read the [method explanation](how-it-works.md) and [sample run log](../examples/sample-league/RUNLOG.md) before interpreting the output.
 
 ## Updating
 
-The skill is versioned in `SKILL.md` (`metadata.version`). Re-download the zip or `git pull` and re-copy. Your `league.yaml` lives outside the skill folder, so updates don't touch it.
+Re-download and upload the packaged ZIP, or pull the repository and re-copy the installed skill folder. Keep your league files outside the skill folder so replacing it does not replace your inputs. Regenerate your board when you want updated data; downloading a new skill does not refresh an existing board.

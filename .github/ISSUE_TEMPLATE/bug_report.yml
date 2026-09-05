@@ -1,0 +1,39 @@
+name: Bug or setup help
+description: Report a broken step, unexpected result, or board problem.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tell us what you tried and where it stopped. Use the public sample league or a fictional example whenever possible. Do not include account credentials, private league links, league IDs, manager names, email addresses, or full private chat logs.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Sample demo
+        - Claude web or desktop upload
+        - Claude Code
+        - Codex or another coding assistant
+        - Running Python scripts
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: What did you try?
+      description: Include the smallest steps that reproduce the problem. Say whether it happens with the sample league.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Error or screenshot (optional)
+      description: Paste only the relevant error, or a cropped screenshot with personal details removed. Browser, operating system, Python version, and skill version may help.

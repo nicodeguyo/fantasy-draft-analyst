@@ -1,0 +1,22 @@
+name: Idea, league rule, or data correction
+description: Suggest a useful improvement or show a source that needs correcting.
+title: "[Idea] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us understand the draft decision this would improve. Public sources and fictional league examples are welcome; private league details are not needed.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the decision or confusing result in ordinary language.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Your suggestion or correction
+      description: For league rules, give a fictional example. For data corrections, include a public source URL and its season or date. Do not include private league links or personal information.
+    validations:
+      required: true
