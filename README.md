@@ -7,7 +7,7 @@ It tells you which one to take — and exactly what it costs you to take a diffe
 
 <p align="center">
 <a href="https://github.com/nicodeguyo/fantasy-draft-analyst/stargazers"><img src="https://img.shields.io/github/stars/nicodeguyo/fantasy-draft-analyst?style=flat&labelColor=0B1B33&color=69BE28" alt="Stars"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-69BE28?style=flat&labelColor=0B1B33" alt="MIT"></a>
+<a href="LICENSE"><img src="https://img.shields.io/github/license/nicodeguyo/fantasy-draft-analyst?style=flat&labelColor=0B1B33&color=69BE28" alt="License"></a>
 <img src="https://img.shields.io/badge/python-3.10%2B-69BE28?style=flat&labelColor=0B1B33" alt="Python 3.10+">
 <img src="https://img.shields.io/badge/dependencies-PyYAML%20only-69BE28?style=flat&labelColor=0B1B33" alt="PyYAML only">
 <img src="https://img.shields.io/badge/example-fully%20reproducible-69BE28?style=flat&labelColor=0B1B33" alt="Reproducible example">
