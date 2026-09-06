@@ -9,7 +9,7 @@
 <b><a href="#setup">Make my draft plan</a></b>
 </p>
 
-<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="A saved draft comparison: choose Jonathan Taylor or Puka Nacua and see the resulting projected lineup change. Click to explore the demo."></a></p>
+<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="Seven-screen draft planner tour: compare draft paths, see targets and backups, track picks, explore positional depth and tiers, and inspect an internal test across 800 simulated drafts. Click to explore the demo."></a></p>
 
 <p align="center">Free, open-source project · No account needed for the demo · No coding needed for the guided setup</p>
 
