@@ -9,7 +9,7 @@
 <b><a href="#setup">Make my draft plan</a></b>
 </p>
 
-<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="A sample draft board: compare recommendations, cross off taken players, and add your pick to your lineup. Click to explore the demo."></a></p>
+<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="A saved draft comparison: choose Jonathan Taylor or Puka Nacua and see the resulting projected lineup change. Click to explore the demo."></a></p>
 
 <p align="center">Free, open-source project · No account needed for the demo · No coding needed for the guided setup</p>
 
@@ -89,15 +89,17 @@ The repository includes a reproducible policy benchmark: the prepared board, a n
 
 The score is the **sum of season projections for one best legal starting lineup**. This is an internal simulation comparison, not a real-season backtest or a test against a platform’s actual autopick. Weekly substitutions, injuries, waivers, and the insurance value of the bench are outside that score. Shared seeds couple randomness; the resulting draft rooms can diverge after different picks. [Reproduce the comparison](#reproduce-every-number).
 
-## Why I built it
+## Make your next pick fit the rest of your draft
 
-Two early versions of this tool, using the same projections and league settings, produced opposite plans. One drafted eight running backs. The other took receivers in rounds 2 and 3. A change to the assumed “replacement level”—the baseline used to compare positions—had moved the answer.
+The difficult part of a draft is choosing between good players while building a complete team.
 
-That pushed the project toward a more useful question: **which pick leaves me with the better team when the draft ends?**
+Taking a running back now changes the receivers you can target later. Your scoring, draft slot and keeper change those tradeoffs, too.
 
-For each candidate, it simulates the rest of the draft many times and compares the projected best legal starting lineups. Candidates face matched draft conditions so a lucky run is less likely to look like a better pick. These simulated continuations are called *rollouts*.
+Fantasy Draft Analyst plays out possible drafts and turns that analysis into a plan: targets, backups and a board you can bring to draft night.
 
-The method still depends on projections, modeled opponents, and the policy making later picks. You can inspect those choices and challenge the result. Read [how it works](docs/how-it-works.md), the [interactive demo methodology](docs/site/README.md), the [worked analysis](examples/sample-league/analysis.md), and the [run log with data sources](examples/sample-league/RUNLOG.md).
+Try the [saved example](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare) to see two paths from the same starting draft room. Then [build a plan for your league](#setup).
+
+The method depends on projections, modeled opponents, and the policy making later picks. You can inspect those choices and challenge the result. Read [how it works](docs/how-it-works.md), the [interactive demo methodology](docs/site/README.md), the [worked analysis](examples/sample-league/analysis.md), and the [run log with data sources](examples/sample-league/RUNLOG.md).
 
 ## What it handles
 

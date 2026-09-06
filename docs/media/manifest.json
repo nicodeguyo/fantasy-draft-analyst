@@ -4,55 +4,70 @@
   "assets": [
     {
       "file": "docs/media/draft-board-demo.mp4",
-      "purpose": "Primary LinkedIn/X video and website walkthrough",
-      "bytes": 573371,
-      "sha256": "9bd994b7141d60cb60a9a3a58b9959123c38a438e4d9ff6b5e755e8a7c681736",
+      "purpose": "Primary 32-second social and website demo; AI narration, on-screen captions and original music",
+      "bytes": 2840402,
+      "sha256": "ff0a815737e5496e8e4cb5bfc593391a2eb101d0687cad4bc2540987fb897fa2",
       "media": {
         "programs": [],
         "stream_groups": [],
         "streams": [
           {
-            "width": 540,
-            "height": 960,
-            "r_frame_rate": "25/1"
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1350,
+            "r_frame_rate": "25/1",
+            "duration": "32.000000",
+            "nb_frames": "800"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "duration": "32.000000",
+            "nb_frames": "1501"
           }
         ],
         "format": {
-          "duration": "26.000000"
+          "duration": "32.000000"
         }
       }
     },
     {
       "file": "docs/media/draft-board-demo-poster.jpg",
       "purpose": "Deliberate video cover",
-      "bytes": 114013,
-      "sha256": "7d82bff8ff0bec433490b5903e85aabf9d634497e4336a86e46720287fbe65e9"
+      "bytes": 129847,
+      "sha256": "2b1843029058a83a55387bd5b715c77da4df115ca91a63b871a19a6e0c67e716"
     },
     {
       "file": "docs/media/draft-board-demo.gif",
-      "purpose": "Eight-second README loop",
-      "bytes": 957880,
-      "sha256": "0715fcdcfea215d811f778414100781c17a641a9c0f446872fb3ca0e02bec840",
+      "purpose": "Seven-second README comparison loop",
+      "bytes": 981140,
+      "sha256": "629e51ef18e8bab13686b9bf2006a6d1ea3111f2610de73c970f666eaad1c91c",
       "media": {
         "programs": [],
         "stream_groups": [],
         "streams": [
           {
+            "codec_name": "gif",
+            "codec_type": "video",
             "width": 540,
-            "height": 960,
-            "r_frame_rate": "12/1"
+            "height": 675,
+            "r_frame_rate": "10/1",
+            "duration": "7.000000",
+            "nb_frames": "70"
           }
         ],
         "format": {
-          "duration": "8.000000"
+          "duration": "7.000000"
         }
       }
     },
     {
       "file": "docs/media/draft-board-demo.vtt",
       "purpose": "Optional accessible website captions",
-      "bytes": 640,
-      "sha256": "4e929ec0412df4f9cedc5eca4bd694e2a582a3cec0356ae2082573451822bdc8"
+      "bytes": 722,
+      "sha256": "981d263328c78424213b373676df66af39fde7c386e3834ed4e2a329c8908885"
     },
     {
       "file": "docs/media/social-preview.png",
@@ -65,6 +80,37 @@
       "purpose": "Single saved-draft comparison follow-up",
       "bytes": 67668,
       "sha256": "853049d279a1080e177e2882eccc63701a123930bfd6e0db53cb7808291623a0"
+    },
+    {
+      "file": "docs/media/draft-board-demo-no-narration.mp4",
+      "purpose": "Same 32-second social edit, captions and original music, no narration",
+      "bytes": 2853778,
+      "sha256": "59f58d11ee6f15e9dc64258b20622d9774a096ac79aa337231691c2f5d1fb499",
+      "media": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1350,
+            "r_frame_rate": "25/1",
+            "duration": "32.000000",
+            "nb_frames": "800"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "duration": "32.000000",
+            "nb_frames": "1501"
+          }
+        ],
+        "format": {
+          "duration": "32.000000"
+        }
+      }
     }
   ]
 }
