@@ -1,37 +1,44 @@
 <h1 align="center">Fantasy Draft Analyst</h1>
 
-<p align="center"><b>Don’t just rank players. Explore what your next pick does to the rest of your draft.</b></p>
+<p align="center"><b>Your next pick shapes your whole team. Plan for it.</b></p>
 
-<p align="center">Compare draft paths, understand the tradeoffs, and bring a plan to draft night.</p>
+<p align="center">A free skill you download and run with Claude. Turn your league’s rules into targets, backups, and a board for draft night.</p>
 
 <p align="center">
-<b><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">Explore the sample demo</a></b> ·
-<b><a href="#setup">Make my draft plan</a></b>
+<b><a href="#setup">Get the skill</a></b> ·
+<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP</a> ·
+<a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">See it in action</a>
 </p>
 
-<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/"><img src="docs/media/draft-board-demo.gif" width="480" alt="Seven-screen draft planner tour: compare draft paths, see targets and backups, track picks, explore positional depth and tiers, and inspect an internal test across 800 simulated drafts. Click to explore the demo."></a></p>
+<p align="center"><a href="#setup"><img src="docs/media/draft-board-demo.gif" width="480" alt="15-second draft planner tour: compare draft paths, see targets and backups, track picks, explore positional depth and tiers, and inspect an internal test across 800 simulated drafts. Ends with Get the skill. Click for download and setup."></a></p>
 
-<p align="center">Free, open-source project · No account needed for the demo · No coding needed for the guided setup</p>
+<p align="center">Free & open source · No coding needed with Claude · Assistant account and usage limits apply</p>
 
-The board is prepared **before your draft** using your scoring, draft slot, roster rules, and keepers. During the draft, tap to cross off taken players and fill your lineup. **Those taps do not rerun simulations or recalculate recommendations.**
+**Your scoring. Your draft slot. Your keeper—or no keeper.** Describe your league in ordinary language. The skill researches player data, plays out possible drafts, and creates your analysis and downloadable board.
+
+Prepare it before your draft. When your target goes, use the backups already on your board. Tap to cross off taken players and fill your lineup. Recommendations are prepared in advance; marking picks does not rerun simulations or sync with your draft platform.
 
 The demo uses a fictional 12-team ESPN half-PPR keeper league with saved 2026 player data. It is an example, not a live feed or advice tailored to your league. [View or download the sample HTML board](examples/sample-league/draft-board.html).
 
-**Useful for your draft? [Star the repo](https://github.com/nicodeguyo/fantasy-draft-analyst) so you can find it again, and share the demo with a friend.**
+**Want this ready for draft night? [Download the skill and follow the setup](#setup).**
 
-## What you get
+## What it helps you decide
 
-- **A pick-by-pick plan.** Compare players by the projected starting lineup you could finish with. `TAKE` marks the recommendation; `−14` means an estimated 14 fewer projected lineup points across the season if you choose that alternative.
-- **See when targets tend to go.** Explore pre-draft availability at your picks and the modeled drop in available talent at each position. These frequencies do not update when you mark picks.
-- **Keeper decisions explained.** Compare keepers against each other and keeping nobody, including the draft pick each costs. The simulator supports zero or one keeper per team.
-- **Your shortlist, checked.** Ask the assistant to verify the role, injury, and usage claims behind the players you like, with dated sources and an honest bear case.
-- **A board for your phone.** Download one HTML file, track picks manually, and keep your lineup visible. Picks are saved in that browser when local storage is available.
+- **How does this pick shape the team I finish with?** Compare players by the projected starting lineup you could build around them, then get a pick-by-pick plan with targets and alternatives.
+- **My target’s gone. Who’s next?** Keep prepared backups in view, cross off taken players, and mark your own picks on a board you can use on your phone.
+- **Which position can I afford to wait on?** See modeled availability at your picks and the projected drop in talent as the draft progresses. These are pre-draft estimates.
+- **Is my keeper worth the pick?** Compare eligible keepers against each other and keeping nobody, including the round each costs. Supports zero or one keeper per team.
+- **What am I missing about a player?** Ask the assistant to check role, injury, and usage claims with dated sources—and explain the case against a player you like.
+
+On the board, `TAKE` marks the recommendation; `−14` means an estimated 14 fewer projected lineup points across the season if you choose that alternative. Your marks are saved in that browser when local storage is available.
 
 <p align="center"><img src="docs/media/board-picks.png" width="480" alt="Sample pick table showing the recommended player and projected lineup-point differences for alternatives"></p>
 
 ## Setup
 
-**New to AI tools? Start with Claude in your browser.** The download is a *skill*: a package of instructions and scripts that teaches the assistant how to research your league and run the simulator. You describe your league in ordinary language; Claude runs the code.
+**Download the skill. Describe your league. Get your draft plan.**
+
+New to AI tools? Start with Claude in your browser. A *skill* is a package of instructions and scripts you add to Claude. This one guides its research, runs the draft simulator, and builds your board. You describe your league in ordinary language; Claude runs the code.
 
 1. [Follow the upload guide](docs/install.md#claude-in-your-browser-recommended) to enable code execution and upload the [packaged skill](https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip).
 2. Paste the league description below, replacing the brackets. “I don't know” is fine; ask Claude to help you find the setting.
@@ -97,7 +104,7 @@ Taking a running back now changes the receivers you can target later. Your scori
 
 Fantasy Draft Analyst plays out possible drafts and turns that analysis into a plan: targets, backups and a board you can bring to draft night.
 
-Try the [saved example](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare) to see two paths from the same starting draft room. Then [build a plan for your league](#setup).
+[Get the skill](#setup) to build a plan for your league. Want to see the idea first? The [interactive example](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare) shows two paths from the same starting draft room.
 
 The method depends on projections, modeled opponents, and the policy making later picks. You can inspect those choices and challenge the result. Read [how it works](docs/how-it-works.md), the [interactive demo methodology](docs/site/README.md), the [worked analysis](examples/sample-league/analysis.md), and the [run log with data sources](examples/sample-league/RUNLOG.md).
 
@@ -146,7 +153,7 @@ Use a writable output path on your computer (for example `fantasy-sample-sim.jso
 
 - **Projections are assumptions.** Confident simulation results can still be wrong if player projections or the model of your draft room are wrong.
 - **The board is a prepared plan.** Its recommendations and availability percentages do not update when you mark picks. An unexpected draft can make the plan less useful.
-- **Later simulated picks use a heuristic.** That decision rule influences the value assigned to each candidate. The sample board trails the model's adaptive policy by 26 projected points in the internal comparison.
+- **Later simulated picks use a heuristic.** That decision rule influences the value assigned to each candidate. The sample board trails the model's adaptive policy by 13 projected points in the internal comparison.
 - **Freshness depends on the run.** The assistant researches data when you ask it to; saved boards do not refresh themselves. Check dates and rerun before your draft when injuries or roles change.
 
 ## FAQ

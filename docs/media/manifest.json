@@ -5,8 +5,8 @@
     {
       "file": "docs/media/draft-board-demo.mp4",
       "purpose": "Selected 32-second video: Michael narration and upbeat electronic music",
-      "bytes": 2834082,
-      "sha256": "12b12f4adb49690883ea14fcdc8f5d473e269b8837a8791cd957fc841c406e32",
+      "bytes": 2871825,
+      "sha256": "d651464d83829d29cb26475121f4f1acf48e7293f4bb8bbf1a208220177ddf73",
       "media": {
         "programs": [],
         "stream_groups": [],
@@ -41,9 +41,9 @@
     },
     {
       "file": "docs/media/draft-board-demo.gif",
-      "purpose": "14-second README story: seven benefit-captioned screens including the 800-draft internal test",
-      "bytes": 435430,
-      "sha256": "261d74a2ab6e3a591e6bf73c6915774621ea36d3b1189e60a78a955e7db5673b",
+      "purpose": "15-second README story: benefit-led tour including the 800-draft internal test and skill download invitation",
+      "bytes": 887204,
+      "sha256": "3b36dd5f5c29c611b7d1749f9641d178d237daa557ad025f511717c464171447",
       "media": {
         "programs": [],
         "stream_groups": [],
@@ -53,21 +53,21 @@
             "codec_type": "video",
             "width": 540,
             "height": 675,
-            "r_frame_rate": "1/2",
-            "duration": "14.000000",
-            "nb_frames": "7"
+            "r_frame_rate": "1/1",
+            "duration": "15.000000",
+            "nb_frames": "15"
           }
         ],
         "format": {
-          "duration": "14.000000"
+          "duration": "15.000000"
         }
       }
     },
     {
       "file": "docs/media/draft-board-demo.vtt",
       "purpose": "Optional accessible website captions",
-      "bytes": 695,
-      "sha256": "5f5b284e786784846c0bed5ecb1f728e27d4768f7a8bdf1d579695ad6659a80c"
+      "bytes": 700,
+      "sha256": "410be440c6c0c3c8478275987db4c6699af83227cb2d73888c5b87006863fedb"
     },
     {
       "file": "docs/media/social-preview.png",
@@ -84,8 +84,8 @@
     {
       "file": "docs/media/draft-board-demo-no-narration.mp4",
       "purpose": "Same 32-second social edit, captions and original music, no narration",
-      "bytes": 2862594,
-      "sha256": "30f72c469c81378475c28edbe0c6aede6a9953d1a35f94db969fe469fb6a1ef5",
+      "bytes": 2903108,
+      "sha256": "03ba7582cfdacadd1b741a40a97a65324c5f026191e6568ade0d0799539a4f9c",
       "media": {
         "programs": [],
         "stream_groups": [],
@@ -114,9 +114,9 @@
     },
     {
       "file": "docs/media/draft-board-story-silent.mp4",
-      "purpose": "Silent 14-second seven-screen story, two seconds per screen",
-      "bytes": 548503,
-      "sha256": "c06c83aa5d25ea664294d6927d29c5ee39d648b5d689d59299259b3fdd7aa4ab",
+      "purpose": "Silent 15-second story ending with a skill download invitation",
+      "bytes": 601870,
+      "sha256": "27adef0a3a3d3cb3965fd69879e2ab643e06cba1231fb76e87ccf840466781ca",
       "media": {
         "programs": [],
         "stream_groups": [],
@@ -127,12 +127,12 @@
             "width": 1080,
             "height": 1350,
             "r_frame_rate": "25/1",
-            "duration": "14.000000",
-            "nb_frames": "350"
+            "duration": "15.000000",
+            "nb_frames": "375"
           }
         ],
         "format": {
-          "duration": "14.000000"
+          "duration": "15.000000"
         }
       }
     }
