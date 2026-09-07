@@ -71,6 +71,17 @@ def _settings(cfg):
     pair_share = float(settings.get('overlap_share', .25))
     if not 0 <= missed < horizon or not 0 <= pair_share <= 1:
         raise ValueError('Invalid missed-games or overlap assumption')
+    weeks = settings.get('weeks', [])
+    calendar_weeks = cfg.get('league', {}).get('season_weeks', 18)
+    if not isinstance(calendar_weeks, int) or isinstance(calendar_weeks, bool) or calendar_weeks < 1:
+        raise ValueError('league.season_weeks must be a positive integer')
+    if not isinstance(weeks, list):
+        raise ValueError('valuation.weeks must be a list of unique integer week numbers')
+    if any(not isinstance(week, int) or isinstance(week, bool)
+           or not 1 <= week <= calendar_weeks for week in weeks):
+        raise ValueError(f'valuation.weeks must contain integer weeks between 1 and {calendar_weeks}')
+    if len(weeks) != len(set(weeks)):
+        raise ValueError('valuation.weeks cannot contain duplicate weeks')
     return settings, horizon, missed, pair_share
 
 

@@ -117,6 +117,11 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(player['projections'][0]['stats']['rec'],40)
         self.assertNotIn('fum',player['projections'][0]['stats'])
 
+    def test_defense_explicit_zero_points_allowed_is_not_missing(self):
+        self.assertEqual(score_row({'pos':'DEF','pts_allowed':0},{}),170)
+        self.assertEqual(score_row({'pos':'DEF'},{}),0)
+        self.assertEqual(score_row({'pos':'DEF','pts_allowed':''},{}),0)
+
     def test_legacy_scoring_rejects_bad_values(self):
         for bad in ('broken','nan','inf'):
             with self.assertRaises(ValueError): score_row({'pos':'RB','rec':bad},{})

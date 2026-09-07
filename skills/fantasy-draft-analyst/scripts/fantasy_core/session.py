@@ -24,8 +24,8 @@ def normalize_players(players):
         p = dict(raw)
         name = str(p.get("name", "")).strip()
         pid = str(p.get("player_id") or p.get("id") or "name:" + name.casefold())
-        if not name or pid in ids or name.casefold() in names:
-            raise ValueError("Players require unique IDs and names")
+        if not name or pid in ids:
+            raise ValueError("Players require unique IDs and nonempty names")
         p.update(player_id=pid, name=name)
         ids.add(pid); names.add(name.casefold()); out.append(p)
     if not out:
@@ -157,8 +157,9 @@ def refresh(s, players, evidence=None):
     retained = [dict(p,evidence_mode="retained_stale") for p in s["players"] if p["player_id"] in taken-ids]
     new += retained
     old=s["data_revision"]
-    old_names={p["name"].casefold():p["player_id"] for p in s["players"]}
-    if any(p["name"].casefold() in old_names and old_names[p["name"].casefold()]!=p["player_id"] for p in new):
+    old_names={}
+    for p in s["players"]:old_names.setdefault(p["name"].casefold(),set()).add(p["player_id"])
+    if any(p["name"].casefold() in old_names and p["player_id"] not in old_names[p["name"].casefold()] for p in new):
         raise ValueError("Refresh changed a known player ID; resolve identity mapping before refresh")
     s.setdefault("snapshots",{})[old]={"players":copy.deepcopy(s["players"]),"evidence":copy.deepcopy(s["evidence"])}
     s["players"]=new

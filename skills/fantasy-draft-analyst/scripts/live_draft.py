@@ -178,17 +178,26 @@ def recommend(s,limit=3):
         result['warnings'].append('Keeper declarations are missing. No keepers are invented; confirm declarations before relying on availability.')
     unknown=[p for p in live['picks'] if p['unknown']]
     if unknown: result['warnings'].append('Unmatched picks preserve slots but may hide a player alias; resolve before trusting availability.')
-    if any(p['owner']==own and p['unknown'] for p in live['picks']):
-        result['warnings'].append('Your roster has unresolved players; point comparisons are disabled.')
+    eligible=[p for p in pool if p.get('proj') not in (None,'') and p.get('adp') not in (None,'') and p.get('pos') in ('QB','RB','WR','TE','K','DEF')]
+    eligible_ids={p['player_id'] for p in eligible}
+    own_unscored=any(p['owner']==own and (p['unknown'] or p['player_id'] not in eligible_ids) for p in live['picks'])
+    if own_unscored:
+        result['warnings'].append('Your roster has unresolved identities or missing validated projections/prices; point comparisons are disabled.')
         rank_only=True
-    else: rank_only=any(p.get('proj') in (None,'') for p in pool)
+    else: rank_only=not eligible
+    if len(eligible)<len(pool):
+        result['mode']='limited_projection'
+        result['warnings'].append(str(len(pool)-len(eligible))+' players lack eligible projection/price/position data. They remain recordable but are excluded from numerical recommendations and opponent simulations; coverage and wait comparisons are incomplete.')
     if rank_only:
         result['mode']='rank_only'
         ordered=sorted([p for p in avail if p.get('adp') not in (None,'') or p.get('rank') not in (None,'')],key=lambda p:float(p.get('adp') or p.get('rank')))
-        result['warnings'].append('Players without validated price/rank remain in the available list but are not ranked; projection comparisons are disabled for incomplete pools.')
+        result['warnings'].append('Players without validated price/rank remain in the available list but are not ranked; projection comparisons are disabled when your roster cannot be valued or no eligible projections remain.')
         result['candidates']=[dict(player_id=p['player_id'],name=p['name'],pos=p.get('pos','unknown'),
             explanation='Rank-only fallback; workload projections or roster identity are incomplete. No point advantage is claimed.') for p in ordered[:limit]]
         return result
+    pool=eligible
+    avail=[p for p in avail if p['player_id'] in eligible_ids]
+    roster=[p for p in roster if p['player_id'] in eligible_ids]
     for p in pool:
         p['proj']=float(p['proj']);p['adp']=float(p.get('adp') or 99999)
         raw_sd=p.get('sd',p.get('adp_sd'))

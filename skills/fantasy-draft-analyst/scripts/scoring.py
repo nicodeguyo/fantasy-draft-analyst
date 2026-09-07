@@ -98,7 +98,7 @@ def score_row(row: dict, sc: dict) -> float:
         pts += f(row, "fum_rec") * float(sc.get("fum_rec", 2)) + f(row, "def_td") * float(sc.get("def_td", 6))
         pts += f(row, "safety") * float(sc.get("safety", 2))
         pa = f(row, "pts_allowed")
-        if pa:
+        if row.get("pts_allowed") not in (None, "", "-", "—"):
             # ESPN/Yahoo-style points-allowed buckets, per game, approximated over a season
             per_game = pa / 17.0
             bucket = 10 if per_game == 0 else 7 if per_game < 7 else 4 if per_game < 14 else 1 if per_game < 21 else 0 if per_game < 28 else -1 if per_game < 35 else -4

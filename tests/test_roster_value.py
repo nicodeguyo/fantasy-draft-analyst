@@ -39,6 +39,22 @@ class RosterValueTests(unittest.TestCase):
         self.assertAlmostEqual(value['coverage_points'], 8)
         self.assertEqual(value['starter_points'], 190)
 
+    def test_duplicate_or_invalid_weeks_cannot_inflate_bye_coverage(self):
+        cfg = config(RB=1)
+        cfg['valuation'].update(weeks=[5], overlap_share=0)
+        roster = [player('Starter', 'RB', 100, expected_games=9, bye=5),
+                  player('Reserve', 'RB', 80, expected_games=10)]
+        self.assertEqual(roster_value(roster, cfg, {'RB': 0})['coverage_points'], 8)
+        for weeks in ([5, 5], [0], [19], [True], ['5'], '5', None):
+            with self.subTest(weeks=weeks):
+                cfg['valuation']['weeks'] = weeks
+                with self.assertRaises(ValueError):
+                    roster_value(roster, cfg, {'RB': 0})
+        # Calendar length is configurable independently of projected games.
+        cfg['league']['season_weeks'] = 20
+        cfg['valuation']['weeks'] = [19]
+        self.assertGreaterEqual(roster_value(roster, cfg, {'RB': 0})['coverage_points'], 0)
+
     def test_known_same_bye_backup_cannot_cover(self):
         cfg = config(RB=1)
         cfg['valuation'].update(weeks=[5], overlap_share=0)

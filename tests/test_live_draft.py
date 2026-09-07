@@ -81,8 +81,30 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(next(p for p in self.s['players'] if p['player_id']=='0')['evidence_mode'],'retained_stale')
         self.assertTrue(any('stale' in w for w in self.s['evidence']['warnings']))
 
-    def test_rank_only_has_no_fake_point_delta(self):
+    def test_partial_pool_scores_covered_players_without_erasing_other_ids(self):
         self.s['players'][0]['proj']=None
+        rec=live_draft.recommend(self.s)
+        self.assertEqual(rec['mode'],'limited_projection')
+        self.assertTrue(rec['candidates'])
+        self.assertTrue(all('policy_score' in p for p in rec['candidates']))
+        self.assertNotIn('0',[p['player_id'] for p in rec['candidates']])
+        self.assertIn('0',[p['player_id'] for p in session.available(self.s)])
+        session.record_pick(self.s,'0')
+        own_missing=live_draft.recommend(self.s)
+        self.assertEqual(own_missing['mode'],'rank_only')
+        self.assertTrue(all('policy_score' not in p for p in own_missing['candidates']))
+
+    def test_same_name_different_ids_remain_distinct(self):
+        self.pool[1]['name']=self.pool[0]['name']
+        s=session.create(self.cfg,self.pool)
+        self.assertIsNone(session.resolve(s,'Player 0'))
+        session.refresh(s,self.pool)
+        session.record_pick(s,'0')
+        self.assertIn('1',[p['player_id'] for p in session.available(s)])
+        self.assertNotIn('0',[p['player_id'] for p in session.available(s)])
+
+    def test_rank_only_has_no_fake_point_delta(self):
+        for player in self.s['players']:player['proj']=None
         rec=live_draft.recommend(self.s)
         self.assertEqual(rec['mode'],'rank_only')
         self.assertTrue(all('policy_score' not in p for p in rec['candidates']))

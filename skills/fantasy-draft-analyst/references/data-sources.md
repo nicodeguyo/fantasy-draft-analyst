@@ -43,7 +43,7 @@ Combine: use platform ADP as the price, FFC's std dev as the spread. If the plat
 
 ## 3. Consensus projections with stat lines
 
-- `https://www.fantasypros.com/nfl/projections/{qb|rb|wr|te|k|dst}.php?week=draft&scoring={STD|HALF|PPR}` — consensus season stat lines (attempts, yards, TDs, receptions, fumbles) with a "last updated" date. Six pages; space requests about a minute apart to avoid rate limiting. Re-score the stat lines in the league's system with `scripts/scoring.py`; the FPTS column is only right if the scoring matches.
+- `https://www.fantasypros.com/nfl/projections/{qb|rb|wr|te|k|dst}.php?week=draft&scoring={STD|HALF|PPR}` — consensus season stat lines (attempts, yards, TDs, receptions, fumbles) with a "last updated" date. Six pages; space requests about a minute apart to avoid rate limiting. Use `scripts/prepare_data.py` to validate and re-score stat lines in the league's system; the FPTS column is only right if scoring matches. Legacy `scoring.py` accepts sparse fields for compatibility and cannot establish source completeness.
 - ESPN's own projections come with the ESPN API above (`stats` entries with `statSourceId 1` for the 2026 season).
 - Underdog's projected points are on the bestballteambuilder table (half-PPR).
 
@@ -85,7 +85,7 @@ Bhayshul Tuten,RB,JAX,53.0,6.5,200,8,co-starter per Coen; Rodriguez foot surgery
 
 - `adp` — overall pick number on the user's platform (or the format-matched mock ADP with a note).
 - `adp_sd` — spread of that ADP. Leave it blank if the source doesn't give one; the simulator fills in `max(4, 0.08 × adp)`.
-- `proj` — season total in the league's scoring, built by `scripts/scoring.py` or by hand.
+- `proj` — season total in the league's scoring, preferably emitted by `scripts/prepare_data.py` with its evidence sidecar. Manual/legacy values must remain explicitly unverified; the sparse legacy scorer does not prove completeness.
 - `pos` — one of QB, RB, WR, TE, K, DEF (`DST`, `D/ST`, and `PK` are accepted and normalized).
 - `bye` and `note` are optional and may be omitted entirely; the six-column form `name,pos,team,adp,adp_sd,proj` is enough for every script.
 - Include at least `teams × 15` players plus every relevant K and DEF, or the simulator will run out of bodies in late rounds.
