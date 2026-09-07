@@ -1,10 +1,19 @@
-# Make your draft plan
+# Choose your draft setup
 
 **Version 3.0.0:** replace your installed ZIP and regenerate your plan. The new default policy values roster coverage, so results intentionally differ from v2. Keep league files outside the installed skill. Local live advice requires Python on your computer; a downloaded static board or hosted chat artifact cannot run its local server.
 
-First, [explore the sample demo](https://nicodeguyo.github.io/fantasy-draft-analyst/). No account or installation is needed to try it. Your own plan requires an assistant that can read the instructions, research public data, and run the bundled Python scripts.
+First, [explore the saved v3 demo](https://nicodeguyo.github.io/fantasy-draft-analyst/). No account or installation is needed to inspect it. It switches between saved engine outputs; it does not run a personal draft. Your own plan requires an assistant that can read the instructions, research public data, and run the bundled Python scripts.
 
-## Claude in your browser (recommended)
+| Goal | Route | What you need |
+|---|---|---|
+| Prepare a downloadable board | [Claude browser preparation](#prepare-in-claude) | Skills and code execution in Claude; no local Python |
+| Recalculate after actual picks | [Local live advice](#local-live-advice) | Python 3.10+, PyYAML, and a browser on the same computer |
+
+Neither route syncs with your fantasy platform or makes picks for you. Assistant account and usage limits apply.
+
+<a id="claude-in-your-browser-recommended"></a>
+
+## Prepare in Claude
 
 You do not need to install Python or use a terminal for this route. A *skill* is the downloadable package of instructions and scripts you give Claude.
 
@@ -13,7 +22,7 @@ You do not need to install Python or use a terminal for this route. A *skill* is
 1. [Download fantasy-draft-analyst.zip](https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip). Keep it zipped.
 2. In Claude, enable **Settings → Capabilities → Code execution and file creation**. For a work account, check your organization's Skills settings if this is unavailable.
 3. Open **Customize → Skills → + → Create skill → Upload a skill**, choose the ZIP, and enable it. [Official upload instructions](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
-4. Start a new chat. Paste the [league-description prompt](../README.md#setup) with your settings and ask Claude to use the fantasy draft analyst skill. Enable web search for fresh sources when available.
+4. Start a new chat. Paste the [short starter prompt](../README.md#setup), or use the [full league template](#league-template) and ask Claude to use the fantasy draft analyst skill. Enable web search for fresh sources when available.
 5. Check the settings Claude gathers. Then have it run the simulator, explain the recommendations, and create a downloadable HTML board.
 6. Download and open the HTML file in your browser. Try crossing off a player and marking your pick before draft night. Open that same file in the same browser to continue tracking.
 
@@ -28,6 +37,41 @@ The board stores your marks locally when your browser allows storage. It does no
 - **Claude replies without running the simulation:** ask, “Use the installed skill, run its simulator, and create the downloadable HTML board. Tell me what is blocking you if you cannot.”
 - **Current data is unavailable:** provide a public source or a sanitized export of player data. Do not reuse the sample league's old data as if it were current.
 - **No code execution available:** use the [paste-anywhere prompt](../prompt/fantasy-draft-analyst-prompt.md). It offers an analytical approximation; it does not run the full simulator.
+
+## Local live advice
+
+This route recalculates recommendations after each recorded pick. It requires a Python process on your computer; a downloaded HTML file from a cloud chat cannot run the server. You can ask a local coding assistant to perform these steps.
+
+1. Clone the repository and create an environment, using the [Claude Code commands](#claude-code) through the dependency installation step (copying the skill is optional for direct script use).
+2. Save your confirmed settings as `league.yaml` outside the installed skill. Ask your assistant to prepare this from the [league template](#league-template). Validate every keeper's identity, owner, and round cost.
+3. From the cloned repository root, enter the skill directory and prepare current public data (if you installed the skill elsewhere, enter that folder instead):
+
+```bash
+cd skills/fantasy-draft-analyst
+python scripts/prepare_data.py --league /path/to/league.yaml --season 2026 --fetch-espn --fetch-cbs --fetch-fantasypros --out /path/to/players.csv
+```
+
+Replace the paths and season with your own. These feeds may be incomplete or unavailable. Inspect the output mode, source dates, warnings, and `players.evidence.json` before drafting. Provider fetch times do not prove that the forecasts themselves were recently updated. Keep the sidecar beside the CSV. Have the assistant research relevant news separately; this fetch does not supply automatic live news or betting data.
+
+4. Start your session:
+
+```bash
+python scripts/live_draft.py --session /path/to/session.json init --league /path/to/league.yaml --players /path/to/players.csv
+python scripts/live_draft.py --session /path/to/session.json serve --port 8768
+```
+
+5. Open `http://127.0.0.1:8768` on that same computer. Record a pick and confirm the draft history and shortlist update. Try Undo before draft night. Keep the Python process running while drafting.
+
+**What success looks like:** the local board shows the correct turn, your roster, available players, and an updated shortlist after a recorded pick. It shows evidence limitations instead of treating missing projections as verified advice.
+
+To resume, run `serve` with the same session file; do not initialize again. You can import actual picks, resolve unmatched names, refresh player inputs, and export decision records. Refreshing data is separate from recording picks. [Full live-session guide](../skills/fantasy-draft-analyst/references/live-draft.md).
+
+### If local setup gets stuck
+
+- **Python or PyYAML missing:** use the environment commands below. On Windows activate with `.venv\Scripts\Activate.ps1`; use `python` if that is your Python 3 command.
+- **Page unavailable:** keep the server running, open the printed address on the host computer, and choose another port if 8768 is occupied. A phone cannot reach this loopback address.
+- **No numerical recommendation:** inspect unresolved own picks and data coverage. Rank-only advice is a declared fallback, not a full projection comparison.
+- **Need a preparation board too:** follow the skill's preparation workflow with the same validated inputs. The downloaded board remains a separate, frozen artifact.
 
 ## Claude Code
 
@@ -75,65 +119,43 @@ This route uses a one-pick-ahead analytical approximation. It is useful for disc
 
 ## Running the scripts yourself
 
-Requires Python 3.10+ and PyYAML. From a cloned repository, create and activate a virtual environment:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install pyyaml
-```
-
-On Windows, use `.venv\Scripts\Activate.ps1` in PowerShell for activation. Use `python` in place of `python3` to create the environment if that is your Python 3 command.
-
-Regenerate the example into a separate output folder:
-
-```bash
-mkdir -p output
-python skills/fantasy-draft-analyst/scripts/draft_sim.py \
-  --league examples/sample-league/league.yaml \
-  --players examples/sample-league/players.csv \
-  --sims 1500 --pick-values --keeper-scenarios \
-  --out output/sim.json
-python skills/fantasy-draft-analyst/scripts/build_board.py \
-  --league examples/sample-league/league.yaml \
-  --sim output/sim.json \
-  --notes examples/sample-league/notes.json \
-  --players examples/sample-league/players.csv \
-  --out output/draft-board.html
-```
-
-These multi-line commands use macOS/Linux shell syntax. In PowerShell, put each command on one line without the trailing backslashes. Open `output/draft-board.html` in a browser to inspect the result.
-
-Keeper scenarios run before the board and choose among up to four surplus-shortlisted candidates plus nobody. Use `--keeper "Player Name"` or `--no-keeper` for an explicit decision. The simulator supports zero or one keeper per team. A published keeper list needs each player’s original draft slot and round cost; omitted opponents keep nobody. An empty list means unknown keepers and uses modeled draws.
-
-The simulator prints a summary and writes the JSON results plus an availability CSV. Budget several minutes depending on your hardware; `--rollouts 60` is quicker but less precise, and `--no-pick-values` skips the full candidate comparisons. The sample uses saved inputs so you can reproduce it. For a real league, update the settings and fetch fresh data first.
-
-To reproduce the README's policy comparison using the committed sample output:
-
-```bash
-python scripts/compare_policies.py \
-  --league examples/sample-league/league.yaml \
-  --players examples/sample-league/players.csv \
-  --sim examples/sample-league/sim.json \
-  --drafts 800
-```
-
-The scripts in `skills/fantasy-draft-analyst/scripts/` include ADP fetching, projection scoring, and ADP merging. Read the [method explanation](how-it-works.md) and [sample run log](../examples/sample-league/RUNLOG.md) before interpreting the output.
+Use the [local live setup above](#local-live-advice) for v3 data preparation and draft sessions. To inspect the frozen public example offline, follow [example reproduction](site/README.md). For the old simulation comparison, use the [v2 benchmark archive](archive/v2-benchmark.md).
 
 ## Updating
 
 Re-download and upload the packaged ZIP, or pull the repository and re-copy the installed skill folder. Keep your league files outside the skill folder so replacing it does not replace your inputs. Regenerate your board when you want updated data; downloading a new skill does not refresh an existing board.
 
-## New v3 data and live workflow
 
-Inside the installed `fantasy-draft-analyst` directory:
+## League template
 
-```bash
-python scripts/prepare_data.py --league league.yaml --snapshot evidence.json --out players.csv
-python scripts/draft_sim.py --league league.yaml --players players.csv --sims 100 --rollouts 20 --pick-values --out sim.json
-python scripts/build_board.py --league league.yaml --players players.csv --sim sim.json --notes notes.json --out draft-board.html
-python scripts/live_draft.py --session session.json init --league league.yaml --players players.csv
-python scripts/live_draft.py --session session.json serve --port 8768
+You can start with the short prompt and let the assistant ask questions. If you already have the settings, paste this complete template. “I don't know” is better than guessing; confirm the settings before the simulation.
+
+```text
+Use the fantasy draft analyst skill to make my draft plan.
+Ask me about missing settings before you simulate.
+
+Season and draft date: [2026, date and time zone]
+Platform: [ESPN / Yahoo / Sleeper / other]
+League size: [number of teams]
+Draft order: [snake / linear], my pick: [number], rounds: [number]
+Scoring: [standard / half-PPR / PPR]
+Passing TDs: [4 or 6], interceptions: [penalty]
+Other scoring: [bonuses, TE premium, or none]
+Starting lineup: [QB, RB, WR, TE, FLEX, superflex, K, DEF counts]
+Bench spots: [number]
+Keepers: [none, or number allowed and cost rules]
+My keeper options: [player and round cost, or none]
+Known league keepers: [draft slot, player, round cost for each; or unknown]
+Players I like or want to avoid: [names and why, or none]
+Draft-room tendencies: [anything I know, or unknown]
+Board colors: [favorite NFL team or colors]
+
+Use current public data and show the date and source for each input.
+Tell me if any data is unavailable or any result is only an approximation.
+Give me keeper advice if relevant, a pick-by-pick plan, the cost of
+waiting, and a downloadable HTML board. Explain the assumptions and
+which changes would alter your recommendation. Do not use the sample
+league's saved player data as current data for my league.
 ```
 
-Create `notes.json` from the output reference (an empty `{}` is valid for a minimal board). These are initial exploration settings, not a precision guarantee. Increase simulations after checking the data and runtime. Read [evidence](../skills/fantasy-draft-analyst/references/evidence.md) for current provider options and [live sessions](../skills/fantasy-draft-analyst/references/live-draft.md) for pick imports, undo, refresh and receipts. `--help` documents every executable option. Carry `players.evidence.json` with the CSV so live advice retains provenance.
+For live mode, also say: “Help me set up the local live session on my computer. Confirm actual keeper declarations and show me how to record, undo, and import picks.”

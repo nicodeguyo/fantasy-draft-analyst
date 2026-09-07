@@ -1,0 +1,21 @@
+{
+  "description": "Captioned editorial walkthrough of reproduced v3 outputs. Silent, four six-second frames. No private league data.",
+  "files": {
+    "v3-decision.png": {
+      "bytes": 75860,
+      "sha256": "874065af191c2a1632dbc9c425325b97aefe8e00892f9a37949bc48638f70889"
+    },
+    "social-preview-v3.png": {
+      "bytes": 55145,
+      "sha256": "84868f64518227e5ed884efb08b4a6cdc866b1185c725708952e3af8612d7b36"
+    },
+    "v3-walkthrough.mp4": {
+      "bytes": 270214,
+      "sha256": "d80b587522d417e45d561b41c66f202b16df0ce41c55daa547e351cedff7ca03"
+    },
+    "v3-walkthrough.vtt": {
+      "bytes": 504,
+      "sha256": "4c6090b360550863cd0b8ea4f6ec3786815c1261cb407c63b03bfbea4b39a6e4"
+    }
+  }
+}

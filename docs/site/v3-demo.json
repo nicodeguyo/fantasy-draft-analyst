@@ -1,0 +1,1456 @@
+{
+  "as_of": "2026-09-07T04:00:17.778842+00:00",
+  "season": 2026,
+  "evidence_mode": "limited",
+  "method": "First 18 picks by eligible ADP; pick 19 deliberately takes the preview leader. Fictional draft, real saved projections. No search for maximum improvement.",
+  "recorded_pick": {
+    "pick": 19,
+    "name": "George Pickens"
+  },
+  "before": {
+    "revision": 18,
+    "data_revision": "f80ff361d4e1e5c953e2af9887753c9a827be347e74c0d1b683bdfa37555eb1b",
+    "current_pick": 19,
+    "for_pick": 20,
+    "mode": "limited_projection",
+    "engine": "shared fast deterministic policy",
+    "warnings": [
+      "Preview only: opponents still pick before your turn; rerun after every pick.",
+      "536 players lack eligible projection/price/position data. They remain recordable but are excluded from numerical recommendations and opponent simulations; coverage and wait comparisons are incomplete."
+    ],
+    "candidates": [
+      {
+        "player_id": "espn:4426354",
+        "name": "George Pickens",
+        "pos": "WR",
+        "policy_score": 82.2,
+        "roster_benefit": {
+          "starter_points": 82.2,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 28.21,
+        "projection_disagreement": null,
+        "source_count": 1.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4426354",
+          "name": "George Pickens",
+          "accepted": [
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/WR/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.492452+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "93",
+                "rec_yd": "1384",
+                "rec_td": "10",
+                "rush_yd": "-1",
+                "rush_td": "0",
+                "fum": "0"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "3": "rec",
+                  "4": "rec_yd",
+                  "7": "rec_td",
+                  "9": "rush_yd",
+                  "11": "rush_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 244.8,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [
+            {
+              "record": {
+                "source": "espn",
+                "independence_group": "espn",
+                "independence_verified": true,
+                "season": 2026,
+                "period": "season",
+                "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+                "updated_at": null,
+                "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+                "stats": {
+                  "rec": 79.85157198,
+                  "rec_yd": 1115.176636,
+                  "rec_td": 8.174412885,
+                  "fum": 0.894337606
+                },
+                "assumed_zeros": {
+                  "two_pt": "ESPN adapter does not currently map two-point projections"
+                },
+                "expected_games": 17.0,
+                "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+                "incorporated_events": []
+              },
+              "reason": "Missing applicable projection stats: rush_td, rush_yd"
+            }
+          ],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 1,
+          "group_points": {
+            "cbs": 244.8
+          },
+          "adjustments": [],
+          "projection_sd": null,
+          "league_points": 244.8,
+          "expected_games_by_source": {
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 28.21; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b110% analyst projection stress (\u00b124.48 points): Preferred pick changes to Kenneth Walker III in the lower case. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "analyst_10_percent_stress",
+          "baseline_projection": 244.8,
+          "magnitude_points": 24.48,
+          "baseline_top_choice": "espn:4426354",
+          "top_choice_reverses": true,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 220.32,
+              "input_shift_points": -24.48,
+              "top_choice": "espn:4567048",
+              "top_name": "Kenneth Walker III",
+              "reversed": true,
+              "candidate_rank": 8,
+              "runner_up_gap": 2.3
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 269.28,
+              "input_shift_points": 24.48,
+              "top_choice": "espn:4426354",
+              "top_name": "George Pickens",
+              "reversed": false,
+              "candidate_rank": 1,
+              "runner_up_gap": 38.28
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "projection": 244.8
+      },
+      {
+        "player_id": "espn:4567048",
+        "name": "Kenneth Walker III",
+        "pos": "RB",
+        "policy_score": 68.4,
+        "roster_benefit": {
+          "starter_points": 68.4,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 24.55,
+        "projection_disagreement": 9.084908120369494,
+        "source_count": 3.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4567048",
+          "name": "Kenneth Walker III",
+          "accepted": [
+            {
+              "source": "espn",
+              "independence_group": "espn",
+              "independence_verified": true,
+              "season": 2026,
+              "period": "season",
+              "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+              "updated_at": null,
+              "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+              "stats": {
+                "rush_yd": 1239.263187,
+                "rush_td": 9.000290613,
+                "rec": 48.2838044,
+                "rec_yd": 376.0276182,
+                "rec_td": 1.67781158,
+                "fum": 0.887779484
+              },
+              "assumed_zeros": {
+                "two_pt": "ESPN adapter does not currently map two-point projections"
+              },
+              "expected_games": 17.0,
+              "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+              "incorporated_events": [],
+              "league_points": 248.0,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections"
+              ]
+            },
+            {
+              "source": "fantasypros",
+              "independence_group": "fantasypros",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.fantasypros.com/nfl/projections/rb.php?week=draft&scoring=HALF&year=2026",
+              "fetched_at": "2026-09-07T04:00:15.824062+00:00",
+              "updated_at": null,
+              "provider_updated_text": "2026-09-06 03:07:42",
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rush_yd": "1,174.1",
+                "rush_td": "8.7",
+                "rec": "45.3",
+                "rec_yd": "346.9",
+                "rec_td": "1.5",
+                "fum": "0.9"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": false,
+              "constituents": null,
+              "transformation": {
+                "position": "RB",
+                "column_indices": {
+                  "2": "rush_yd",
+                  "3": "rush_td",
+                  "4": "rec",
+                  "5": "rec_yd",
+                  "6": "rec_td",
+                  "7": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "league_points": 234.1,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Source independence is unverified; do not claim independent consensus",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            },
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/RB/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.255159+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rush_yd": "1205",
+                "rush_td": "8",
+                "rec": "47",
+                "rec_yd": "360",
+                "rec_td": "0",
+                "fum": "1"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "RB",
+                "column_indices": {
+                  "3": "rush_yd",
+                  "5": "rush_td",
+                  "7": "rec",
+                  "8": "rec_yd",
+                  "11": "rec_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 226.0,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections",
+            "Source update time unknown; fetch time is not content freshness",
+            "Source independence is unverified; do not claim independent consensus",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 2,
+          "group_points": {
+            "espn": 248.0,
+            "fantasypros": 234.1,
+            "cbs": 226.0
+          },
+          "adjustments": [],
+          "projection_sd": 9.084908120369494,
+          "league_points": 236.0,
+          "expected_games_by_source": {
+            "espn": 17.0,
+            "fantasypros": null,
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 24.55; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b19.085 points from source disagreement: Preferred pick is unchanged in these two cases. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "source_disagreement",
+          "baseline_projection": 236.0,
+          "magnitude_points": 9.085,
+          "baseline_top_choice": "espn:4426354",
+          "top_choice_reverses": false,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 226.915,
+              "input_shift_points": -9.085,
+              "top_choice": "espn:4426354",
+              "top_name": "George Pickens",
+              "reversed": false,
+              "candidate_rank": 8,
+              "runner_up_gap": 16.1
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 245.085,
+              "input_shift_points": 9.085,
+              "top_choice": "espn:4426354",
+              "top_name": "George Pickens",
+              "reversed": false,
+              "candidate_rank": 2,
+              "runner_up_gap": 4.715
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "projection": 236.0
+      },
+      {
+        "player_id": "espn:4428331",
+        "name": "Rashee Rice",
+        "pos": "WR",
+        "policy_score": 66.1,
+        "roster_benefit": {
+          "starter_points": 66.1,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 29.32,
+        "projection_disagreement": 16.05705106452891,
+        "source_count": 3.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4428331",
+          "name": "Rashee Rice",
+          "accepted": [
+            {
+              "source": "espn",
+              "independence_group": "espn",
+              "independence_verified": true,
+              "season": 2026,
+              "period": "season",
+              "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+              "updated_at": null,
+              "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+              "stats": {
+                "rush_yd": 42.8276301,
+                "rush_td": 0.589459909,
+                "rec": 92.47566278,
+                "rec_yd": 1081.610388,
+                "rec_td": 8.692261969,
+                "fum": 1.111701716
+              },
+              "assumed_zeros": {
+                "two_pt": "ESPN adapter does not currently map two-point projections"
+              },
+              "expected_games": 17.0,
+              "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+              "incorporated_events": [],
+              "league_points": 212.1,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections"
+              ]
+            },
+            {
+              "source": "fantasypros",
+              "independence_group": "fantasypros",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.fantasypros.com/nfl/projections/wr.php?week=draft&scoring=HALF&year=2026",
+              "fetched_at": "2026-09-07T04:00:16.318140+00:00",
+              "updated_at": null,
+              "provider_updated_text": "2026-09-06 03:07:50",
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "99.9",
+                "rec_yd": "1,134.1",
+                "rec_td": "9.3",
+                "rush_yd": "19.5",
+                "rush_td": "0.6",
+                "fum": "0.6"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": false,
+              "constituents": null,
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "1": "rec",
+                  "2": "rec_yd",
+                  "3": "rec_td",
+                  "5": "rush_yd",
+                  "6": "rush_td",
+                  "7": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "league_points": 223.5,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Source independence is unverified; do not claim independent consensus",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            },
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/WR/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.492452+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "104",
+                "rec_yd": "1049",
+                "rec_td": "13",
+                "rush_yd": "35",
+                "rush_td": "2",
+                "fum": "0"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "3": "rec",
+                  "4": "rec_yd",
+                  "7": "rec_td",
+                  "9": "rush_yd",
+                  "11": "rush_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 250.4,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections",
+            "Source update time unknown; fetch time is not content freshness",
+            "Source independence is unverified; do not claim independent consensus",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 2,
+          "group_points": {
+            "espn": 212.1,
+            "fantasypros": 223.5,
+            "cbs": 250.4
+          },
+          "adjustments": [],
+          "projection_sd": 16.05705106452891,
+          "league_points": 228.7,
+          "expected_games_by_source": {
+            "espn": 17.0,
+            "fantasypros": null,
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 29.32; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b116.057 points from source disagreement: Preferred pick is unchanged in these two cases. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "source_disagreement",
+          "baseline_projection": 228.7,
+          "magnitude_points": 16.057,
+          "baseline_top_choice": "espn:4426354",
+          "top_choice_reverses": false,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 212.643,
+              "input_shift_points": -16.057,
+              "top_choice": "espn:4426354",
+              "top_name": "George Pickens",
+              "reversed": false,
+              "candidate_rank": 12,
+              "runner_up_gap": 13.8
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 244.757,
+              "input_shift_points": 16.057,
+              "top_choice": "espn:4426354",
+              "top_name": "George Pickens",
+              "reversed": false,
+              "candidate_rank": 2,
+              "runner_up_gap": 0.043
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "projection": 228.7
+      }
+    ],
+    "roster_analysis": {
+      "counts": {
+        "QB": 0,
+        "RB": 1,
+        "WR": 0,
+        "TE": 0,
+        "K": 0,
+        "DEF": 0
+      },
+      "requirements": {
+        "QB": 1,
+        "RB": 2,
+        "WR": 2,
+        "TE": 1,
+        "FLEX": 1,
+        "SUPERFLEX": 0,
+        "K": 1,
+        "DEF": 1,
+        "bench": 6
+      },
+      "value": {
+        "policy": "roster_v2",
+        "total": 1622.6999999999998,
+        "starter_points": 1622.6999999999998,
+        "coverage_points": 0.0,
+        "upside_points": 0.0,
+        "starters": [
+          "espn:4242335"
+        ],
+        "horizon_games": 17.0,
+        "assumptions": [
+          "Coverage is an absence-scenario utility increment over waiver fallback, not a win or expected-total forecast.",
+          "Expected season totals are not discounted again; rate estimates divide totals by expected_games.",
+          "Reserves assumed available outside known byes; overlapping injuries use a deterministic stress-test sample, not learned correlations.",
+          "Unknown expected_games: assume 1 missed games over 17; sensitivity required.",
+          "Unknown outcome variance receives no upside bonus; ADP spread and source disagreement are not performance variance.",
+          "Waiver fallback uses positional replacement cutoff; override valuation.waiver_points for league-specific waiver depth."
+        ],
+        "scenario_count": 1
+      }
+    },
+    "roster": [
+      "Jonathan Taylor"
+    ]
+  },
+  "after": {
+    "revision": 19,
+    "data_revision": "f80ff361d4e1e5c953e2af9887753c9a827be347e74c0d1b683bdfa37555eb1b",
+    "current_pick": 20,
+    "for_pick": 20,
+    "mode": "limited_projection",
+    "engine": "shared fast deterministic policy",
+    "warnings": [
+      "536 players lack eligible projection/price/position data. They remain recordable but are excluded from numerical recommendations and opponent simulations; coverage and wait comparisons are incomplete."
+    ],
+    "candidates": [
+      {
+        "player_id": "espn:4567048",
+        "name": "Kenneth Walker III",
+        "pos": "RB",
+        "policy_score": 68.4,
+        "roster_benefit": {
+          "starter_points": 68.4,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 24.55,
+        "projection_disagreement": 9.084908120369494,
+        "source_count": 3.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4567048",
+          "name": "Kenneth Walker III",
+          "accepted": [
+            {
+              "source": "espn",
+              "independence_group": "espn",
+              "independence_verified": true,
+              "season": 2026,
+              "period": "season",
+              "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+              "updated_at": null,
+              "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+              "stats": {
+                "rush_yd": 1239.263187,
+                "rush_td": 9.000290613,
+                "rec": 48.2838044,
+                "rec_yd": 376.0276182,
+                "rec_td": 1.67781158,
+                "fum": 0.887779484
+              },
+              "assumed_zeros": {
+                "two_pt": "ESPN adapter does not currently map two-point projections"
+              },
+              "expected_games": 17.0,
+              "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+              "incorporated_events": [],
+              "league_points": 248.0,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections"
+              ]
+            },
+            {
+              "source": "fantasypros",
+              "independence_group": "fantasypros",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.fantasypros.com/nfl/projections/rb.php?week=draft&scoring=HALF&year=2026",
+              "fetched_at": "2026-09-07T04:00:15.824062+00:00",
+              "updated_at": null,
+              "provider_updated_text": "2026-09-06 03:07:42",
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rush_yd": "1,174.1",
+                "rush_td": "8.7",
+                "rec": "45.3",
+                "rec_yd": "346.9",
+                "rec_td": "1.5",
+                "fum": "0.9"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": false,
+              "constituents": null,
+              "transformation": {
+                "position": "RB",
+                "column_indices": {
+                  "2": "rush_yd",
+                  "3": "rush_td",
+                  "4": "rec",
+                  "5": "rec_yd",
+                  "6": "rec_td",
+                  "7": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "league_points": 234.1,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Source independence is unverified; do not claim independent consensus",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            },
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/RB/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.255159+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rush_yd": "1205",
+                "rush_td": "8",
+                "rec": "47",
+                "rec_yd": "360",
+                "rec_td": "0",
+                "fum": "1"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "RB",
+                "column_indices": {
+                  "3": "rush_yd",
+                  "5": "rush_td",
+                  "7": "rec",
+                  "8": "rec_yd",
+                  "11": "rec_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 226.0,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections",
+            "Source update time unknown; fetch time is not content freshness",
+            "Source independence is unverified; do not claim independent consensus",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 2,
+          "group_points": {
+            "espn": 248.0,
+            "fantasypros": 234.1,
+            "cbs": 226.0
+          },
+          "adjustments": [],
+          "projection_sd": 9.084908120369494,
+          "league_points": 236.0,
+          "expected_games_by_source": {
+            "espn": 17.0,
+            "fantasypros": null,
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 24.55; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b19.085 points from source disagreement: Preferred pick changes to Rashee Rice in the lower case. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "source_disagreement",
+          "baseline_projection": 236.0,
+          "magnitude_points": 9.085,
+          "baseline_top_choice": "espn:4567048",
+          "top_choice_reverses": true,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 226.915,
+              "input_shift_points": -9.085,
+              "top_choice": "espn:4428331",
+              "top_name": "Rashee Rice",
+              "reversed": true,
+              "candidate_rank": 7,
+              "runner_up_gap": 1.7
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 245.085,
+              "input_shift_points": 9.085,
+              "top_choice": "espn:4567048",
+              "top_name": "Kenneth Walker III",
+              "reversed": false,
+              "candidate_rank": 1,
+              "runner_up_gap": 11.385
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "wait_comparison": {
+          "trials": 8,
+          "next_pick": 29,
+          "take_now_then_next_mean_utility": 760.025,
+          "next_choices": {
+            "Chris Olave": 4,
+            "Rashee Rice": 2,
+            "Javonte Williams": 2
+          },
+          "other_candidates_surviving_trials": {
+            "espn:4428331": 2,
+            "espn:4361370": 5
+          },
+          "assumptions": "Conditional on confirmed rival rosters and platform ADP-noise prior. Eight trials are an illustrative scenario, not calibrated survival probabilities. No outcome uncertainty is sampled.",
+          "best_pivot_id": "espn:4428331",
+          "paired_utility_difference": 7.475,
+          "sampling_standard_error": 0.413
+        },
+        "projection": 236.0
+      },
+      {
+        "player_id": "espn:4428331",
+        "name": "Rashee Rice",
+        "pos": "WR",
+        "policy_score": 66.1,
+        "roster_benefit": {
+          "starter_points": 66.1,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 29.32,
+        "projection_disagreement": 16.05705106452891,
+        "source_count": 3.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4428331",
+          "name": "Rashee Rice",
+          "accepted": [
+            {
+              "source": "espn",
+              "independence_group": "espn",
+              "independence_verified": true,
+              "season": 2026,
+              "period": "season",
+              "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+              "updated_at": null,
+              "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+              "stats": {
+                "rush_yd": 42.8276301,
+                "rush_td": 0.589459909,
+                "rec": 92.47566278,
+                "rec_yd": 1081.610388,
+                "rec_td": 8.692261969,
+                "fum": 1.111701716
+              },
+              "assumed_zeros": {
+                "two_pt": "ESPN adapter does not currently map two-point projections"
+              },
+              "expected_games": 17.0,
+              "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+              "incorporated_events": [],
+              "league_points": 212.1,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections"
+              ]
+            },
+            {
+              "source": "fantasypros",
+              "independence_group": "fantasypros",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.fantasypros.com/nfl/projections/wr.php?week=draft&scoring=HALF&year=2026",
+              "fetched_at": "2026-09-07T04:00:16.318140+00:00",
+              "updated_at": null,
+              "provider_updated_text": "2026-09-06 03:07:50",
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "99.9",
+                "rec_yd": "1,134.1",
+                "rec_td": "9.3",
+                "rush_yd": "19.5",
+                "rush_td": "0.6",
+                "fum": "0.6"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": false,
+              "constituents": null,
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "1": "rec",
+                  "2": "rec_yd",
+                  "3": "rec_td",
+                  "5": "rush_yd",
+                  "6": "rush_td",
+                  "7": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "league_points": 223.5,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Source independence is unverified; do not claim independent consensus",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            },
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/WR/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.492452+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "104",
+                "rec_yd": "1049",
+                "rec_td": "13",
+                "rush_yd": "35",
+                "rush_td": "2",
+                "fum": "0"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "3": "rec",
+                  "4": "rec_yd",
+                  "7": "rec_td",
+                  "9": "rush_yd",
+                  "11": "rush_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 250.4,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: ESPN adapter does not currently map two-point projections",
+            "Source update time unknown; fetch time is not content freshness",
+            "Source independence is unverified; do not claim independent consensus",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 2,
+          "group_points": {
+            "espn": 212.1,
+            "fantasypros": 223.5,
+            "cbs": 250.4
+          },
+          "adjustments": [],
+          "projection_sd": 16.05705106452891,
+          "league_points": 228.7,
+          "expected_games_by_source": {
+            "espn": 17.0,
+            "fantasypros": null,
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 29.32; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b116.057 points from source disagreement: Preferred pick changes to Rashee Rice in the higher case. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "source_disagreement",
+          "baseline_projection": 228.7,
+          "magnitude_points": 16.057,
+          "baseline_top_choice": "espn:4567048",
+          "top_choice_reverses": true,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 212.643,
+              "input_shift_points": -16.057,
+              "top_choice": "espn:4567048",
+              "top_name": "Kenneth Walker III",
+              "reversed": false,
+              "candidate_rank": 11,
+              "runner_up_gap": 4.0
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 244.757,
+              "input_shift_points": 16.057,
+              "top_choice": "espn:4428331",
+              "top_name": "Rashee Rice",
+              "reversed": true,
+              "candidate_rank": 1,
+              "runner_up_gap": 13.757
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "wait_comparison": {
+          "trials": 8,
+          "next_pick": 29,
+          "take_now_then_next_mean_utility": 752.55,
+          "next_choices": {
+            "Chris Olave": 5,
+            "Javonte Williams": 3
+          },
+          "other_candidates_surviving_trials": {
+            "espn:4567048": 0,
+            "espn:4361370": 5
+          },
+          "assumptions": "Conditional on confirmed rival rosters and platform ADP-noise prior. Eight trials are an illustrative scenario, not calibrated survival probabilities. No outcome uncertainty is sampled.",
+          "best_pivot_id": "espn:4567048",
+          "paired_utility_difference": -7.475,
+          "sampling_standard_error": 0.413
+        },
+        "projection": 228.7
+      },
+      {
+        "player_id": "espn:4361370",
+        "name": "Chris Olave",
+        "pos": "WR",
+        "policy_score": 64.4,
+        "roster_benefit": {
+          "starter_points": 64.4,
+          "coverage_points": 0.0,
+          "upside_points": 0.0
+        },
+        "adp": 29.57,
+        "projection_disagreement": 14.400000000000006,
+        "source_count": 2.0,
+        "evidence_mode": "limited",
+        "evidence": {
+          "player_id": "espn:4361370",
+          "name": "Chris Olave",
+          "accepted": [
+            {
+              "source": "fantasypros",
+              "independence_group": "fantasypros",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.fantasypros.com/nfl/projections/wr.php?week=draft&scoring=HALF&year=2026",
+              "fetched_at": "2026-09-07T04:00:16.318140+00:00",
+              "updated_at": null,
+              "provider_updated_text": "2026-09-06 03:07:50",
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "96.2",
+                "rec_yd": "1,183.8",
+                "rec_td": "7.7",
+                "rush_yd": "5.6",
+                "rush_td": "0.0",
+                "fum": "0.3"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": false,
+              "constituents": null,
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "1": "rec",
+                  "2": "rec_yd",
+                  "3": "rec_td",
+                  "5": "rush_yd",
+                  "6": "rush_td",
+                  "7": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "league_points": 212.6,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Source independence is unverified; do not claim independent consensus",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            },
+            {
+              "source": "cbs",
+              "independence_group": "cbs",
+              "season": 2026,
+              "period": "season",
+              "url": "https://www.cbssports.com/fantasy/football/stats/WR/2026/season/projections/nonppr/",
+              "fetched_at": "2026-09-07T04:00:17.492452+00:00",
+              "updated_at": null,
+              "provider_updated_text": null,
+              "update_time_note": "Provider timestamp timezone is unknown; not promoted to a verified UTC update",
+              "stats": {
+                "rec": "100",
+                "rec_yd": "1254",
+                "rec_td": "11",
+                "rush_yd": "0",
+                "rush_td": "0",
+                "fum": "0"
+              },
+              "assumed_zeros": {
+                "two_pt": "Source table does not publish two-point projections; explicit zero approximation"
+              },
+              "independence_verified": true,
+              "constituents": [
+                "cbs"
+              ],
+              "transformation": {
+                "position": "WR",
+                "column_indices": {
+                  "3": "rec",
+                  "4": "rec_yd",
+                  "7": "rec_td",
+                  "9": "rush_yd",
+                  "11": "rush_td",
+                  "12": "fum"
+                },
+                "vendor_FPTS_ignored": true
+              },
+              "expected_games": "17",
+              "league_points": 241.4,
+              "warnings": [
+                "Source update time unknown; fetch time is not content freshness",
+                "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation"
+              ]
+            }
+          ],
+          "rejected": [
+            {
+              "record": {
+                "source": "espn",
+                "independence_group": "espn",
+                "independence_verified": true,
+                "season": 2026,
+                "period": "season",
+                "fetched_at": "2026-09-07T04:00:14.326270+00:00",
+                "updated_at": null,
+                "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info",
+                "stats": {
+                  "rec": 91.17244034,
+                  "rec_yd": 1195.04388,
+                  "rec_td": 6.60969841,
+                  "fum": 0.621540054
+                },
+                "assumed_zeros": {
+                  "two_pt": "ESPN adapter does not currently map two-point projections"
+                },
+                "expected_games": 17.0,
+                "stat_definition_reference": "https://github.com/cwendt94/espn-api/blob/master/espn_api/football/constant.py",
+                "incorporated_events": []
+              },
+              "reason": "Missing applicable projection stats: rush_td, rush_yd"
+            }
+          ],
+          "warnings": [
+            "Source update time unknown; fetch time is not content freshness",
+            "Source independence is unverified; do not claim independent consensus",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "Source update time unknown; fetch time is not content freshness",
+            "Assumed zero for two_pt: Source table does not publish two-point projections; explicit zero approximation",
+            "ADP spread unavailable; engine may use an explicitly assumed price spread",
+            "Player expected games not established; provider conventions retained without assuming 17 games"
+          ],
+          "mode": "limited",
+          "verified_independent_sources": 1,
+          "group_points": {
+            "fantasypros": 212.6,
+            "cbs": 241.4
+          },
+          "adjustments": [],
+          "projection_sd": 14.400000000000006,
+          "league_points": 227.0,
+          "expected_games_by_source": {
+            "fantasypros": null,
+            "cbs": "17"
+          }
+        },
+        "explanation": "Shared roster policy weighs usable starters, coverage and upside; policy score is not a forecast of points or win probability.",
+        "wait_risk": "Price context only: ADP 29.57; next own pick 29. No calibrated availability probability.",
+        "sensitivity": "\u00b114.4 points from source disagreement: Preferred pick changes to Chris Olave in the higher case. This is not a confidence interval.",
+        "sensitivity_cases": {
+          "method": "source_disagreement",
+          "baseline_projection": 227.0,
+          "magnitude_points": 14.4,
+          "baseline_top_choice": "espn:4567048",
+          "top_choice_reverses": true,
+          "scenarios": [
+            {
+              "direction": "lower",
+              "changed_projection": 212.6,
+              "input_shift_points": -14.4,
+              "top_choice": "espn:4567048",
+              "top_name": "Kenneth Walker III",
+              "reversed": false,
+              "candidate_rank": 11,
+              "runner_up_gap": 2.3
+            },
+            {
+              "direction": "higher",
+              "changed_projection": 241.4,
+              "input_shift_points": 14.4,
+              "top_choice": "espn:4361370",
+              "top_name": "Chris Olave",
+              "reversed": true,
+              "candidate_rank": 1,
+              "runner_up_gap": 10.4
+            }
+          ],
+          "interpretation": "One-at-a-time change in this player only; all other inputs and availability fixed. Source dispersion is disagreement, not outcome variance; the fallback 10% is an analyst assumption. Neither is a statistical confidence interval or an exhaustive risk test."
+        },
+        "wait_comparison": {
+          "trials": 8,
+          "next_pick": 29,
+          "take_now_then_next_mean_utility": 751.987,
+          "next_choices": {
+            "Javonte Williams": 5,
+            "Rashee Rice": 3
+          },
+          "other_candidates_surviving_trials": {
+            "espn:4567048": 0,
+            "espn:4428331": 3
+          },
+          "assumptions": "Conditional on confirmed rival rosters and platform ADP-noise prior. Eight trials are an illustrative scenario, not calibrated survival probabilities. No outcome uncertainty is sampled.",
+          "best_pivot_id": "espn:4567048",
+          "paired_utility_difference": -8.038,
+          "sampling_standard_error": 0.365
+        },
+        "projection": 227.0
+      }
+    ],
+    "roster_analysis": {
+      "counts": {
+        "QB": 0,
+        "RB": 1,
+        "WR": 0,
+        "TE": 0,
+        "K": 0,
+        "DEF": 0
+      },
+      "requirements": {
+        "QB": 1,
+        "RB": 2,
+        "WR": 2,
+        "TE": 1,
+        "FLEX": 1,
+        "SUPERFLEX": 0,
+        "K": 1,
+        "DEF": 1,
+        "bench": 6
+      },
+      "value": {
+        "policy": "roster_v2",
+        "total": 1622.6999999999998,
+        "starter_points": 1622.6999999999998,
+        "coverage_points": 0.0,
+        "upside_points": 0.0,
+        "starters": [
+          "espn:4242335"
+        ],
+        "horizon_games": 17.0,
+        "assumptions": [
+          "Coverage is an absence-scenario utility increment over waiver fallback, not a win or expected-total forecast.",
+          "Expected season totals are not discounted again; rate estimates divide totals by expected_games.",
+          "Reserves assumed available outside known byes; overlapping injuries use a deterministic stress-test sample, not learned correlations.",
+          "Unknown expected_games: assume 1 missed games over 17; sensitivity required.",
+          "Unknown outcome variance receives no upside bonus; ADP spread and source disagreement are not performance variance.",
+          "Waiver fallback uses positional replacement cutoff; override valuation.waiver_points for league-specific waiver depth."
+        ],
+        "scenario_count": 1
+      }
+    },
+    "roster": [
+      "Jonathan Taylor"
+    ]
+  },
+  "picks": [
+    {
+      "pick": 1,
+      "owner": 1,
+      "player_id": "espn:4429795",
+      "name": "Jahmyr Gibbs",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 2,
+      "owner": 2,
+      "player_id": "espn:4430807",
+      "name": "Bijan Robinson",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 3,
+      "owner": 3,
+      "player_id": "espn:4362628",
+      "name": "Ja'Marr Chase",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 4,
+      "owner": 4,
+      "player_id": "espn:4426515",
+      "name": "Puka Nacua",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 5,
+      "owner": 5,
+      "player_id": "espn:4242335",
+      "name": "Jonathan Taylor",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 6,
+      "owner": 6,
+      "player_id": "espn:4430878",
+      "name": "Jaxon Smith-Njigba",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 7,
+      "owner": 7,
+      "player_id": "espn:3117251",
+      "name": "Christian McCaffrey",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 8,
+      "owner": 8,
+      "player_id": "espn:4374302",
+      "name": "Amon-Ra St. Brown",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 9,
+      "owner": 9,
+      "player_id": "espn:4379399",
+      "name": "James Cook III",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 10,
+      "owner": 10,
+      "player_id": "espn:4241389",
+      "name": "CeeDee Lamb",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 11,
+      "owner": 11,
+      "player_id": "espn:4262921",
+      "name": "Justin Jefferson",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 12,
+      "owner": 12,
+      "player_id": "espn:4429160",
+      "name": "De'Von Achane",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 13,
+      "owner": 12,
+      "player_id": "espn:3929630",
+      "name": "Saquon Barkley",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 14,
+      "owner": 11,
+      "player_id": "espn:3043078",
+      "name": "Derrick Henry",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 15,
+      "owner": 10,
+      "player_id": "espn:4362238",
+      "name": "Chase Brown",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 16,
+      "owner": 9,
+      "player_id": "espn:4685382",
+      "name": "Omarion Hampton",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 17,
+      "owner": 8,
+      "player_id": "espn:3918298",
+      "name": "Josh Allen",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 18,
+      "owner": 7,
+      "player_id": "espn:4426502",
+      "name": "Drake London",
+      "keeper": false,
+      "unknown": false
+    },
+    {
+      "pick": 19,
+      "owner": 6,
+      "player_id": "espn:4426354",
+      "name": "George Pickens",
+      "keeper": false,
+      "unknown": false
+    }
+  ],
+  "input_sha256": {
+    "league.json": "050e2e5e4d6347df4334392d33791dd4596b0f037f5315f4c068ab8e0e200e9a",
+    "evidence.json": "39af9aa34fe183a6b3da3f6621b64e3c5b6dd34b2a6354dcbc0a251341b47131"
+  }
+}
