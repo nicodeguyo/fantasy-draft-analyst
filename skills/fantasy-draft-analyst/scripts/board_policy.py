@@ -5,7 +5,7 @@ an evaluated plan_path target. All candidate estimates remain frozen before the 
 """
 from collections import Counter
 
-POLICY_VERSION = 'saved-board-v1'
+POLICY_VERSION = 'saved-board-v2'
 POLICY_DESCRIPTION = ('Follow the first available eligible row, including the more rows. '
     'Skip avoid-list players and filled position caps (QB 2 plus superflex, RB 6, WR 7, TE 2, K 1, DEF 1). '
     'When remaining picks equal unfilled starting slots, choose only a player who fills one. '
@@ -39,6 +39,13 @@ def row_groups(sim, notes, players, pk, top_n=5, matrix=None):
         rows.append({'name': name, 'pos': p['pos'], 'proj': round(proj),
                      'surplus': round(proj - sim['replacement'].get(p['pos'], 0)),
                      'there': matrix.get(name, {}).get(pk), 'watch': True})
+    # Availability exports also contain watch/earlier-target reference rows at 0%.
+    # Beyond rollouts, use the same 15% floor as the simulator's candidate table.
+    # Apply after notes are merged so prose cannot reintroduce a known-gone player.
+    if not pv:
+        rows = [r for r in rows if r.get('there') is None or r['there'] >= 15]
+        if target and not any(r['name'] == target for r in rows):
+            target = None
     rows.sort(key=lambda r: (r['name'] != target, r.get('value') is None if pv else False,
                              -r.get('value', r.get('surplus', 0))))
     visible, hidden = rows[:top_n], rows[top_n:]

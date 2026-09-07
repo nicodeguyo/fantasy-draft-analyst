@@ -6,7 +6,7 @@
 
 <p align="center">
 <b><a href="#setup">Get the skill</a></b> ·
-<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP</a> ·
+<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP (v2.0.1)</a> ·
 <a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">See it in action</a>
 </p>
 

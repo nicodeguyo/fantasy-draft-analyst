@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — correct late-round availability
+
+- Fixed late-round recommendations promoting early targets and watched players despite zero modeled availability. Tables beyond the rollout horizon now apply the simulator’s existing 15% availability floor, including expanded rows and notes-added players with known availability.
+- Added current-pick availability to late rows and renamed “vs. free” to “vs. starter”: the metric is a projected starting-lineup benchmark, not waiver value.
+- Added regression tests covering unavailable reference rows, notes reintroducing players, and preservation of evaluated early-round falls. Rebuilt the public sample and reran its 800-draft benchmark.
+- **Upgrade:** replace the installed v2.0.0 skill with v2.0.1 and rebuild your HTML board using your saved league, players, simulation and notes. Existing HTML files do not update automatically. This fix does not require a new player-data download or simulation.
+
 ## 2.0.0 — simulate draft continuations, deliver a usable plan
 
 For each candidate at a pick, the engine simulates the remaining draft and scores one best legal starting lineup using saved season projections. These continuations are called rollouts. They help explore roster construction instead of relying only on a player's isolated rank or projected surplus.

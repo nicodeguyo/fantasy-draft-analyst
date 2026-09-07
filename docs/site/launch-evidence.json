@@ -11,10 +11,10 @@
     "examples/sample-league/players.csv": "bdfecc09a0a841d30f59b0ae4a7670dad54f8f4ff7f97b0552d4cde59babd25d",
     "examples/sample-league/sim.json": "f08008059dd138b1d4e3ef3d3188c89108a31c008f645d62213df3f4028d39e0",
     "examples/sample-league/notes.json": "e15a9a872e2a00cf0355cccabaa5ee449055aeec7619111118142205c52a30e8",
-    "examples/sample-league/benchmark.json": "c12481fdb3805ca7ce731dee27dfc966360c9998bcf09d010a0523df8693a0af",
+    "examples/sample-league/benchmark.json": "7b24d72bd2cf5fc252464a09ccf650b32028c113dddf6f82d3ce34fb95d5d6b4",
     "docs/site/pick-comparison.json": "22f7a9c1c96f98f55ebd2e6801f733f85f4b6b641a7d2644f5f7c398021eec11",
     "skills/fantasy-draft-analyst/scripts/draft_sim.py": "7f65a89939f9112344ea5accf915950b2afb6eb6ad43ec672e8246f99287812d",
-    "skills/fantasy-draft-analyst/scripts/build_board.py": "e044beb5906555f30cf3c221e9dd6e8a29727349e007d56e0f85852283492d58",
+    "skills/fantasy-draft-analyst/scripts/build_board.py": "5a799e596a229e5a2be140057a38bd1c3a540c615c6e0327126e0f1d4fa7aea2",
     "scripts/compare_policies.py": "75e5830a47fac67436fa1d1849e7c3dc50d48ac7cf8058acece36abc4ba4ee4b"
   },
   "regeneration_commands": [

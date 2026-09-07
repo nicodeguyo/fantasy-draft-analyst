@@ -3,7 +3,7 @@ name: fantasy-draft-analyst
 description: Build a fantasy football draft plan using league-specific projections, simulated draft continuations, pre-draft availability, keeper scenarios, and an interactive HTML board. Use for draft preparation, keeper decisions, pick comparisons, tiers, shortlist research, and draft-board generation. Supports snake or linear redraft and single-keeper leagues with configurable scoring and lineups.
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   author: "Nico Neugebauer"
   homepage: "https://github.com/nicodeguyo/fantasy-draft-analyst"
 ---

@@ -8,7 +8,7 @@
   ],
   "horizon_probes": 300,
   "top": 5,
-  "policy_version": "saved-board-v1",
+  "policy_version": "saved-board-v2",
   "policy_description": "Follow the first available eligible row, including the more rows. Skip avoid-list players and filled position caps (QB 2 plus superflex, RB 6, WR 7, TE 2, K 1, DEF 1). When remaining picks equal unfilled starting slots, choose only a player who fills one. If no row qualifies, use the fallback order below. Marking picks does not recalculate values.",
   "complete_lineups": {
     "Noisy ADP-based draft bot": 800,
@@ -25,8 +25,8 @@
     "sim": "f08008059dd138b1d4e3ef3d3188c89108a31c008f645d62213df3f4028d39e0",
     "notes": "e15a9a872e2a00cf0355cccabaa5ee449055aeec7619111118142205c52a30e8",
     "benchmark": "75e5830a47fac67436fa1d1849e7c3dc50d48ac7cf8058acece36abc4ba4ee4b",
-    "board_policy": "145d8819f58cdb94965fd6289cac1ce2c6a1910aa2d0f6f71e7b1c0aa33246d4",
-    "renderer": "e044beb5906555f30cf3c221e9dd6e8a29727349e007d56e0f85852283492d58",
+    "board_policy": "32f7d129584d625015c28937005f76f0f6b401c8c8c999bb5fe2bf380f2cd65e",
+    "renderer": "5a799e596a229e5a2be140057a38bd1c3a540c615c6e0327126e0f1d4fa7aea2",
     "simulator": "7f65a89939f9112344ea5accf915950b2afb6eb6ad43ec672e8246f99287812d"
   },
   "policies": [

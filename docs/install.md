@@ -1,5 +1,7 @@
 # Make your draft plan
 
+**Already using v2.0.0?** Download the current ZIP and replace your installed skill. Version 2.0.1 fixes unavailable early players appearing in late-round recommendations. Ask Claude to rebuild your board from the saved league, player, simulation and notes files using the updated skill; existing HTML boards do not update automatically.
+
 First, [explore the sample demo](https://nicodeguyo.github.io/fantasy-draft-analyst/). No account or installation is needed to try it. Your own plan requires an assistant that can read the instructions, research public data, and run the bundled Python scripts.
 
 ## Claude in your browser (recommended)

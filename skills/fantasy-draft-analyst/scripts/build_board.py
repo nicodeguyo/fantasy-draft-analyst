@@ -342,8 +342,8 @@ def main():
         note = r.get("note") or ""
         vhtml = (f'<span class="pval" title="Projected final starting lineup if you take him here">'
                  f'{round(val):,}</span>') if val is not None else (
-                 f'<span class="psur" title="Points over a free agent at his position">{vor:+d}'
-                 f'<s>vs. free</s></span>')
+                 f'<span class="psur" title="Points above the model starting-lineup benchmark at his position">{vor:+d}'
+                 f'<s>vs. starter</s></span>')
         plan_rows.append(
             f'<div class="prow" data-name="{esc(name)}">'
             f'<div class="ppick"><b>{"KEEP" if is_keep else esc(pk)}</b>{f"<s>rd {rd}</s>" if rd else ""}</div>'
@@ -453,9 +453,10 @@ def main():
                             f'by {abs(d):.0f}">{d:+.0f}</span>')
         if (not mine_row) and val is not None and target_val is not None and (val - target_val) > 0:
             now_html += '<s class="iff">if he falls</s>'
+        here_label = (f" · here {here}%" if here is not None else " · availability unknown") if val is None else ""
         title = f' title="on the board at this pick in {here}% of drafts"' if here is not None else ""
         return (f'<tr data-name="{esc(name)}" class="{(dim + (" take" if mine_row else "")).strip()}"{title}><td class="pl"><div class="pcell">{badge(r["pos"])}<div class="pcol"><span class="nm">{esc(name)}</span>'
-                f'<span class="meta">{esc(team)} · adp {adp}{target_tag(name)}</span></div></div></td>'
+                f'<span class="meta">{esc(team)} · adp {adp}{here_label}{target_tag(name)}</span></div></div></td>'
                 f'<td class="n nowcell">{now_html}</td>'
                 f'<td class="n nextcell">{nx_html}</td>'
                 f'<td class="act">{me_btn(name)}</td></tr>')
@@ -489,12 +490,12 @@ def main():
         pb = f'<div class="planb"><b>If he\'s gone:</b> {esc(plan_b)}</div>' if plan_b else ""
         nxt_lbl = f'At {nxt}' if nxt else "Last pick"
         now_hd = ('<th class="n nowcell" title="Points of final starting lineup against the player this pick recommends">Now</th>'
-                  if pv else '<th class="n nowcell" title="Points over the worst player at his position anyone has to start">vs. free</th>')
+                  if pv else '<th class="n nowcell" title="Points over the worst player at his position anyone has to start">vs. starter</th>')
         blocks.append(f'''
     <div class="pick" id="p{pk}" data-pick="{pk}">
       <div class="pickhd">
         <div class="jersey"><b>{pk}</b><s>RD {l["round"]}</s></div>
-        <div class="picknote"><div class="decision">{esc(note) or ("Take the top row." if pv else "Best surplus on the board.")}</div>{pb}</div>
+        <div class="picknote"><div class="decision">{esc(note) or ("Take the top row." if pv else "Late-round options with at least 15% modeled availability. Fill missing starters, then bench depth.")}</div>{pb}</div>
       </div>
       <table>
         <thead><tr><th>Player</th>{now_hd}<th class="n nextcell" title="Pre-draft availability at this later pick across all model runs, not survival if you pass now">{esc(nxt_lbl)}</th><th class="act" title="Tap when you draft him">Got</th></tr></thead>
@@ -532,7 +533,7 @@ def main():
                     lis.append(f'<li data-name="{esc(n)}"><span class="pn">{esc(n)}{"<span class=ktag>KEEPER</span>" if n == keeper else target_tag(n)}</span>'
                                f'<span class="pa">{esc(team)} · adp {adp}</span><span class="pp">{round(proj)}</span><span class="ps{" strong" if vor >= 60 else ""}">{vor:+d}</span>{me_btn(n)}</li>')
                 bands.append(f'<div class="bandhd">{lbl}{bnote}</div><ul class="plist">{"".join(lis)}</ul>')
-        sub = tdata.get("subtitle") or f'vs. free = points over {pos}{sim["replacement_rank"].get(pos, "")} ({repl.get(pos, "")}), the last {pos} anyone has to start'
+        sub = tdata.get("subtitle") or f'vs. starter = points over {pos}{sim["replacement_rank"].get(pos, "")} ({repl.get(pos, "")}), the last {pos} anyone has to start'
         tier_html.append(f'<div class="tier" id="tier-{esc(pos)}"><div class="th"><span>{esc(POS_NAMES.get(pos, pos))}</span><em>{esc(sub)}</em></div><div class="band">{"".join(bands)}</div></div>')
 
     # ---------- shortlist / vegas ----------
@@ -770,7 +771,7 @@ def main():
 
   <a class="jump" id="jump" href="#picks">On the clock? Jump to your pick →</a>
   <details class="quick">
-    <summary><span><b class="lg">TAKE</b> = the pick · <b>+6</b> = better if he fell to you · <b>close</b> = small estimated gap · <b>amber %</b> = lower pre-draft availability later · <b>vs. free</b> = points over a free agent, used once the plan runs out</span><em>How this works</em></summary>
+    <summary><span><b class="lg">TAKE</b> = the pick · <b>+6</b> = better if he fell to you · <b>close</b> = small estimated gap · <b>amber %</b> = lower pre-draft availability later · <b>vs. starter</b> = points above a starting-lineup benchmark, not waiver value; used after rollouts end</span><em>How this works</em></summary>
     <ol>{howto_html}</ol>
   </details>
 
@@ -804,7 +805,7 @@ def main():
 
   <section id="tiers" class="pagebreak">
     <h2>Tier boards</h2>
-    <p class="sub">Grouped by real scoring gaps. A colored bar is a cliff — the point drop to the next tier. The right-hand number is <b>vs. free</b>: points above the worst player at that position anyone has to start. It shows where a position is deep; the pick tables above are what decide a pick.</p>
+    <p class="sub">Grouped by real scoring gaps. A colored bar is a cliff — the point drop to the next tier. The right-hand number is <b>vs. starter</b>: points above the worst player at that position anyone has to start. It shows where a position is deep; the pick tables above are what decide a pick.</p>
     <div class="tiertabs">{"".join(tier_tabs)}</div>
     {"".join(tier_html)}
   </section>
@@ -813,7 +814,7 @@ def main():
     <h2>Calls on your shortlist</h2>
     <p class="sub">{esc(notes.get("shortlist_sub", "The names you flagged, run through the same simulation."))}</p>
     <table class="verd">
-      <thead><tr><th>Player</th><th class="n" title="Points above the worst player at his position anyone has to start">vs. free</th><th>Call</th><th class="act"></th></tr></thead>
+      <thead><tr><th>Player</th><th class="n" title="Points above the worst player at his position anyone has to start">vs. starter</th><th>Call</th><th class="act"></th></tr></thead>
       <tbody>{"".join(sl)}</tbody>
     </table>
     {"<details class=notes><summary>What the betting market thinks</summary><ul class='vg'>" + vg + "</ul></details>" if vg else ""}
