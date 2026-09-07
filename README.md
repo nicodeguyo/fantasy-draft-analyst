@@ -6,7 +6,7 @@
 
 <p align="center">
 <b><a href="#setup">Get the skill</a></b> ·
-<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP (v2.0.1)</a> ·
+<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP (v3.0.0)</a> ·
 <a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">See it in action</a>
 </p>
 
@@ -16,21 +16,31 @@
 
 **Your scoring. Your draft slot. Your keeper—or no keeper.** Describe your league in ordinary language. The skill researches player data, plays out possible drafts, and creates your analysis and downloadable board.
 
-Prepare it before your draft. When your target goes, use the backups already on your board. Tap to cross off taken players and fill your lineup. Recommendations are prepared in advance; marking picks does not rerun simulations or sync with your draft platform.
+Prepare a downloadable board before your draft, or run the new local live session to recalculate advice after each actual pick. The downloadable board remains a static preparation plan. The live session needs a running local Python process; neither mode syncs with your fantasy platform.
 
 The demo uses a fictional 12-team ESPN half-PPR keeper league with saved 2026 player data. It is an example, not a live feed or advice tailored to your league. [View or download the sample HTML board](examples/sample-league/draft-board.html).
 
 **Want this ready for draft night? [Download the skill and follow the setup](#setup).**
 
+## What is new in v3
+
+- A reusable evidence layer preserves player IDs, scoring, season/week, publication and fetch times, provider disagreement, missing fields and source independence. A stale or incomplete feed cannot silently become fresh consensus.
+- Multiple stat projection inputs are scored in your league's rules. News has dated events and supersession links; it supplies evidence and scenarios, not unexplained point bonuses.
+- Draft utility includes legal starters and explicit absence coverage. Seven receivers and three backs are no longer evaluated solely through one ideal starting lineup.
+- Local live sessions track actual picks, keepers, undo/replay and data revisions. Advice uses the same roster policy and includes conditional next-turn comparisons and evidence-bound explanations.
+- The downloadable skill contains its Python core. Future lineup and waiver skills can reuse it; those workflows are not shipped in this release.
+
+[Data contract](skills/fantasy-draft-analyst/references/evidence.md) · [Live session guide](skills/fantasy-draft-analyst/references/live-draft.md) · [Architecture](docs/toolkit-architecture.md)
+
 ## What it helps you decide
 
-- **How does this pick shape the team I finish with?** Compare players by the projected starting lineup you could build around them, then get a pick-by-pick plan with targets and alternatives.
+- **How does this pick shape the team I finish with?** Compare players by modeled roster utility: starting strength plus explicit bench coverage and optional upside, then get a pick-by-pick plan with targets and alternatives.
 - **My target’s gone. Who’s next?** Keep prepared backups in view, cross off taken players, and mark your own picks on a board you can use on your phone.
 - **Which position can I afford to wait on?** See modeled availability at your picks and the projected drop in talent as the draft progresses. These are pre-draft estimates.
 - **Is my keeper worth the pick?** Compare eligible keepers against each other and keeping nobody, including the round each costs. Supports zero or one keeper per team.
 - **What am I missing about a player?** Ask the assistant to check role, injury, and usage claims with dated sources—and explain the case against a player you like.
 
-On the board, `TAKE` marks the recommendation; `−14` means an estimated 14 fewer projected lineup points across the season if you choose that alternative. Your marks are saved in that browser when local storage is available.
+On a new v3 board, `TAKE` marks the recommendation; `−14` means 14 fewer modeled roster utility points under the stated assumptions. Utility is a decision score, not a season-point forecast. The archived v2 example uses projected starting-lineup points. Your marks are saved in that browser when local storage is available.
 
 <p align="center"><img src="docs/media/board-picks.png" width="480" alt="Sample pick table showing the recommended player and projected lineup-point differences for alternatives"></p>
 
@@ -76,10 +86,10 @@ league's saved player data as current data for my league.
 
 Already use a coding assistant? See [Claude Code](docs/install.md#claude-code), [Codex or another coding assistant](docs/install.md#codex-or-another-coding-assistant), or [run the scripts yourself](docs/install.md#running-the-scripts-yourself). For chat without code execution, use the [paste-anywhere prompt](prompt/fantasy-draft-analyst-prompt.md); that route provides an analytical approximation, not the full simulation.
 
-## Test the strategy, not just the rankings
+## Historical benchmark, and how we will evaluate v3
 
 <!-- benchmark:start -->
-Across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.
+Archived v2 benchmark (does not evaluate v3): across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.
 
 | Drafting policy | Mean projected lineup total |
 |---|---:|
@@ -92,9 +102,7 @@ Across 800 simulated drafts, the saved-board policy produced 90 more projected s
 The benchmark follows the same saved player order and documented fallback as the displayed board. It does not model every choice a human user might make. [Exact results and input hashes](examples/sample-league/benchmark.json).
 <!-- benchmark:end -->
 
-The repository includes a reproducible policy benchmark: the prepared board, a noisy ADP-based draft bot, and the simulator’s adaptive policy draft against the same opponent model. The board policy follows the displayed ordering, roster constraints, and documented late-round fallback.
-
-The score is the **sum of season projections for one best legal starting lineup**. This is an internal simulation comparison, not a real-season backtest or a test against a platform’s actual autopick. Weekly substitutions, injuries, waivers, and the insurance value of the bench are outside that score. Shared seeds couple randomness; the resulting draft rooms can diverge after different picks. [Reproduce the comparison](#reproduce-every-number).
+The saved example and comparison remain historical illustrations. New v3 recommendations include roster coverage, so their utility scores must not be compared numerically to this table. `evaluate_policy.py` supports held-out, timestamped one-pick decisions and weekly lineup choices made before outcomes are read. It is an evaluation harness, not evidence of superiority; no held-out performance result is claimed for this release. See [the architecture and evaluation boundaries](docs/toolkit-architecture.md).
 
 ## Make your next pick fit the rest of your draft
 
@@ -113,7 +121,7 @@ The method depends on projections, modeled opponents, and the policy making late
 | Setting | Support |
 |---|---|
 | Drafts | Snake and linear; redraft and keeper leagues |
-| Scoring | Standard, half-PPR, PPR, passing-TD settings, bonuses, TE premium |
+| Scoring | Standard, half-PPR, PPR, passing-TD settings and supported TE premium; unsupported bonuses require additional data and cannot be called exact |
 | Lineups | QB / RB / WR / TE / K / DEF, FLEX, superflex |
 | Keepers | Zero or one per team, with a round cost; compare eligible user candidates and keeping nobody; known keepers use explicit draft slots |
 | Platforms | Platform-specific average draft position (ADP), when usable public data is available |
@@ -135,32 +143,20 @@ python scripts/compare_policies.py \
   --drafts 800
 ```
 
-On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell instead. To regenerate the sample simulation:
-
-```bash
-python skills/fantasy-draft-analyst/scripts/draft_sim.py \
-  --league examples/sample-league/league.yaml \
-  --players examples/sample-league/players.csv \
-  --sims 1500 --pick-values --keeper-scenarios \
-  --out /tmp/fantasy-sample-sim.json
-```
-
-**Same saved inputs and seed, same output.** The full sample run was verified byte-for-byte against the committed simulation JSON, availability CSV, and regenerated HTML board on Python 3.14.6 with PyYAML 6.0.3. This reproduces the saved example; fetching newer player data intentionally changes the result.
-
-Use a writable output path on your computer (for example `fantasy-sample-sim.json` on Windows). This can take several minutes; runtime depends on hardware. `--rollouts 60` gives a quicker, rougher run and changes the output. See the [full script guide](docs/install.md#running-the-scripts-yourself) and [sample run log](examples/sample-league/RUNLOG.md) for provenance and settings.
+This command explicitly runs the legacy policy to inspect the archived comparison. New runs use `roster_v2` by default and will intentionally differ from saved v2 outputs. For new data preparation, live sessions and simulation commands, see the [script guide](docs/install.md#running-the-scripts-yourself).
 
 ## Where it can be wrong
 
 - **Projections are assumptions.** Confident simulation results can still be wrong if player projections or the model of your draft room are wrong.
 - **The board is a prepared plan.** Its recommendations and availability percentages do not update when you mark picks. An unexpected draft can make the plan less useful.
-- **Later simulated picks use a heuristic.** That decision rule influences the value assigned to each candidate. The sample board trails the model's adaptive policy by 13 projected points in the internal comparison.
+- **Policies and coverage assumptions matter.** Later picks use a heuristic. Missing expected-games inputs use an explicit default; replacement strength and optional upside assumptions can change the result.
 - **Freshness depends on the run.** The assistant researches data when you ask it to; saved boards do not refresh themselves. Check dates and rerun before your draft when injuries or roles change.
 
 ## FAQ
 
 **Do I need to code?** No for the recommended Claude upload route. You need an assistant that can execute the bundled scripts to get the full simulation and board.
 
-**Does this connect to my live draft?** No. You manually mark picks. It does not log into your league or sync with ESPN, Yahoo, or Sleeper.
+**Does this connect to my live draft?** You manually enter or import actual picks into the local live session. It recalculates against that state, supports undo and resume, and exports decision receipts. It does not log into your league or sync with ESPN, Yahoo, or Sleeper.
 
 **Redraft with no keepers?** Yes. Say “no keepers” in your league description.
 

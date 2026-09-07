@@ -10,7 +10,7 @@ Usage:
   python3 scoring.py --league league.yaml --stats stats.csv --adp adp.csv --out players.csv
   python3 scoring.py --league league.yaml --stats stats.csv --out players.csv     # ADP already in stats.csv
 
-stats.csv columns (any missing column is treated as 0):
+Legacy sparse stats.csv columns (missing fields assume zero; use prepare_data.py for strict evidence validation):
   name,pos,team,pass_yd,pass_td,int,rush_yd,rush_td,rec,rec_yd,rec_td,fum,two_pt,
   fg,fg_miss,xp,  (kickers)
   sacks,def_int,fum_rec,def_td,safety,pts_allowed,  (defenses — see DEF scoring below)
@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -55,9 +56,12 @@ def f(row: dict, key: str) -> float:
     if v in (None, "", "-", "—"):
         return 0.0
     try:
-        return float(str(v).replace(",", ""))
-    except ValueError:
-        return 0.0
+        result = float(str(v).replace(",", ""))
+    except (ValueError, TypeError):
+        raise ValueError(f"Malformed numeric stat {key}: {v!r}") from None
+    if not math.isfinite(result):
+        raise ValueError(f"Stat {key} must be finite")
+    return result
 
 
 def score_row(row: dict, sc: dict) -> float:

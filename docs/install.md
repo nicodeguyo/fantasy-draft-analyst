@@ -1,6 +1,6 @@
 # Make your draft plan
 
-**Already using v2.0.0?** Download the current ZIP and replace your installed skill. Version 2.0.1 fixes unavailable early players appearing in late-round recommendations. Ask Claude to rebuild your board from the saved league, player, simulation and notes files using the updated skill; existing HTML boards do not update automatically.
+**Version 3.0.0:** replace your installed ZIP and regenerate your plan. The new default policy values roster coverage, so results intentionally differ from v2. Keep league files outside the installed skill. Local live advice requires Python on your computer; a downloaded static board or hosted chat artifact cannot run its local server.
 
 First, [explore the sample demo](https://nicodeguyo.github.io/fantasy-draft-analyst/). No account or installation is needed to try it. Your own plan requires an assistant that can read the instructions, research public data, and run the bundled Python scripts.
 
@@ -123,3 +123,17 @@ The scripts in `skills/fantasy-draft-analyst/scripts/` include ADP fetching, pro
 ## Updating
 
 Re-download and upload the packaged ZIP, or pull the repository and re-copy the installed skill folder. Keep your league files outside the skill folder so replacing it does not replace your inputs. Regenerate your board when you want updated data; downloading a new skill does not refresh an existing board.
+
+## New v3 data and live workflow
+
+Inside the installed `fantasy-draft-analyst` directory:
+
+```bash
+python scripts/prepare_data.py --league league.yaml --snapshot evidence.json --out players.csv
+python scripts/draft_sim.py --league league.yaml --players players.csv --sims 100 --rollouts 20 --pick-values --out sim.json
+python scripts/build_board.py --league league.yaml --players players.csv --sim sim.json --notes notes.json --out draft-board.html
+python scripts/live_draft.py --session session.json init --league league.yaml --players players.csv
+python scripts/live_draft.py --session session.json serve --port 8768
+```
+
+Create `notes.json` from the output reference (an empty `{}` is valid for a minimal board). These are initial exploration settings, not a precision guarantee. Increase simulations after checking the data and runtime. Read [evidence](../skills/fantasy-draft-analyst/references/evidence.md) for current provider options and [live sessions](../skills/fantasy-draft-analyst/references/live-draft.md) for pick imports, undo, refresh and receipts. `--help` documents every executable option. Carry `players.evidence.json` with the CSV so live advice retains provenance.

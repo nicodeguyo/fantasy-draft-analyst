@@ -237,6 +237,7 @@ def main():
         cfg = yaml.safe_load(cfgp.read_text(encoding="utf-8"))
     sim = json.loads(Path(args.sim).read_text(encoding="utf-8"))
     notes = json.loads(Path(args.notes).read_text(encoding="utf-8"))
+    roster_utility_mode = sim.get("settings", {}).get("draft_policy") == "roster_v2"
     players = load_players(args.players)
     matrix = load_matrix(args.sim)
     th = theme_from(cfg)
@@ -331,7 +332,9 @@ def main():
         th_ = (pp_row or {}).get("avail_pct")
         if th_ is None:
             th_ = there_at(name, int(pk)) if pk.isdigit() else None
-        val = r.get("value", (pp_row or {}).get("value"))
+        # A reused notes file cannot relabel old starter scores as current utility.
+        val = ((pp_row or {}).get("value") if roster_utility_mode
+               else r.get("value", (pp_row or {}).get("value")))
         pb_val = r.get("plan_b_value", (pp_row or {}).get("plan_b_value"))
         alt = r.get("alt") or ""
         if not alt and pp_row and pp_row.get("plan_b"):
@@ -355,10 +358,20 @@ def main():
     plan_players = [(pinfo(r.get("player") or "")[0], pinfo(r.get("player") or "")[1]) for r in plan if (r.get("player") or "") in players]
     plan_total = lineup_total(plan_players, slots)
     mean = (sim.get("totals") or {}).get("mean")
-    plan_total_lbl = notes.get("plan_total_label") or notes.get("plan_total") or (
-        (f"{round(plan_path[-1]['value']):,} projected lineup at your last planned pick" if plan_path
-         else f"{round(plan_total):,} projected starting points" if plan_total else "")
-        + (f" · {mean:,} average across simulated drafts" if mean else ""))
+    if roster_utility_mode:
+        utility_mean = (sim.get("roster_utility") or {}).get("mean")
+        plan_total_lbl = (
+            f"{round(plan_path[-1]['value']):,} modeled roster utility at your last planned pick"
+            if plan_path else f"{round(plan_total):,} projected starting points" if plan_total else "")
+        if utility_mean is not None:
+            plan_total_lbl += f" · {utility_mean:,} average roster utility across simulated drafts"
+        if mean is not None:
+            plan_total_lbl += f" · {mean:,} average projected starter points"
+    else:
+        plan_total_lbl = notes.get("plan_total_label") or notes.get("plan_total") or (
+            (f"{round(plan_path[-1]['value']):,} projected lineup at your last planned pick" if plan_path
+             else f"{round(plan_total):,} projected starting points" if plan_total else "")
+            + (f" · {mean:,} average across simulated drafts" if mean else ""))
 
     # ---------- cost of waiting ----------
     # Replaces v1's surplus heatmap. A heatmap of value *levels* moves when you move replacement
@@ -928,6 +941,30 @@ def main():
 </body>
 </html>
 '''
+    # Historical sim files omit this field and retain their original point metric.
+    if roster_utility_mode:
+        for before, after in (
+            ("Projected final starting lineup", "Modeled roster utility"),
+            ("projected lineup at your last planned pick", "roster utility at your last planned pick"),
+            ("Projected lineup", "Roster utility"),
+            ("Projected final lineup", "Modeled roster utility"),
+            ("Points of final starting lineup against", "Roster utility difference against"),
+            ("one fixed projected starting lineup", "roster utility with coverage and upside assumptions"),
+            ("conditional model estimates of a fixed starting lineup", "conditional model estimates of roster utility"),
+            ("Less than one projected point", "Less than one utility point"),
+            ("the starting lineup it projects", "its modeled roster utility"),
+            ("which scores the final lineup directly", "which scores final roster utility directly"),
+            ("points of final starting lineup", "units of modeled roster utility"),
+        ):
+            page = page.replace(before, after)
+        assumptions = sim.get("roster_utility", {}).get("assumptions", {})
+        notice = ('<aside class="wrap" role="note"><p><b>Preparation mode · roster utility.</b> '
+                  'Pick values include modeled depth coverage and optional upside; they are not '
+                  'projected season points or win probabilities. Marking picks does not recalculate. '
+                  'For a recalculating local board, run live_draft.py with your actual session.</p>'
+                  '<details><summary>Objective assumptions</summary><pre>'
+                  + esc(json.dumps(assumptions, indent=2)) + '</pre></details></aside>')
+        page = page.replace('<body>', '<body>' + notice, 1)
     page = "\n".join(line.rstrip() for line in page.splitlines()) + "\n"
     Path(args.out).write_text(page, encoding="utf-8")
     print(f"Wrote {args.out} ({len(page) // 1024} KB), theme {cfg.get('theme', {}).get('team', 'custom')}")

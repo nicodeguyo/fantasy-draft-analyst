@@ -1,6 +1,6 @@
-# Data sources — verified, by platform, with a fetch order
+# Data source directory and verification rules
 
-Every URL here was fetched successfully without a login as of September 2026. Sites change; if one fails, move to the next in the list and say which you used. Always record the date shown on the page (or the fetch date if none is shown) in the appendix.
+This is a discovery directory, not a guarantee that every endpoint is currently accessible or an implemented connector. Use `prepare_data.py --help` for executable adapters and `evidence.md` for validated inputs. Record successful and failed fetches, source publication/update time separately from retrieval time, requested season/period and license/access constraints. Never bypass an access restriction. A successful HTTP response alone does not validate the season or scoring.
 
 Contents
 
@@ -25,9 +25,9 @@ Contents
 
 ## 2. Platform-specific ADP
 
-Drafters follow their platform's default rankings, so the ADP that matters is the one from the site the league is hosted on.
+Platform rankings can influence a draft room. Format-matched platform ADP is a useful price prior, then actual picks and roster needs update the modeled room.
 
-| Platform | Source (verified) | Notes |
+| Platform | Candidate source | Notes |
 |---|---|---|
 | **Any platform, cross-platform table** | `https://www.footballguys.com/adp?season=2026&pos=all` (also `pos=qb/rb/wr/te`) | One server-rendered table with overall pick numbers per platform: Consensus, ESPN, Yahoo, Sleeper (1QB / Redraft / Superflex), CBS, FFPC, NFFC, Underdog, DraftKings, MFL, RTSports. **Best first stop for Yahoo, FFPC, NFFC, MFL.** |
 | **ESPN** | **First choice from a chat/fetch tool: the Footballguys ESPN column above.** From a shell with network: `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info` with header `X-Fantasy-Filter: {"players":{"limit":300,"sortDraftRanks":{"sortPriority":100,"sortAsc":true,"value":"PPR"}}}` (`scripts/fetch_adp.py --source espn` does this) | JSON with `ownership.averageDraftPosition`, ESPN's default ranks (`draftRanksByRankType`), `injuryStatus`, and ESPN season projections. Without the header it returns players alphabetically, which makes it useless from a text fetcher that can't send headers. Position ids: 1 QB, 2 RB, 3 WR, 4 TE, 5 K, 16 DST. |
@@ -69,19 +69,9 @@ Combine: use platform ADP as the price, FFC's std dev as the spread. If the plat
 - Route share / snap share / TPRR for the current preseason are mostly paywalled (PFF, FantasyPoints, Next Gen Stats). Use web search for `"<player>" route share` restricted to the last two weeks; analysts quote the numbers in free articles. Always note the sample size.
 - Team pace and pass rate: search `pass rate over expectation 2026` for the current preseason article set.
 
-## 7. Platform quirks
+## 7. Platform and format matching
 
-Why platform ADP matters — with the recurring patterns (verify against this year's Footballguys table):
-
-- **ESPN**: ADP is from real ESPN drafts and tracks ESPN's default ranks closely; where ESPN's rank and the market disagree, the room follows ESPN. Elite QBs and TEs go earlier than mocks (Josh Allen ~17 on ESPN vs ~38 on Underdog in 2026), receivers on new teams and post-hype receivers slide 8–10 picks, and ESPN's default 2-WR lineup depresses mid-round WRs. Exploit: the ESPN rank/ADP gaps, and the WR band that ESPN rooms undervalue.
-- **Yahoo**: sharp default ranks, so ADP ≈ Yahoo rank. QB1s go 5–8 picks earlier than on Underdog; WRs pushed down; TEs historically undervalued by an older user base. Yahoo ADP is computed on standard scoring even for PPR leagues.
-- **Sleeper**: younger, Zero-RB-leaning users; RBs slide, receivers and elite TEs rise; the QB market is a barbell — the top two or three QBs go very early, everyone else very late (mid-tier veteran QBs are the best value on Sleeper). Separate 1QB, redraft, and superflex ADPs exist; use the right one.
-- **CBS**: stronger RB lean than mocks.
-- **Underdog**: best-ball, 18-man rosters, no waivers — depth backs, handcuffs, rookies, and late-round upside are drafted earlier and ADP is meaningful to pick ~216; camp hype moves it within days. QBs go later than on ESPN/Yahoo.
-- **FFPC**: TE-premium scoring (1.5 PPR for TEs) is the FFPC standard in most formats; QBs go much later than on ESPN.
-- **FFC (mocks)**: explicitly mock-draft based, which means more autopicks and less roster discipline than real leagues; treat it as the format baseline and the source of spread, not as the price.
-
-In each case the exploit is the same: find where the platform's room is systematically early or late relative to your surplus ranking, and let them overpay for the early stuff while you buy the late stuff.
+Use the actual host and scoring/roster format when available. Keep standard, PPR, superflex, keeper and best-ball markets distinct. Measure current platform gaps rather than assuming a site's users always favor a particular position. Mock-draft distributions are not observed real-room behavior. If a platform column is missing, label the fallback and its limitations; do not silently rename consensus ADP as platform ADP.
 
 ## 8. The `players.csv` format
 
@@ -99,3 +89,7 @@ Bhayshul Tuten,RB,JAX,53.0,6.5,200,8,co-starter per Coen; Rodriguez foot surgery
 - `pos` — one of QB, RB, WR, TE, K, DEF (`DST`, `D/ST`, and `PK` are accepted and normalized).
 - `bye` and `note` are optional and may be omitted entirely; the six-column form `name,pos,team,adp,adp_sd,proj` is enough for every script.
 - Include at least `teams × 15` players plus every relevant K and DEF, or the simulator will run out of bodies in late rounds.
+
+## Reuse across future skills
+
+Normalized identity, stat observations, projection snapshots and dated news belong in the shared data layer. The links above are research fallbacks, not necessarily automated adapters. Usage, betting and additional league-platform connectors must declare access, freshness and scoring coverage before claiming support. Do not redistribute a provider's dataset just because this repository's code is MIT licensed.

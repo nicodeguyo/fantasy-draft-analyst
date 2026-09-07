@@ -1,3 +1,11 @@
+# Output metric contract for v3
+
+Read `settings.draft_policy` before labeling comparisons. Under `roster_v2`, candidate and keeper values are **modeled roster utility**, not predicted season points or win probability. `totals` and the user's displayed starter-point sum remain separate. State the coverage, expected-games, waiver and upside assumptions. Numeric examples below are illustrative; never copy their player claims, totals or default verdicts into a user's analysis.
+
+Every important recommendation needs source/period/date, scoring completeness, independent-source count, disagreement, matched ADP, actual alternatives, roster impact, contrary evidence and what would change the choice. Distinguish modeled estimates from verified football facts and assumptions. See `evidence.md`.
+
+Preparation HTML does not recalculate when marked. Local live mode uses the versioned session and receipt contract in `live-draft.md`; do not attach unconditional pre-draft percentages to actual live candidates as if they were conditional survival.
+
 # Output spec — the exact shape of the analysis and the board
 
 The user should be able to read the analysis top to bottom on a phone and know what to do at every pick. Use the section order below. Templates show the level of specificity expected; the numbers are illustrative.
@@ -21,10 +29,10 @@ Contents
 
 <One sentence on why it isn't close, or why it is.>
 
-### The verdict in lineup points
+### The verdict in the declared objective
 Full drafts simulated under each scenario (`keeper_scenarios`):
 
-| Scenario | Cost | Projected starting lineup | SE |
+| Scenario | Cost | Modeled roster utility | SE |
 |---|---|---|---|
 | Keep <A> | R6 | 1,864 | ±0.6 |
 | Keep <B> | R3 | 1,824 | ±0.8 |
@@ -62,7 +70,7 @@ Your picks at slot <s> in a <T>-team snake: <ladder>.
 ## How every number on this page was produced
 For each of your picks, each candidate was planted at that pick and the rest of the draft was
 simulated <R> times — the room drafting off ADP, you drafting sensibly afterwards — and the
-resulting starting lineup scored. **Pick value** is that projected lineup. The player with the
+resulting roster scored under the declared policy. **Pick value** is modeled roster utility under v3 (starting-lineup points only under legacy). The player with the
 highest one is the pick; the gap below him is what the alternative costs you.
 
 Replacement level, for context rather than for decisions:
@@ -110,12 +118,12 @@ For each pick:
 | Brock Bowers | TE | 192 | 1,861 | close | 50% | 8% |
 | Trey McBride | TE | 188 | 1,856 | −5 | 71% | 20% |
 | ... five rows ...
-<One sentence naming an alternative and explaining the tradeoff. “Close” means an absolute projected gap below one point, a rounding convention. Explain small gaps without claiming statistical equivalence.>
+<One sentence naming an alternative and explaining the tradeoff. “Close” means an absolute utility gap below one point, a rounding convention. Explain small gaps without claiming statistical equivalence.>
 ```
 
 Pick values support model-based comparisons **within** a pick, with potentially different candidate availability populations, and not across picks (each is measured against that pick's own control arm, which assumes you followed the plan to get there) and not against a keeper-scenario total. Say so once in §2 rather than letting a reader subtract one from another.
 
-"Now" is `row.value − plan_path[pick].value` — the gap against the player the pick actually recommends, **not** against `delta_vs_best`, which is measured from the highest raw value and can sit on a player who reaches you one draft in five. Use the same subtraction in the analysis as the board does, or the two will disagree at exactly the picks where it matters. It reads: `TAKE` on his row, a positive number on anyone worth more if he happened to fall to you, a negative number on anyone worth less, and `close` for an absolute gap below one projected point (a rounding convention, not a statistical test). There is exactly one `TAKE` per table and it is the top row, so the table can never disagree with the decision sentence above it. “Here” / “At [pick]” are availability at that pick and at the following one, measured across the simulations with your own seat drafting off ADP as unconditional pre-draft frequencies. They are not survival probabilities after deliberately passing on a player who is available now. Label the simulated or analytical method used.
+"Now" is `row.value − plan_path[pick].value` — the gap against the player the pick actually recommends, **not** against `delta_vs_best`, which is measured from the highest raw value and can sit on a player who reaches you one draft in five. Use the same subtraction in the analysis as the board does, or the two will disagree at exactly the picks where it matters. It reads: `TAKE` on his row, a positive number on anyone worth more if he happened to fall to you, a negative number on anyone worth less, and `close` for an absolute gap below one utility point (a rounding convention, not a statistical test). There is exactly one `TAKE` per table and it is the top row, so the table can never disagree with the decision sentence above it. “Here” / “At [pick]” are availability at that pick and at the following one, measured across the simulations with your own seat drafting off ADP as unconditional pre-draft frequencies. They are not survival probabilities after deliberately passing on a player who is available now. Label the simulated or analytical method used.
 
 ### 5. Tiers with cliffs
 
@@ -127,10 +135,10 @@ Per player, the five-part template from `references/metrics.md` §6, ending with
 
 ### 7. Sample drafts and the target build
 
-Range of projected totals; most-owned players; "what happened in every draft". Then the target build, which is `plan_path` — one row per pick with the target, the projected lineup, how often he's actually there, the Plan B and what it costs, and the "if he falls" upside:
+Range of projected totals; most-owned players; "what happened in every draft". Then the target build, which is `plan_path` — one row per pick with the target, the modeled roster utility, how often he's actually there, the Plan B and what it costs, and the "if he falls" upside:
 
 ```
-| Pick | Target | Projected lineup | There | If he's gone | If he falls |
+| Pick | Target | Roster utility | There | If he's gone | If he falls |
 |---|---|---|---|---|---|
 | 5 | Jaxon Smith-Njigba | 1,858 | 63% | Jonathan Taylor (−22) | Bijan Robinson (21%) |
 | 20 | Brock Bowers | 1,859 | 50% | Drake London (close) | — |
@@ -185,7 +193,7 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
     "5": {"note": "Running back if Bijan fell (21%). Otherwise Jaxon Smith-Njigba.", "plan_b": "Jonathan Taylor (52%), then James Cook III (76%)"},
     "20": "Tight end. Bowers if he's there (52%); McBride if not (72%). The 25-point cliff below them closes before 29."
   },
-  "late_note": "Nothing back here moves your lineup. Kicker and defense in the final two rounds only.",
+  "late_note": "Late picks should improve usable coverage or supported role upside; explain which gap remains.",
   "late_body": "Spend rounds 9 through 13 on two things...",
   "tiers": {
     "RB": {
@@ -219,7 +227,7 @@ Bullet list: eligibility, league size, superflex, escalation, and the one assump
 
 Field notes:
 
-- `plan` is the target build, one row per pick plus the keeper. It should be `sim.json`'s `plan_path` wearing your prose; omit it entirely and the renderer builds it from `plan_path` alone. Each row may carry `value` and `plan_b_value`, but you rarely need to: the renderer reads both from `plan_path` when they're absent, which is what keeps the board and the analysis from ever disagreeing. `alt` is the Plan B shown in the "If he's gone" column — name the fallback and what it costs; leave it out and the renderer writes it from `plan_path` (including the "if he falls" upside line). `note` (optional) is a short label under the name. `plan_total` (or `plan_total_label`) is a display string; if omitted the renderer uses the plan path's final projected lineup. The older `target_build` shape is still accepted.
+- `plan` is the target build, one row per pick plus the keeper. It should be `sim.json`'s `plan_path` wearing your prose; omit it entirely and the renderer builds it from `plan_path` alone. Each row may carry `value` and `plan_b_value`, but you rarely need to: the renderer reads both from `plan_path` when they're absent, which is what keeps the board and the analysis from ever disagreeing. `alt` is the Plan B shown in the "If he's gone" column — name the fallback and what it costs; leave it out and the renderer writes it from `plan_path` (including the "if he falls" upside line). `note` (optional) is a short label under the name. `plan_total` (or `plan_total_label`) is a display string; if omitted the renderer uses the plan path's final modeled objective. The older `target_build` shape is still accepted.
 - `shortlist_sub` overrides the one-line subtitle above the shortlist table. `waiting_note` is the two-sentence reading of the cost-of-waiting table (the renderer draws the table from `sim.json`'s `cost_of_waiting`). The old key name `roadmap_note` still works.
 - `pick_notes` values may be a string or `{"note": ..., "plan_b": ...}`; the Plan B renders under the decision sentence and its players are always shown in that pick's table.
 - `howto` may override the four "how to use this on draft day" steps as `[[heading, body], ...]`; leave it `null` to use the defaults, which are right for almost everyone.
@@ -241,7 +249,7 @@ One HTML file, no external dependencies except a Google Font, in the user's team
 1. Masthead — team name, subtitle, setting chips.
 2. Sticky pick ladder — PLAN first, then every pick number, then TIERS / CALLS / NOTES.
 3. **How to use this on draft day** — four numbered steps: before the draft, on the clock, when someone else drafts a player (tap him), when you draft a player (tap ✓).
-4. **The plan** — the target at every pick with round, the projected starting lineup it produces, how often he's there, "If he's gone", and the "if he falls" upside; the plan total; the target note.
+4. **The plan** — the target at every pick with round, the modeled roster utility it produces, how often he's there, "If he's gone", and the "if he falls" upside; the plan total; the target note.
 5. **Cost of waiting** — points lost per position by waiting one more turn (QB/RB/WR/TE × your picks), the outlined cell marking the position about to run out, and the waiting sentence.
 6. **Your lineup** — every starting slot, filled in as the user taps ✓; a running projected total and a bench line.
 7. Your picks in order — one block per pick: decision sentence, Plan B, and the table ranked by pick value with **Now** (`TAKE` on the recommended player, signed points against him below) and **Pre-draft availability** (frequency at the following pick; not conditional live survival), plus a ✓ button per row.

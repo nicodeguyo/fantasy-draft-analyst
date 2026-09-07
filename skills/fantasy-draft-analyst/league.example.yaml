@@ -94,3 +94,13 @@ preferences:
 theme:
   team: "BUF"                    # any NFL abbreviation for the board's colors, or "custom"
   custom: {primary: "#00338D", secondary: "#C60C30", accent: "#E8B21A"}   # used when team: custom
+
+# v3 roster utility assumptions. These are disclosed scenarios, not calibrated outcome forecasts.
+valuation:
+  horizon_games: 17              # explicitly choose the scoring horizon for your league
+  assumed_missed_games: 1        # fallback only when player expected_games is absent
+  overlap_share: 0.25            # share assigned to simultaneous starter-absence scenarios
+  upside_weight: 0.10            # applies only to supplied performance_sd, never ADP/source spread
+  weeks: []                     # optional bye-week scenario list
+  waiver_points: {}             # season-point baseline by position; empty uses positional cutoff
+# preferences.draft_policy defaults to roster_v2; use legacy only for historical comparisons.
