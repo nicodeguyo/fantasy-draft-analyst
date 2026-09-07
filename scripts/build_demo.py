@@ -28,7 +28,7 @@ def main():
     keeper = data['league'].get('keeper')
     context = f"{keeper} is already kept in round {data['league']['keeper_round']}." if keeper else 'Your team has no keeper in this example.'
     fragment = fragment.replace('__KEEPER_CONTEXT__', esc(context))
-    path = ROOT / 'index.html'
+    path = ROOT / 'docs/archive/v2-site.html'
     source = path.read_text()
     start, rest = source.split('<!-- demo:start -->', 1)
     _, end = rest.split('<!-- demo:end -->', 1)

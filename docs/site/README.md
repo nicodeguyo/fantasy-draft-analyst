@@ -1,34 +1,50 @@
-# The sample demo
+# The v3 walkthrough
 
-The homepage is a static, account-free explanation of the existing draft planner. It does not generate personalized boards or run simulations in your browser. Making a personal board follows the [skill setup guide](../install.md).
+The public website demonstrates two **saved outputs from the shipped v3 engine**. Switching stages displays these results; the website does not execute the Python engine, access a league account, or generate personal advice.
 
-## One pick, two possible teams
+## Inputs and source dates
 
-`pick-comparison.json` contains two branches of one saved sample draft, using seed `20260905` and the [sample league](../../examples/sample-league/). Before either branch, the code selects the highest projected available running back and wide receiver at pick 5. It does not search for a favorable result. Both branches copy the same draft state and random-generator state, then use the simulator's adaptive policy to finish the draft. Opponent decisions can diverge as the remaining player pool changes.
+- Fictional league: [The Open Draft League](../../examples/v3-live/league.json), 12 teams, half-PPR, snake, pick 5, no keepers. The roster requires QB, two RB, two WR, TE, FLEX, K, DEF, and six bench spots.
+- Public input snapshot: [evidence.json](../../examples/v3-live/evidence.json), season 2026, fetched September 7, 2026 around 04:00 UTC (September 6 around 11 p.m. Central).
+- Sources: [ESPN public projection API](https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info), [CBS projection tables](https://www.cbssports.com/fantasy/football/stats/RB/2026/season/projections/nonppr/), and [FantasyPros projection tables](https://www.fantasypros.com/nfl/projections/rb.php?week=draft&scoring=HALF&year=2026). Each saved projection retains its own URL, stat line, fetch time, and assumptions. Vendor fantasy-point totals are not used; stat lines are rescored for the example league.
+- No private league, actual user picks, news events, usage inputs, or betting inputs are included. NFL players and their public data are real; the draft is constructed.
 
-The exact saved candidates and totals are generated in `pick-comparison.json` and displayed on the homepage. Their difference is **one illustrative outcome**, not an averaged advantage or a recommendation. The objective sums projections for one best legal starting lineup; it does not simulate weekly substitutions, injuries or bench coverage. The published board averages many rollouts and may rank candidates differently. The homepage highlights players absent from the other branch, rather than treating a player moving between RB1 and RB2 as a different player.
+**Limited evidence:** source update times are unverified, some scoring fields use declared zero approximations, and coverage is incomplete. FantasyPros constituents are unknown and cannot be counted as verified independent forecasts. Unmatched provider rows are absent from the normalized snapshot; incomplete player identities remain visible to the engine. No claim of complete provider coverage is made.
 
-From the repository root, with PyYAML installed:
+The snapshot is deliberately frozen. Do not use it as fresh advice for a future draft. The source pages may change without changing these saved results.
+
+## How the example is selected
+
+The first 18 selections follow ascending ADP among players with eligible projections and prices. At pick 19, the fictional opponent deliberately takes the preview's top candidate. This illustrates a lost target; it is not a claim about typical opponent behavior. No search for the largest favorable difference is performed.
+
+The engine calls its normal `recommend()` function before and after the recorded pick. At pick 20, it compares Walker, Rice, and Olave, including their evidence, roster contributions, next-turn possibilities, and projection sensitivity. The current roster contains Jonathan Taylor. Confirmed keepers are supported by the product but this example has none.
+
+The next-turn comparisons use eight paired opponent continuations to pick 29. They are illustrative scenarios, not calibrated availability probabilities or a full-season backtest. Roster utility is a decision score; its components are not additional points over another candidate. Source dispersion measures disagreement, not football outcome variance. Missing expected-games values and bench coverage use the engine's declared defaults; no performance-upside inputs are supplied here.
+
+## Reproduce
+
+From the repository root, with Python 3.10+ and PyYAML:
 
 ```bash
-python3 scripts/reproduce_demo.py --repo . --output docs/site/pick-comparison.json
-python3 scripts/build_demo.py
+python scripts/build_v3_demo.py
 ```
 
-The first command records the input hashes and validates legal lineups. The second refreshes only the marked comparison section in `index.html`. It is deterministic and uses no fresh network data. The homepage also contains both saved lineups as ordinary HTML, so this explanation remains readable without JavaScript.
+The script rescoring step uses the frozen `as_of` time, then reproduces both states through the same CSV loader and policy as local live mode. It writes [v3-demo.json](v3-demo.json), including input hashes, and refreshes the marked HTML section on the homepage. It does not modify the draft engine. The public JSON omits ephemeral session tokens but preserves the evidence and scenarios behind the candidates.
 
-## Animation and privacy
+To regenerate the screenshot, social preview, and captioned video, see [media reproduction](../media/README.md).
 
-Changing the selected candidate animates the saved lineup for about a quarter second. Scroll progress draws a small underline beneath the example heading. No essential text depends on either effect; reduced motion disables positional animation. The walkthrough video is user-controlled with captions. Copying an example link includes only the saved branch (`rb` or `wr`), never a visitor's editable league prompt. The page has no analytics, account login, or form submission.
+## Website behavior and accessibility
 
-The 26-second recording uses the regenerated sample board, deliberate readable holds, and captions embedded in the picture. It demonstrates manual pick tracking; it does not imply recalculated advice. The initial frame is also a deliberate cover showing a draft decision. Separate WebVTT captions remain available for the website.
+Both states are ordinary HTML; the after-pick state remains readable without JavaScript. Stage buttons have pressed states and a status announcement. Source details use native disclosure controls. No automatic animation is necessary to understand the example. The site retains the navy/lime design, requires no remote fonts, and contains no analytics or account access. The starter-prompt copy button has a text-selection fallback.
 
-## Local preview and deployment
+Preview from the repository root:
 
 ```bash
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8765/`. GitHub Pages should deploy `main`, root; `.nojekyll` keeps the static files intact. Relative assets also work under the `/fantasy-draft-analyst/` project base path. The package download points to the committed skill zip.
+Open `http://127.0.0.1:8765/`. GitHub Pages deploys `main`, root. Relative assets work under the project path `/fantasy-draft-analyst/`.
 
-Scroll Craft's unchanged engine is vendored from commit `0b816225945e45380397d6a0487efa3c98916858` of [nateherkai/scroll-craft](https://github.com/nateherkai/scroll-craft), under its [MIT license](vendor/SCROLLCRAFT-LICENSE). The site needs no Node build, external fonts, generated imagery, or additional Python runtime dependency.
+## Historical assets
+
+The [v2 site](../archive/v2-site.html), [benchmark](../archive/v2-benchmark.md), saved preparation board, and original media are archived. `build_demo.py` and `build_launch_evidence.py` now target the archive, so reproducing historical evidence cannot overwrite the current homepage. The current homepage does not use the archived performance claim.

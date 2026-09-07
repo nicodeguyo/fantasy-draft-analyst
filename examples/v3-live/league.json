@@ -1,0 +1,46 @@
+{
+  "league": {
+    "name": "The Open Draft League",
+    "team_name": "Team Five",
+    "platform": "espn",
+    "teams": 12,
+    "draft_type": "snake",
+    "draft_slot": 5,
+    "draft_date": "2026-09-07",
+    "rounds": 15,
+    "season": 2026
+  },
+  "scoring": {
+    "reception": 0.5,
+    "rec_yard": 0.1,
+    "rec_td": 6,
+    "rush_yard": 0.1,
+    "rush_td": 6,
+    "pass_yard": 0.04,
+    "pass_td": 4,
+    "interception": -2,
+    "fumble_lost": -2,
+    "two_point": 2,
+    "te_premium": 0,
+    "bonuses": []
+  },
+  "roster": {
+    "QB": 1,
+    "RB": 2,
+    "WR": 2,
+    "TE": 1,
+    "FLEX": 1,
+    "SUPERFLEX": 0,
+    "K": 1,
+    "DEF": 1,
+    "bench": 6
+  },
+  "keepers": {
+    "count": 0,
+    "league_keeper_list": []
+  },
+  "preferences": {
+    "risk": "balanced",
+    "draft_policy": "roster_v2"
+  }
+}

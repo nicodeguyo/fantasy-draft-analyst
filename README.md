@@ -1,183 +1,135 @@
 <h1 align="center">Fantasy Draft Analyst</h1>
+<p align="center"><b>Your league. Your roster. Your next pick.</b></p>
+<p align="center">Make your next fantasy football pick with the evidence and the tradeoffs in view.</p>
+<p align="center"><a href="#setup"><b>Choose your setup</b></a> · <a href="https://nicodeguyo.github.io/fantasy-draft-analyst/#compare">Explore the v3 example</a> · <a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download v3.0.0</a></p>
+<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/#compare"><img src="docs/media/v3-decision.png" width="760" alt="Actual v3 engine output in a saved fictional draft: after George Pickens is taken, Kenneth Walker III leads the shortlist ahead of Rashee Rice and Chris Olave. Each choice exposes its sources and tradeoffs."></a></p>
 
-<p align="center"><b>Your next pick shapes your whole team. Plan for it.</b></p>
+A free, open-source skill for AI assistants. Compare available players using your scoring, multiple projection sources, and the team you’re building. See the recommendation, the alternatives, and what could change the call.
 
-<p align="center">A free skill you download and run with Claude. Turn your league’s rules into targets, backups, and a board for draft night.</p>
-
-<p align="center">
-<b><a href="#setup">Get the skill</a></b> ·
-<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download ZIP (v3.0.0)</a> ·
-<a href="https://nicodeguyo.github.io/fantasy-draft-analyst/">See it in action</a>
-</p>
-
-<p align="center"><a href="#setup"><img src="docs/media/draft-board-demo.gif" width="480" alt="15-second draft planner tour: compare draft paths, see targets and backups, track picks, explore positional depth and tiers, and inspect an internal test across 800 simulated drafts. Ends with Get the skill. Click for download and setup."></a></p>
-
-<p align="center">Free & open source · No coding needed with Claude · Assistant account and usage limits apply</p>
-
-**Your scoring. Your draft slot. Your keeper—or no keeper.** Describe your league in ordinary language. The skill researches player data, plays out possible drafts, and creates your analysis and downloadable board.
-
-Prepare a downloadable board before your draft, or run the new local live session to recalculate advice after each actual pick. The downloadable board remains a static preparation plan. The live session needs a running local Python process; neither mode syncs with your fantasy platform.
-
-The demo uses a fictional 12-team ESPN half-PPR keeper league with saved 2026 player data. It is an example, not a live feed or advice tailored to your league. [View or download the sample HTML board](examples/sample-league/draft-board.html).
-
-**Want this ready for draft night? [Download the skill and follow the setup](#setup).**
-
-## What is new in v3
-
-- A reusable evidence layer preserves player IDs, scoring, season/week, publication and fetch times, provider disagreement, missing fields and source independence. A stale or incomplete feed cannot silently become fresh consensus.
-- Multiple stat projection inputs are scored in your league's rules. News has dated events and supersession links; it supplies evidence and scenarios, not unexplained point bonuses.
-- Draft utility includes legal starters and explicit absence coverage. Seven receivers and three backs are no longer evaluated solely through one ideal starting lineup.
-- Local live sessions track actual picks, keepers, undo/replay and data revisions. Advice uses the same roster policy and includes conditional next-turn comparisons and evidence-bound explanations.
-- The downloadable skill contains its Python core. Future lineup and waiver skills can reuse it; those workflows are not shipped in this release.
-
-[Data contract](skills/fantasy-draft-analyst/references/evidence.md) · [Live session guide](skills/fantasy-draft-analyst/references/live-draft.md) · [Architecture](docs/toolkit-architecture.md)
-
-## What it helps you decide
-
-- **How does this pick shape the team I finish with?** Compare players by modeled roster utility: starting strength plus explicit bench coverage and optional upside, then get a pick-by-pick plan with targets and alternatives.
-- **My target’s gone. Who’s next?** Keep prepared backups in view, cross off taken players, and mark your own picks on a board you can use on your phone.
-- **Which position can I afford to wait on?** See modeled availability at your picks and the projected drop in talent as the draft progresses. These are pre-draft estimates.
-- **Is my keeper worth the pick?** Compare eligible keepers against each other and keeping nobody, including the round each costs. Supports zero or one keeper per team.
-- **What am I missing about a player?** Ask the assistant to check role, injury, and usage claims with dated sources—and explain the case against a player you like.
-
-On a new v3 board, `TAKE` marks the recommendation; `−14` means 14 fewer modeled roster utility points under the stated assumptions. Utility is a decision score, not a season-point forecast. The archived v2 example uses projected starting-lineup points. Your marks are saved in that browser when local storage is available.
-
-<p align="center"><img src="docs/media/board-picks.png" width="480" alt="Sample pick table showing the recommended player and projected lineup-point differences for alternatives"></p>
+**Your next pick shapes your whole team.** Prepare targets and backups before draft night, or run a local live session that recalculates advice as you record picks.
 
 ## Setup
 
-**Download the skill. Describe your league. Get your draft plan.**
+A *skill* is a package of instructions and scripts you give an assistant. Choose the experience you want:
 
-New to AI tools? Start with Claude in your browser. A *skill* is a package of instructions and scripts you add to Claude. This one guides its research, runs the draft simulator, and builds your board. You describe your league in ordinary language; Claude runs the code.
+| | Prepare your draft plan | Get local live advice |
+|---|---|---|
+| Get | Researched targets, backups, keeper comparisons, and a saved HTML board | Updated shortlists, roster tradeoffs, and saved decision records |
+| Run with | Claude with Skills and code execution, or a compatible coding assistant | Python 3.10+ on your computer; a coding assistant can help set up |
+| Record picks | Marks on a downloaded board **do not recalculate** its advice | Enter or import actual picks; recommendations recalculate |
+| Start | [Preparation setup](docs/install.md#prepare-in-claude) | [Local live setup](docs/install.md#local-live-advice) |
 
-1. [Follow the upload guide](docs/install.md#claude-in-your-browser-recommended) to enable code execution and upload the [packaged skill](https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip).
-2. Paste the league description below, replacing the brackets. “I don't know” is fine; ask Claude to help you find the setting.
-3. Review the league settings and data dates, then ask Claude to generate your analysis and downloadable HTML board. Open the board before draft night and try marking a pick.
+The Claude browser preparation route needs no local Python installation. Live mode needs a running local Python process and a browser on that computer. Neither mode automatically syncs with ESPN, Yahoo, or Sleeper or submits picks. The code is free; assistant accounts and usage may cost money.
 
-The project is free. Creating your own plan requires an assistant account and sufficient usage; its plan limits apply. Claude's upload route requires code execution. [Current prerequisites and alternatives](docs/install.md).
+After installing, start with:
 
 ```text
-Use the fantasy draft analyst skill to make my draft plan.
-Ask me about missing settings before you simulate.
-
-Season and draft date: [2026, date and time zone]
-Platform: [ESPN / Yahoo / Sleeper / other]
-League size: [number of teams]
-Draft order: [snake / linear], my pick: [number], rounds: [number]
-Scoring: [standard / half-PPR / PPR]
-Passing TDs: [4 or 6], interceptions: [penalty]
-Other scoring: [bonuses, TE premium, or none]
-Starting lineup: [QB, RB, WR, TE, FLEX, superflex, K, DEF counts]
-Bench spots: [number]
-Keepers: [none, or number allowed and cost rules]
-My keeper options: [player and round cost, or none]
-Known league keepers: [draft slot, player, round cost for each; or unknown]
-Players I like or want to avoid: [names and why, or none]
-Draft-room tendencies: [anything I know, or unknown]
-Board colors: [favorite NFL team or colors]
-
-Use current public data and show the date and source for each input.
-Tell me if any data is unavailable or any result is only an approximation.
-Give me keeper advice if relevant, a pick-by-pick plan, the cost of
-waiting, and a downloadable HTML board. Explain the assumptions and
-which changes would alter your recommendation. Do not use the sample
-league's saved player data as current data for my league.
+Use the fantasy draft analyst skill to help me prepare for my fantasy draft.
+Ask me for my league settings, confirm them with me, then build a sourced
+plan with targets and alternatives. Show missing data and assumptions.
 ```
 
-Already use a coding assistant? See [Claude Code](docs/install.md#claude-code), [Codex or another coding assistant](docs/install.md#codex-or-another-coding-assistant), or [run the scripts yourself](docs/install.md#running-the-scripts-yourself). For chat without code execution, use the [paste-anywhere prompt](prompt/fantasy-draft-analyst-prompt.md); that route provides an analytical approximation, not the full simulation.
+Already have your settings? [Use the complete league template](docs/install.md#league-template). Other routes: [Claude Code](docs/install.md#claude-code) · [Codex or another coding assistant](docs/install.md#codex-or-another-coding-assistant) · [No code execution](docs/install.md#any-assistant-without-code-execution).
 
-## Historical benchmark, and how we will evaluate v3
+## What it helps you decide
 
-<!-- benchmark:start -->
-Archived v2 benchmark (does not evaluate v3): across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.
+- **Which source should I trust?** Inspect which projection inputs support an estimate, where they disagree, and what is missing.
+- **How does this player fit my team?** Compare usable starting-lineup contribution and modeled bench coverage under your scoring and roster requirements.
+- **My target is gone. Who is next?** Record the pick in local live mode and recalculate from the actual available pool.
+- **Can I afford to wait?** Inspect possible next-turn choices under declared opponent assumptions. Live mode’s eight scenarios are illustrative, not calibrated survival odds.
+- **What could change the recommendation?** Examine projection stress cases and ask the assistant to research dated injury, role, and usage evidence.
+- **Is my keeper worth the pick?** Compare eligible options and keeping nobody, including their round costs. Supports zero or one keeper per team.
 
-| Drafting policy | Mean projected lineup total |
-|---|---:|
-| Noisy ADP-based draft bot | 1,761 |
-| Saved-board policy | 1,851 |
-| Adaptive heuristic | 1,864 |
+## See v3 work
 
-**Internal simulation, not real-season results.** The metric is the sum of projections for one best legal starting lineup. The paired difference is +90.1 ± 3.5 points (approximately 95% Monte Carlo interval). This interval excludes projection and model uncertainty. Weekly substitutions, injury coverage and bench value are not scored. The baseline is our noisy ADP-based draft bot, not verified platform autopick.
+In the [public walkthrough](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare), a fictional 12-team half-PPR manager has Jonathan Taylor. Pick 19 takes George Pickens; the v3 engine then recommends Kenneth Walker III at pick 20, followed by Rashee Rice and Chris Olave.
 
-The benchmark follows the same saved player order and documented fallback as the displayed board. It does not model every choice a human user might make. [Exact results and input hashes](examples/sample-league/benchmark.json).
-<!-- benchmark:end -->
+The example also shows a reason to question the lead: lowering Walker’s projection by the observed source disagreement puts Rice first. Source disagreement is not a performance forecast or confidence interval.
 
-The saved example and comparison remain historical illustrations. New v3 recommendations include roster coverage, so their utility scores must not be compared numerically to this table. `evaluate_policy.py` supports held-out, timestamped one-pick decisions and weekly lineup choices made before outcomes are read. It is an evaluation harness, not evidence of superiority; no held-out performance result is claimed for this release. See [the architecture and evaluation boundaries](docs/toolkit-architecture.md).
+These are saved engine outputs using public projections fetched September 7, 2026 (UTC), not a current recommendation for your league. The webpage switches between reproduced states; it does not host your live draft. Evidence is **limited**: coverage varies, provider update times are unverified, and some scoring fields use documented zero approximations. No news or betting inputs were used in this example.
 
-## Make your next pick fit the rest of your draft
+[Inputs and reproduction](docs/site/README.md) · [Saved recommendation packets](docs/site/v3-demo.json) · [Download the captioned walkthrough](docs/media/v3-walkthrough.mp4)
 
-The difficult part of a draft is choosing between good players while building a complete team.
+## What informs the advice
 
-Taking a running back now changes the receivers you can target later. Your scoring, draft slot and keeper change those tradeoffs, too.
+| Input | How it is used | What to check |
+|---|---|---|
+| ESPN, CBS, FantasyPros, and authorized imports | Supported stat projections are rescored for your league | Coverage, season, scoring fields, timestamps, and source independence |
+| Your league | Scoring, starter slots, bench, draft order, and keeper costs | Confirm settings before running; never assume unknown keepers |
+| Recorded draft state | Actual picks, available players, and rival rosters in local live mode | Correct unmatched picks; import or enter changes |
+| News and usage evidence | Dated events, workload context, and explicit scenarios when researched or supplied | Source quality, period, denominator, and whether projections already reflect the news |
+| Market information | ADP and, when supplied or researched, dated betting context | Platform/format, market date, and assumptions; no automatic sportsbook feed |
 
-Fantasy Draft Analyst plays out possible drafts and turns that analysis into a plan: targets, backups and a board you can bring to draft night.
+More feeds do not guarantee more independent evidence. FantasyPros constituent coverage may be unknown, and not every player has three sources. Limited or missing evidence stays visible; the system can fall back to rank-only advice. A provider fetch time is not proof its underlying forecast was updated then.
 
-[Get the skill](#setup) to build a plan for your league. Want to see the idea first? The [interactive example](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare) shows two paths from the same starting draft room.
+[Evidence contract and providers](skills/fantasy-draft-analyst/references/evidence.md) · [Position metrics reference](skills/fantasy-draft-analyst/references/metrics.md)
 
-The method depends on projections, modeled opponents, and the policy making later picks. You can inspect those choices and challenge the result. Read [how it works](docs/how-it-works.md), the [interactive demo methodology](docs/site/README.md), the [worked analysis](examples/sample-league/analysis.md), and the [run log with data sources](examples/sample-league/RUNLOG.md).
+## What is new in v3
 
-## What it handles
+- **Inspect the evidence:** preserved identities, source dates, missing fields, and provider disagreement.
+- **Value a usable roster:** starting contribution plus explicit absence coverage; optional upside only when supported by supplied inputs.
+- **Follow the actual draft:** local pick entry/import, confirmed keepers, undo, resume, and data revisions.
+- **Explain the tradeoff:** next-turn scenarios, projection sensitivity, and saved decision records.
+- **Share a foundation:** reusable Python data and roster modules for future skills. Lineup and waiver workflows are planned, not shipped.
 
-| Setting | Support |
+[Changelog](CHANGELOG.md) · [Live session guide](skills/fantasy-draft-analyst/references/live-draft.md) · [Architecture](docs/toolkit-architecture.md)
+
+## Supported leagues
+
+| Setting | Supported |
 |---|---|
-| Drafts | Snake and linear; redraft and keeper leagues |
-| Scoring | Standard, half-PPR, PPR, passing-TD settings and supported TE premium; unsupported bonuses require additional data and cannot be called exact |
-| Lineups | QB / RB / WR / TE / K / DEF, FLEX, superflex |
-| Keepers | Zero or one per team, with a round cost; compare eligible user candidates and keeping nobody; known keepers use explicit draft slots |
-| Platforms | Platform-specific average draft position (ADP), when usable public data is available |
+| Drafts | Snake or linear redraft; zero or one keeper per team |
+| Scoring | Standard, half-PPR, PPR, passing-TD settings, supported TE premium and bonuses when required data is available |
+| Lineups | QB, RB, WR, TE, K, DEF, FLEX, and superflex |
+| Keeper costs | Explicit round cost and draft slot; compare eligible user candidates with keeping nobody |
+| ADP | Platform-specific average draft position when usable public data is available |
 
-Auction has a pricing approximation in the methodology, **not a bidding simulator**. Multi-keeper optimization, best ball’s weekly scoring, and dynasty are outside the model’s scope. Unusual rules and data sources may require adjustments; the assistant should identify those before promising a complete plan.
+Auction bidding, multi-keeper optimization, dynasty, and best ball’s weekly scoring are outside the shipped model. Unusual rules require an explicit data and scoring check.
 
-## Reproduce every number
+## Understand the limits
 
-Requires Python 3.10+ and PyYAML. From the repository root, create an environment and reproduce the benchmark against the committed sample inputs:
+- **Utility is a decision score.** Starting contribution, coverage, and any supplied upside inform it. It is not additional season points or win probability.
+- **The model can be wrong.** Projections, replacement assumptions, and modeled opponent behavior affect results. Source disagreement is shown; it does not automatically disqualify a player.
+- **Preparation and live mode differ.** A saved preparation board has frozen recommendations. Local live mode recalculates draft decisions after recorded picks, but uses cached player evidence until refreshed.
+- **Freshness requires action.** Ask for updated research and refresh the inputs. Neither a new skill download nor recording a pick automatically fetches player news.
+
+We have not established that v3 outperforms other assistants or improves real-season results. The [archived v2 benchmark](docs/archive/v2-benchmark.md) measures an internal simulation using a different objective; it does not evaluate v3. See the [evaluation approach](docs/toolkit-architecture.md) for the distinction between software checks and fantasy performance evidence.
+
+## Reproduce the example
+
+Python 3.10+ and PyYAML, from the repository root:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install pyyaml
-python scripts/compare_policies.py \
-  --league examples/sample-league/league.yaml \
-  --players examples/sample-league/players.csv \
-  --sim examples/sample-league/sim.json \
-  --drafts 800
+python -m pip install -r requirements.txt
+python scripts/build_v3_demo.py
 ```
 
-This command explicitly runs the legacy policy to inspect the archived comparison. New runs use `roster_v2` by default and will intentionally differ from saved v2 outputs. For new data preparation, live sessions and simulation commands, see the [script guide](docs/install.md#running-the-scripts-yourself).
+This offline command rebuilds the public example from frozen inputs and the shipped v3 engine. It updates `docs/site/v3-demo.json` and the marked demonstration in `index.html`. It does not fetch new data or change the draft algorithm. [Method and media reproduction](docs/site/README.md).
 
-## Where it can be wrong
-
-- **Projections are assumptions.** Confident simulation results can still be wrong if player projections or the model of your draft room are wrong.
-- **The board is a prepared plan.** Its recommendations and availability percentages do not update when you mark picks. An unexpected draft can make the plan less useful.
-- **Policies and coverage assumptions matter.** Later picks use a heuristic. Missing expected-games inputs use an explicit default; replacement strength and optional upside assumptions can change the result.
-- **Freshness depends on the run.** The assistant researches data when you ask it to; saved boards do not refresh themselves. Check dates and rerun before your draft when injuries or roles change.
+For your own league, follow the [current data and live commands](docs/install.md#local-live-advice), rather than using the frozen example as current advice.
 
 ## FAQ
 
-**Do I need to code?** No for the recommended Claude upload route. You need an assistant that can execute the bundled scripts to get the full simulation and board.
+**Do I need to code?** The Claude browser preparation route runs the scripts for you. Local live mode needs Python on your computer; a coding assistant can help with its setup.
 
-**Does this connect to my live draft?** You manually enter or import actual picks into the local live session. It recalculates against that state, supports undo and resume, and exports decision receipts. It does not log into your league or sync with ESPN, Yahoo, or Sleeper.
+**Can I use my phone?** You can open a saved preparation board in a browser and test whether it preserves your marks. The local live server is accessible only on its host computer; it is not a hosted mobile app.
 
-**Redraft with no keepers?** Yes. Say “no keepers” in your league description.
+**Can I share my board?** It contains your strategy. Live session exports also contain draft and league information. Share only what you intend others to see; the fictional public example is safe to share.
 
-**Can I share my board?** Yes. The HTML file contains your plan, so share it only with people you want to see your strategy. The public demo is safe to share as an example.
+**Where do I get help?** [Report a setup issue or bug](https://github.com/nicodeguyo/fantasy-draft-analyst/issues/new/choose) with a small, sanitized example. You do not need to publish private league details.
 
-**How do I get help?** [Report a bug or setup problem](https://github.com/nicodeguyo/fantasy-draft-analyst/issues/new/choose) with a small example. You do not need to publish your private league details.
+## Built for my league. Open for yours.
 
-## Contributing
+I built Fantasy Draft Analyst for my own league because rankings alone couldn’t explain the tradeoffs I was making. Drafting with it exposed weaknesses in the original approach. This release adds multiple-source evidence, actual draft context, and clearer assumptions—so you can inspect the advice and challenge it.
 
-Useful contributions include verified public data sources, supported examples for more league formats, clearer setup instructions, and improvements to the model's later-pick policy. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [changelog](CHANGELOG.md).
+— Nico Neugebauer, [@nicodeguyo](https://github.com/nicodeguyo)
 
-## Credits
+## Help build the toolkit
 
-<p align="center">
-<a href="https://github.com/nicodeguyo/fantasy-draft-analyst/stargazers"><img src="https://img.shields.io/github/stars/nicodeguyo/fantasy-draft-analyst?style=flat&labelColor=0B1B33&color=69BE28" alt="GitHub stars"></a>
-<a href="LICENSE"><img src="https://img.shields.io/github/license/nicodeguyo/fantasy-draft-analyst?style=flat&labelColor=0B1B33&color=69BE28" alt="MIT license"></a>
-<img src="https://img.shields.io/badge/python-3.10%2B-69BE28?style=flat&labelColor=0B1B33" alt="Python 3.10 or newer">
-<img src="https://img.shields.io/badge/dependencies-PyYAML%20only-69BE28?style=flat&labelColor=0B1B33" alt="Dependencies: PyYAML only">
-<img src="https://img.shields.io/badge/example-fully%20reproducible-69BE28?style=flat&labelColor=0B1B33" alt="Fully reproducible example">
-</p>
+Draft analysis is available now. Lineup and waiver tools are planned around the same shared data foundation.
 
-Built by Nico Neugebauer ([@nicodeguyo](https://github.com/nicodeguyo)) with Claude, for his own 14-team keeper league, then generalized. The projections, simulations and opinions are the model's; the players are real; the leagues in the examples are not. Not affiliated with the NFL, ESPN, Yahoo, Sleeper or any sportsbook. Data sources belong to their owners; respect their terms.
+Useful contributions include verified public sources, scoring fixtures, reproducible bug reports, clearer setup, and evaluation datasets. [Contributing guide](CONTRIBUTING.md). If the project helps you, star it to follow its progress or share the public example with your league.
 
-[MIT License](LICENSE). Use it, inspect it, improve it.
+[MIT licensed](LICENSE). Not affiliated with the NFL, ESPN, Yahoo, Sleeper, or sportsbooks. Third-party data belongs to its owners; respect their terms.
