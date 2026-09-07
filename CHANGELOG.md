@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0 — shared evidence, roster coverage and local live advice
+
+- Added a self-contained shared core for player identity, dated multi-source stat projections, explicit missing data, source independence and superseding news. Public/import adapters preserve provenance; incomplete data is labeled or rejected rather than silently called consensus.
+- Default draft utility now includes legal starter strength and modeled absence coverage, with explicit replacement and optional performance-upside assumptions. Source disagreement is not treated as performance volatility. Legacy policy remains for historical examples.
+- Added local live sessions with confirmed picks, undo/replay, keeper ownership, revisions, source refresh, conditional next-turn comparisons and auditable evidence-bound decision receipts. Static HTML remains preparation mode.
+- Added a held-out one-pick evaluation harness; no real-season improvement claim accompanies this release. The old 800-draft benchmark is explicitly historical.
+- Added reproducible ZIP packaging, installed-package tests and CI. The bundle includes its reusable Python core; lineup, waiver, dynasty and auction engines remain future work.
+
+
 ## 2.0.1 — correct late-round availability
 
 - Fixed late-round recommendations promoting early targets and watched players despite zero modeled availability. Tables beyond the rollout horizon now apply the simulator’s existing 15% availability floor, including expanded rows and notes-added players with known availability.

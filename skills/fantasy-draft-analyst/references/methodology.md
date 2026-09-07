@@ -13,10 +13,10 @@ For each pick and candidate:
 1. Simulate the draft to that pick, including keeper ownership and forfeited picks.
 2. Branch from the saved state when the candidate is available.
 3. Draft that candidate and let a lineup-aware heuristic complete the roster.
-4. Score the sum of season projections for one best legal starting lineup.
+4. Score roster utility: legal starter strength plus explicit absence coverage and optional performance-upside assumptions. `preferences.draft_policy: legacy` retains the old fixed-lineup policy for historical reproduction.
 5. Compare this result with an unforced continuation from the same state.
 
-The reported estimate is `mean(all controls) + mean(candidate − matched control | candidate available)`. It estimates a candidate's contribution on states where that candidate was available, then adds the common control mean to retain projected-lineup units.
+The reported estimate is `mean(all controls) + mean(candidate − matched control | candidate available)`. It estimates a candidate's contribution on states where that candidate was available, then adds the common control mean to retain modeled roster-utility units.
 
 **Shared randomness.** Candidates share the prefix state and copied random-generator state. Later picks can diverge, and candidate removals can change which players receive later random draws. This coupling reduces some simulation variation; it does not imply identical opponent decisions throughout each branch.
 
@@ -91,7 +91,7 @@ Explain the opportunity cost of taking a player early relative to ADP. Evaluate 
 
 Start from sourced stat lines and score them in the league's settings. Date every input. Adjust projections only with an explicit reason: role changes, expected games, efficiency regression, or team context. Keep source facts separate from analyst assumptions. If data is unavailable, identify the gap; sample inputs are saved examples, not a current consensus feed.
 
-Expected-game discounts can be built into season totals, but that does not simulate injured weeks or substitute bench players. Run sensitivity cases for the projections driving the recommendation. A tight Monte Carlo SE can coexist with a badly wrong player projection.
+Expected-game discounts may already be built into season totals. The v3 coverage model uses separately declared expected games and projection conventions to avoid multiplying that discount twice. Its absence scenarios are an approximation, not a full simulated schedule. Run sensitivity cases for the projections driving the recommendation. A tight Monte Carlo SE can coexist with a badly wrong player projection.
 
 ## 11. Cost of waiting and sample drafts
 
@@ -99,11 +99,11 @@ Expected-game discounts can be built into season totals, but that does not simul
 
 The shared replacement constant cancels in the direct subtraction, but changed assumptions can affect simulated paths and hence the output. Interpret this as modeled loss of available positional talent over a draft interval, not a guaranteed cost of a live decision. Roster fit still matters: the biggest positional drop does not automatically identify the best player for an already-filled lineup.
 
-Use the current output to describe the strongest positional windows. Sample drafts illustrate possible rosters; report which policy produced them, their projected-lineup range, and repeated choices. A few examples do not establish a general performance distribution. The target plan should include reachable alternatives, not depend on the best observed lucky fall.
+Use the current output to describe the strongest positional windows. Sample drafts illustrate possible rosters; report which policy produced them, their separately labeled starter-point and roster-utility ranges, and repeated choices. A few examples do not establish a general performance distribution. The target plan should include reachable alternatives, not depend on the best observed lucky fall.
 
 ## 12. Late rounds
 
-Useful bench picks can provide injury cover, a path to a larger role, or future keeper value. The fixed-lineup score incompletely values these benefits. Explain them as football judgment and identify where the plan departs from pure starter scoring.
+Useful bench picks can provide injury cover, a path to a larger role, or future keeper value. The v3 utility scores coverage under declared absence and waiver assumptions, and optional upside only from explicit performance uncertainty. It does not value future keeper years. Explain unsupported considerations separately.
 
 The displayed board policy is authoritative for a board-following benchmark: follow its ordered candidates, including expanded rows; skip configured exclusions or full position caps; reserve enough picks to fill the starting lineup. If its candidates are exhausted, use the shared surplus fallback shown in the board. Put any specific late-round target into the displayed plan so a benchmark and the user receive the same instruction. The adaptive rollout heuristic is a separate policy and may reserve K/DEF for its final picks.
 
@@ -131,3 +131,11 @@ Name the assumptions most likely to change the pick: important player projection
 ## 15. Player research
 
 Check role, route/snap share, earned targets, team volume, red-zone opportunities, and expected games using dated sources. Treat small samples and camp quotes cautiously. Betting lines can be a cross-check with their own assumptions; they are not automatically player medians or proof of a projection. See `metrics.md` and `data-sources.md` for research guidance, verifying current availability rather than treating older source descriptions as a live audit.
+
+## v3 metric and evidence contract
+
+`sim.settings.draft_policy` and `sim.roster_utility` identify the objective. `totals` retains starting-lineup points for compatibility; candidate comparisons under `roster_v2` use utility and must be labeled accordingly. Do not compare utility values to the archived v2 projected-point benchmark.
+
+The coverage model uses explicit expected games when supplied; otherwise it declares its missed-game default. A separately configurable waiver baseline determines how much a bench player adds. Its default positional cutoff is conservative and is not a measured waiver pool. FLEX and superflex assignment never count a player twice. Expected source disagreement (`projection_sd`) is separate from performance uncertainty (`performance_sd`).
+
+For live recommendations use confirmed draft state, not unconditional pre-draft availability. See `live-draft.md`. For normalized stat lines, source status and dated news see `evidence.md`. Run source and role sensitivity before recommending a large ADP reach; explain take-now versus a feasible alternative next turn and the assumption that could reverse the choice.

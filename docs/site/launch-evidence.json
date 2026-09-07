@@ -2,10 +2,11 @@
   "sample": "The Sample League",
   "projection_data_date": "2026-09-03 (saved analyst-authored inputs, not a current-data refresh)",
   "metric": "sum of projections for one best legal starting lineup",
-  "benchmark_claim": "Across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.",
+  "benchmark_claim": "Archived v2 benchmark (does not evaluate v3): across 800 simulated drafts, the saved-board policy produced 90 more projected starting-lineup points than the noisy ADP-based draft bot, on average.",
   "benchmark_source": "examples/sample-league/benchmark.json",
   "comparison_source": "docs/site/pick-comparison.json",
   "availability_definition": "Unconditional frequency before the draft; includes drafts where the player was taken by the simulated user. Not pass-up survival.",
+  "historical_policy": "legacy; original results preserved, not rerun by this metadata script",
   "sources_sha256": {
     "examples/sample-league/league.yaml": "212a8a1ba93dfc538598589e0e19a592e163e05eb623195ab6a7a2ca53ced061",
     "examples/sample-league/players.csv": "bdfecc09a0a841d30f59b0ae4a7670dad54f8f4ff7f97b0552d4cde59babd25d",
@@ -13,9 +14,9 @@
     "examples/sample-league/notes.json": "e15a9a872e2a00cf0355cccabaa5ee449055aeec7619111118142205c52a30e8",
     "examples/sample-league/benchmark.json": "7b24d72bd2cf5fc252464a09ccf650b32028c113dddf6f82d3ce34fb95d5d6b4",
     "docs/site/pick-comparison.json": "22f7a9c1c96f98f55ebd2e6801f733f85f4b6b641a7d2644f5f7c398021eec11",
-    "skills/fantasy-draft-analyst/scripts/draft_sim.py": "7f65a89939f9112344ea5accf915950b2afb6eb6ad43ec672e8246f99287812d",
-    "skills/fantasy-draft-analyst/scripts/build_board.py": "5a799e596a229e5a2be140057a38bd1c3a540c615c6e0327126e0f1d4fa7aea2",
-    "scripts/compare_policies.py": "75e5830a47fac67436fa1d1849e7c3dc50d48ac7cf8058acece36abc4ba4ee4b"
+    "skills/fantasy-draft-analyst/scripts/draft_sim.py": "da3d01e69f5b28198ca43e223a3d5fb7f4b5267227c9a0f73329b17ebdda0942",
+    "skills/fantasy-draft-analyst/scripts/build_board.py": "42387e2966a62b87c500f372477eda19725d463e463194d43b0a8b8174719b72",
+    "scripts/compare_policies.py": "c8ae5231999d320931c3125a087379c7c02a11569193c7c64494fe6f2bf12c1c"
   },
   "regeneration_commands": [
     "python3 skills/fantasy-draft-analyst/scripts/draft_sim.py --league examples/sample-league/league.yaml --players examples/sample-league/players.csv --sims 1500 --samples 10 --pick-values --keeper-scenarios --out examples/sample-league/sim.json",

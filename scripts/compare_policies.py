@@ -49,6 +49,7 @@ def main():
         ap.error('--top and --horizon-probes must be positive')
     notes_path = Path(args.notes) if args.notes else Path(args.sim).with_name('notes.json')
     cfg, pool = ds.load_league(args.league), ds.load_players(args.players)
+    cfg.setdefault('preferences', {})['draft_policy'] = 'legacy'  # Archived v2 illustration.
     sim = json.loads(Path(args.sim).read_text())
     notes = json.loads(notes_path.read_text())
     if not sim.get('pick_values'):

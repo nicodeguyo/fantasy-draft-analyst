@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "season": 2026,
+  "period": "season",
+  "players": [
+    {
+      "player_id": "example:rb1",
+      "name": "Example Runner",
+      "pos": "RB",
+      "team": "EXA",
+      "aliases": [
+        "E. Runner"
+      ],
+      "provider_ids": {
+        "example-a": "12"
+      },
+      "bye": 7,
+      "adp": {
+        "value": 24.5,
+        "sd": 7,
+        "season": 2026,
+        "format": "managed-1qb",
+        "source": "example-room",
+        "updated_at": "2026-09-06T10:00:00Z"
+      },
+      "projections": [
+        {
+          "source": "example-a",
+          "independence_group": "example-a",
+          "season": 2026,
+          "period": "season",
+          "updated_at": "2026-09-06T09:00:00Z",
+          "fetched_at": "2026-09-06T10:00:00Z",
+          "url": "https://example.com/example-a",
+          "stats": {
+            "rush_yd": 1000,
+            "rush_td": 7,
+            "rec": 40,
+            "rec_yd": 320,
+            "rec_td": 2,
+            "fum": 1,
+            "two_pt": 0
+          },
+          "independence_verified": true
+        },
+        {
+          "source": "example-b",
+          "independence_group": "example-b",
+          "season": 2026,
+          "period": "season",
+          "updated_at": "2026-09-06T09:00:00Z",
+          "fetched_at": "2026-09-06T10:00:00Z",
+          "url": "https://example.com/example-b",
+          "stats": {
+            "rush_yd": 1100.0,
+            "rush_td": 7.7,
+            "rec": 44.0,
+            "rec_yd": 352.0,
+            "rec_td": 2.2,
+            "fum": 1.1,
+            "two_pt": 0.0
+          },
+          "independence_verified": true
+        }
+      ],
+      "expected_games": 16
+    }
+  ]
+}

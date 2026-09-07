@@ -25,6 +25,7 @@ def main():
     import draft_sim as ds
     sample = repo / 'examples/sample-league'
     cfg = ds.load_league(str(sample / 'league.yaml'))
+    cfg.setdefault('preferences', {})['draft_policy'] = 'legacy'  # Archived v2 illustration.
     source_sim = json.loads((sample / 'sim.json').read_text())
     sim = ds.Sim(cfg, ds.load_players(str(sample / 'players.csv')),
                  source_sim['league']['keeper'], source_sim['league']['keeper_round'])

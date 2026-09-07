@@ -1,0 +1,16 @@
+{
+  "csv": "example-projection-import.csv",
+  "source": "example-c",
+  "independence_group": "example-c",
+  "independence_verified": true,
+  "season": 2026,
+  "period": "season",
+  "fetched_at": "2026-09-06T10:00:00Z",
+  "updated_at": "2026-09-06T09:00:00Z",
+  "url": "https://example.com/synthetic-projections",
+  "column_map": {
+    "name": "Player", "rush_yd": "Rushing Yards", "rush_td": "Rushing TD",
+    "rec": "Receptions", "rec_yd": "Receiving Yards", "rec_td": "Receiving TD",
+    "fum": "Fumbles Lost", "two_pt": "Two Points"
+  }
+}

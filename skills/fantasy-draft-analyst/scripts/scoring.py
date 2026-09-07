@@ -10,7 +10,7 @@ Usage:
   python3 scoring.py --league league.yaml --stats stats.csv --adp adp.csv --out players.csv
   python3 scoring.py --league league.yaml --stats stats.csv --out players.csv     # ADP already in stats.csv
 
-stats.csv columns (any missing column is treated as 0):
+Legacy sparse stats.csv columns (missing fields assume zero; use prepare_data.py for strict evidence validation):
   name,pos,team,pass_yd,pass_td,int,rush_yd,rush_td,rec,rec_yd,rec_td,fum,two_pt,
   fg,fg_miss,xp,  (kickers)
   sacks,def_int,fum_rec,def_td,safety,pts_allowed,  (defenses — see DEF scoring below)
@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -55,9 +56,12 @@ def f(row: dict, key: str) -> float:
     if v in (None, "", "-", "—"):
         return 0.0
     try:
-        return float(str(v).replace(",", ""))
-    except ValueError:
-        return 0.0
+        result = float(str(v).replace(",", ""))
+    except (ValueError, TypeError):
+        raise ValueError(f"Malformed numeric stat {key}: {v!r}") from None
+    if not math.isfinite(result):
+        raise ValueError(f"Stat {key} must be finite")
+    return result
 
 
 def score_row(row: dict, sc: dict) -> float:
@@ -94,7 +98,7 @@ def score_row(row: dict, sc: dict) -> float:
         pts += f(row, "fum_rec") * float(sc.get("fum_rec", 2)) + f(row, "def_td") * float(sc.get("def_td", 6))
         pts += f(row, "safety") * float(sc.get("safety", 2))
         pa = f(row, "pts_allowed")
-        if pa:
+        if row.get("pts_allowed") not in (None, "", "-", "—"):
             # ESPN/Yahoo-style points-allowed buckets, per game, approximated over a season
             per_game = pa / 17.0
             bucket = 10 if per_game == 0 else 7 if per_game < 7 else 4 if per_game < 14 else 1 if per_game < 21 else 0 if per_game < 28 else -1 if per_game < 35 else -4

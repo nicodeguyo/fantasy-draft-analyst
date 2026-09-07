@@ -29,6 +29,11 @@ import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
+# Also support existing callers that load this CLI with importlib by filename.
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+from fantasy_core.roster_value import roster_value
+
 SKILL_POS = ("RB", "WR", "TE")
 QB_POS = ("QB",)
 LATE_POS = ("K", "DEF")
@@ -78,6 +83,11 @@ def load_players(path: str) -> list[dict]:
                 raise ValueError(f"ADP, ADP standard deviation and projection must be finite for {name}")
             if adp <= 0 or sd < 0:
                 raise ValueError(f"ADP must be positive and its standard deviation nonnegative for {name}")
+            for key in ("expected_games", "performance_sd", "projection_sd", "source_count", "independent_sources"):
+                if r.get(key) not in (None, ""):
+                    value = float(r[key])
+                    if not math.isfinite(value) or value < 0:
+                        raise ValueError(f"Invalid {key} for {name}")
             rows.append({
                 "name": name,
                 "pos": pos,
@@ -87,6 +97,8 @@ def load_players(path: str) -> list[dict]:
                 "proj": proj,
                 "bye": r.get("bye", ""),
                 "note": r.get("note", ""),
+                **{key: r[key] for key in ("player_id", "evidence_mode", "projection_convention") if r.get(key)},
+                **{key: float(r[key]) for key in ("expected_games", "performance_sd", "projection_sd", "source_count", "independent_sources") if r.get(key) not in (None, "")},
             })
     if not rows:
         sys.exit("players.csv is empty")
@@ -266,6 +278,24 @@ class Sim:
         self.superflex = self.starters["SUPERFLEX"]
         self.maxc = {"QB": 2 + self.superflex, "RB": 6, "WR": 7, "TE": 2, "K": 1, "DEF": 1}
         self._validate_capacity()
+        # Canonical engine values are expected season totals. Normalize explicit
+        # alternative conventions once, before replacement levels and reporting.
+        horizon = float(cfg.get("valuation", {}).get("horizon_games", cfg["league"].get("season_games", 17)))
+        default_missed = float(cfg.get("valuation", {}).get("assumed_missed_games", 1))
+        for p in pool:
+            convention = p.get("projection_convention") or "season_total"
+            if convention not in ("season_total", "per_game", "full_season"):
+                raise ValueError(f"Unsupported projection_convention: {convention}")
+            games = float(p["expected_games"]) if p.get("expected_games") not in (None, "") else horizon - default_missed
+            if not math.isfinite(horizon) or horizon <= 0 or not 0 <= games <= horizon:
+                raise ValueError("Expected games must fit the configured horizon")
+            if convention != "season_total":
+                p["raw_projection"] = p["proj"]
+                p["raw_projection_convention"] = convention
+                p["proj"] *= games if convention == "per_game" else games / horizon
+                p["projection_convention"] = "season_total"
+            if games == 0 and p["proj"] != 0:
+                raise ValueError("Zero expected_games requires zero expected season points")
         self.ranks, self.flex_fill = replacement_ranks(cfg, pool)
         self.repl = replacement_levels(pool, self.ranks)
         self.pool = pool
@@ -280,6 +310,10 @@ class Sim:
         self.qb_strategy = prefs.get("qb_strategy", "auto")
         self.te_strategy = prefs.get("te_strategy", "auto")
         self.risk = prefs.get("risk", "balanced")
+        self.draft_policy = prefs.get("draft_policy", "roster_v2")
+        if self.draft_policy not in ("legacy", "roster_v2"):
+            raise ValueError("preferences.draft_policy must be legacy or roster_v2")
+        self._value_cache = {}
         self.published_keepers = cfg.get("keepers", {}).get("league_keeper_list") or []
         self._validate_keepers()
         # Names whose availability must always be reported (the user's own players and targets).
@@ -444,6 +478,28 @@ class Sim:
                 total += (self.superflex - len(chosen)) * sf_repl
         return total, start
 
+    def roster_breakdown(self, roster, fill_replacement=True):
+        """Shared live/CLI/evaluation utility with transparent components.
+
+        Inputs are immutable during a Sim. Use a new Sim when a data snapshot or
+        league configuration changes; cache keys include the fill policy.
+        """
+        if self.draft_policy == "legacy":
+            points, chosen = self.lineup_pts(roster, fill_replacement)
+            return {"policy": "legacy", "total": points, "starter_points": points,
+                    "coverage_points": 0., "upside_points": 0.,
+                    "starters": [p.get("player_id") or p["name"] for p in chosen],
+                    "assumptions": ["Legacy ideal starting-lineup baseline; bench coverage omitted."]}
+        key = (fill_replacement, tuple(sorted(p.get("player_id") or p["name"] for p in roster)))
+        if key not in self._value_cache:
+            if len(self._value_cache) >= 16384:
+                self._value_cache.clear()
+            self._value_cache[key] = roster_value(roster, self.cfg, self.repl, fill_replacement)
+        return self._value_cache[key]
+
+    def objective_pts(self, roster, fill_replacement=False):
+        return self.roster_breakdown(roster, fill_replacement)["total"]
+
     # ---- opponents ----
     def opp_pick(self, avail, roster, rnd, rng):
         c = Counter(p["pos"] for p in roster)
@@ -479,29 +535,39 @@ class Sim:
         It is a *policy*, not the decision: the decision is the final lineup the rollout produces.
         """
         c = Counter(p["pos"] for p in roster)
-        base, _ = self.lineup_pts(roster, fill_replacement=True)
+        base = self.objective_pts(roster, fill_replacement=True)
         left = self.rounds - rnd
         out = []
         for p in avail:
+            if p.get("expected_games") not in (None, "") and float(p["expected_games"]) == 0:
+                continue
             if p["name"] in self.avoid:
                 continue
             if c[p["pos"]] >= self.maxc[p["pos"]]:
                 continue
             if p["pos"] in LATE_POS and rnd < self.rounds - 1:
                 continue
-            gain = self.lineup_pts(roster + [p], fill_replacement=True)[0] - base
-            v = gain + 0.40 * p["vor"]
+            gain = self.objective_pts(roster + [p], fill_replacement=True) - base
+            v = gain + (0.40 * p["vor"] if self.draft_policy == "legacy" else 0.0)
             # Opportunity cost of waiting: if an equally good player at this position is usually still
             # there at my next pick, taking him now is worth less; if the position is about to run out,
             # it's worth more. Learned from the probe run (self.pos_horizon).
             if next_pick is not None and next_pick in self.pos_horizon:
                 later = self.pos_horizon[next_pick].get(p["pos"])
                 if later is not None:
-                    v += 0.6 * (p["vor"] - later)
+                    if self.draft_policy == "legacy":
+                        v += 0.6 * (p["vor"] - later)
+                    elif p["vor"] > 0:
+                        # Horizon VOR describes future starters, not reserve usefulness.
+                        # Do not punish a needed deep RB because his starter VOR is negative.
+                        v += 0.6 * (p["vor"] - max(0., later))
+            # Only legacy reproduces ADP-spread risk. In v2 neither draft spread
+            # nor disagreement among providers masquerades as performance variance.
+            uncertainty = p["sd"] if self.draft_policy == "legacy" else float(p.get("performance_sd") or 0.)
             if self.risk == "aggressive":
-                v += 0.05 * p["sd"]
+                v += 0.05 * uncertainty
             elif self.risk == "conservative":
-                v -= 0.05 * p["sd"]
+                v -= 0.05 * uncertainty
             qb_needed = self.starters["QB"] + self.superflex
             if p["pos"] == "QB":
                 if c["QB"] < qb_needed and left <= 5:
@@ -523,7 +589,7 @@ class Sim:
                     v += 25
             # Bench balance: once a player wouldn't start, a fourth backup at one position is worth
             # less than a first backup at another — injuries hit every position.
-            if gain <= 0.5 and p["pos"] in SKILL_POS:
+            if self.draft_policy == "legacy" and gain <= 0.5 and p["pos"] in SKILL_POS:
                 backups = c[p["pos"]] - self.starters[p["pos"]]
                 if backups >= 2:
                     v -= 10 * (backups - 1)
@@ -732,7 +798,7 @@ def rollout_pick_values(sim: Sim, ladder: list[tuple[int, int]], *, rollouts: in
         for st in live:
             br = Sim.copy_state(st)
             sim.play(br)
-            control.append(sim.lineup_pts(br["rosters"][sim.slot])[0])
+            control.append(sim.objective_pts(br["rosters"][sim.slot]))
         control_mean = statistics.mean(control)
 
         # --- roll each candidate out from the same prefixes ---
@@ -746,10 +812,15 @@ def rollout_pick_values(sim: Sim, ladder: list[tuple[int, int]], *, rollouts: in
                 br = Sim.copy_state(st)
                 sim.take(br, pl)
                 sim.play(br)
-                diffs.append(sim.lineup_pts(br["rosters"][sim.slot])[0] - control[k])
+                diffs.append(sim.objective_pts(br["rosters"][sim.slot]) - control[k])
             if not diffs:
                 continue
             m, se = _mean_se(diffs)
+            for key in ("expected_games", "performance_sd", "projection_sd", "source_count", "independent_sources"):
+                if r.get(key) not in (None, ""):
+                    value = float(r[key])
+                    if not math.isfinite(value) or value < 0:
+                        raise ValueError(f"Invalid {key} for {name}")
             rows.append({"name": nm, "pos": pl["pos"], "value": round(control_mean + m, 1),
                          "vs_control": round(m, 1),
                          "se": round(se, 1), "n": len(diffs),
@@ -846,16 +917,17 @@ def cost_of_waiting(pos_horizon: dict, ladder: list[tuple[int, int]], max_pick: 
 
 def scenario_totals(cfg: dict, pool: list[dict], keeper: str | None, keeper_round: int | None,
                     sims: int, seed: int) -> dict:
-    """Mean projected final starting lineup across full drafts under one keeper scenario."""
+    """Mean final roster utility under the same policy used for draft rollouts."""
     s = Sim(cfg, [dict(p) for p in pool], keeper, keeper_round)
     pos_best = defaultdict(lambda: defaultdict(list))
     for i in range(min(150, sims)):
         s.run(seed + 70000 + i, pos_best=pos_best)
     s.pos_horizon = {ov: {pos: statistics.mean(v) for pos, v in d.items()} for ov, d in pos_best.items()}
-    totals = [s.run(seed + 300000 + i)[2] for i in range(sims)]
+    totals = [s.objective_pts(s.run(seed + 300000 + i)[1]) for i in range(sims)]
     m, se = _mean_se(totals)
     return {"keeper": keeper, "keeper_round": keeper_round, "mean": round(m), "se": round(se, 1),
-            "sims": sims, "min": round(min(totals)), "max": round(max(totals))}
+            "sims": sims, "min": round(min(totals)), "max": round(max(totals)),
+            "metric": "roster_utility" if s.draft_policy == "roster_v2" else "starter_points"}
 
 
 # ----------------------------------------------------------------------------
@@ -1049,10 +1121,12 @@ def main():
     # --- what the draft is worth when you actually follow the plan ---
     n_out = min(args.sims, 600)
     totals = []
+    utility_totals = []
     owned = Counter()
     for s in range(n_out):
         picks, roster, total, start = sim.run(args.seed + 400000 + s, targets=targets)
         totals.append(total)
+        utility_totals.append(sim.objective_pts(roster))
         for _, r, p in picks:
             if r <= 8:
                 owned[p["name"]] += 1
@@ -1173,6 +1247,9 @@ def main():
         "watch": sorted(sim.watch),
         "availability": {str(k): v for k, v in avail.items()},
         "most_owned": [{"name": n, "pct": round(c / n_out * 100)} for n, c in owned.most_common(15)],
+        "roster_utility": {"policy": sim.draft_policy, "mean": round(statistics.mean(utility_totals), 1),
+                           "min": round(min(utility_totals), 1), "max": round(max(utility_totals), 1),
+                           "assumptions": sim.roster_breakdown(roster)["assumptions"]},
         "totals": {"mean": round(statistics.mean(totals)), "min": round(min(totals)), "max": round(max(totals)),
                    "sd": round(statistics.pstdev(totals), 1)},
         "samples": samples,
@@ -1181,7 +1258,10 @@ def main():
                      "keeper_selection": keeper_selection,
                      "keeper_scope": "zero or one keeper per team; published owners use explicit draft_slot",
                      "availability_model": "unconditional pre-draft frequency with all seats using the ADP bot; not conditional pass-up survival",
-                     "objective": "sum of projections for one best legal starting lineup; excludes weekly substitutions, injuries and bench coverage"},
+                     "draft_policy": sim.draft_policy,
+                     "objective": "roster utility: projected starters plus legal reserve coverage and explicit performance-upside scenarios" if sim.draft_policy == "roster_v2" else "legacy fixed starting lineup",
+                     "totals_metric": "projected starting-lineup points, separately reported from roster utility",
+                     "projection_uncertainty": "source disagreement and ADP spread are not football outcome variance"},
     }
     Path(args.out).write_text(json.dumps(out, indent=1), encoding="utf-8")
 
@@ -1196,7 +1276,7 @@ def main():
                        [round(coll[ov].get(p["name"], 0) / args.sims * 100) for ov in cols])
 
     # --- console summary (markdown) ---
-    print('Interpretation: totals score one fixed projected starting lineup. Legacy tie/level/within-noise flags are descriptive Monte Carlo heuristics, not equivalence tests or total forecast uncertainty.\n')
+    print('Interpretation: totals report projected starters; roster_utility separately adds legal coverage and explicit upside. Rollouts optimize the configured draft policy. Noise flags describe Monte Carlo sampling only, not football forecast uncertainty.\n')
     print(f"# Draft simulation — {teams} teams, slot {slot}, {args.sims} runs")
     print(f"Keeper: {keeper or 'none'}" + (f" (round {keeper_round})" if keeper_round else ""))
 
