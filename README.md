@@ -2,7 +2,7 @@
 <p align="center"><b>Your league. Your roster. Your next pick.</b></p>
 <p align="center">Make your next fantasy football pick with the evidence and the tradeoffs in view.</p>
 <p align="center"><a href="#setup"><b>Choose your setup</b></a> · <a href="https://nicodeguyo.github.io/fantasy-draft-analyst/#compare">Explore the v3 example</a> · <a href="https://github.com/nicodeguyo/fantasy-draft-analyst/raw/refs/heads/main/dist/fantasy-draft-analyst.zip">Download v3.0.0</a></p>
-<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/#compare"><img src="docs/media/v3-decision.png" width="760" alt="Actual v3 engine output in a saved fictional draft: after George Pickens is taken, Kenneth Walker III leads the shortlist ahead of Rashee Rice and Chris Olave. Each choice exposes its sources and tradeoffs."></a></p>
+<p align="center"><a href="https://nicodeguyo.github.io/fantasy-draft-analyst/#compare"><img src="docs/media/v3-tour.gif" width="480" alt="15-second tour: 66 more projected starter points in the benchmark, an updated shortlist, the Walker next-pick comparison, and free skill setup."></a></p>
 
 A free, open-source skill for AI assistants. Compare available players using your scoring, multiple projection sources, and the team you’re building. See the recommendation, the alternatives, and what could change the call.
 
@@ -44,11 +44,25 @@ Already have your settings? [Use the complete league template](docs/install.md#l
 
 In the [public walkthrough](https://nicodeguyo.github.io/fantasy-draft-analyst/#compare), a fictional 12-team half-PPR manager has Jonathan Taylor. Pick 19 takes George Pickens; the v3 engine then recommends Kenneth Walker III at pick 20, followed by Rashee Rice and Chris Olave.
 
-The example also shows a reason to question the lead: lowering Walker’s projection by the observed source disagreement puts Rice first. Source disagreement is not a performance forecast or confidence interval.
+**Why take Walker now?** If you take Rice at 20, Walker reaches pick 29 in 1.4% of the simulated paths. Take Walker instead, and Rice reaches 29 in 30.9%. The Walker-first path averages **+7.5 projected points across the next two selections** (800 simulations per path).
 
-These are saved engine outputs using public projections fetched September 7, 2026 (UTC), not a current recommendation for your league. The webpage switches between reproduced states; it does not host your live draft. Evidence is **limited**: coverage varies, provider update times are unverified, and some scoring fields use documented zero approximations. No news or betting inputs were used in this example.
+Fictional 12-team half-PPR draft using saved September 7 projections. [Explore the inputs and method](docs/site/README.md).
 
-[Inputs and reproduction](docs/site/README.md) · [Saved recommendation packets](docs/site/v3-demo.json) · [Download the captioned walkthrough](docs/media/v3-walkthrough.mp4)
+[Watch the narrated tour](docs/media/v3-walkthrough.mp4) · [Saved recommendation packets](docs/site/v3-demo.json)
+
+## Your draft decisions add up
+
+**+66 projected starting-lineup points.** Our v3 draft policy averaged 66 more points than disciplined ADP drafting across 800 simulated drafts.
+
+| Draft approach | Projected starting-lineup points | Gain with Fantasy Draft Analyst |
+|---|---:|---:|
+| Noisy ADP-based drafting | 1,775 | **+104 points** |
+| Disciplined ADP drafting | 1,813 | **+66 points** |
+| **Fantasy Draft Analyst v3** | **1,879** | — |
+
+**A stronger projected lineup in 793 of 800 simulated drafts** against disciplined ADP.
+
+Internal simulation · 12-team half-PPR · All 12 draft positions · September 7 projections. [Method, baseline rules, and complete results](examples/v3-benchmark/README.md).
 
 ## What informs the advice
 

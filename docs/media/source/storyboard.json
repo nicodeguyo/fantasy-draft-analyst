@@ -1,0 +1,38 @@
+[
+  {
+    "start": 0,
+    "end": 6,
+    "voice": "Your next pick shapes your whole team. Get a plan built around your league.",
+    "caption": "Your league. Your roster. Your next pick."
+  },
+  {
+    "start": 6,
+    "end": 12,
+    "voice": "Sixty-six more projected points than disciplined A D P drafting.",
+    "caption": "+66 projected starting-lineup points versus disciplined ADP."
+  },
+  {
+    "start": 12,
+    "end": 18,
+    "voice": "Your target's gone? Your backup's ready. Record the pick and update your next move.",
+    "caption": "Record the pick. Get your updated shortlist."
+  },
+  {
+    "start": 18,
+    "end": 24,
+    "voice": "Taking Walker first gains seven and a half points across two picks.",
+    "caption": "Take Walker now. Keep your options open at 29."
+  },
+  {
+    "start": 24,
+    "end": 30,
+    "voice": "A stronger projected lineup in seven hundred ninety-three of eight hundred simulations.",
+    "caption": "793 of 800 stronger projected lineups versus disciplined ADP."
+  },
+  {
+    "start": 30,
+    "end": 36,
+    "voice": "Get the free skill. Prepare your board, or run live advice on your computer.",
+    "caption": "Get the free skill. Build your draft plan."
+  }
+]

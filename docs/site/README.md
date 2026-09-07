@@ -19,7 +19,7 @@ The first 18 selections follow ascending ADP among players with eligible project
 
 The engine calls its normal `recommend()` function before and after the recorded pick. At pick 20, it compares Walker, Rice, and Olave, including their evidence, roster contributions, next-turn possibilities, and projection sensitivity. The current roster contains Jonathan Taylor. Confirmed keepers are supported by the product but this example has none.
 
-The next-turn comparisons use eight paired opponent continuations to pick 29. They are illustrative scenarios, not calibrated availability probabilities or a full-season backtest. Roster utility is a decision score; its components are not additional points over another candidate. Source dispersion measures disagreement, not football outcome variance. Missing expected-games values and bench coverage use the engine's declared defaults; no performance-upside inputs are supplied here.
+The shipped recommendation packet includes eight quick paired opponent continuations to pick 29. The marketing explanation uses a separate expanded run of 800 continuations per path, preserved in [next-turn-800.json](../../examples/v3-benchmark/next-turn-800.json). They are illustrative scenarios, not calibrated availability probabilities or a full-season backtest. Roster utility is a decision score; its components are not additional points over another candidate. Source dispersion measures disagreement, not football outcome variance. Missing expected-games values and bench coverage use the engine's declared defaults; no performance-upside inputs are supplied here.
 
 ## Reproduce
 
@@ -31,7 +31,7 @@ python scripts/build_v3_demo.py
 
 The script rescoring step uses the frozen `as_of` time, then reproduces both states through the same CSV loader and policy as local live mode. It writes [v3-demo.json](v3-demo.json), including input hashes, and refreshes the marked HTML section on the homepage. It does not modify the draft engine. The public JSON omits ephemeral session tokens but preserves the evidence and scenarios behind the candidates.
 
-To regenerate the screenshot, social preview, and captioned video, see [media reproduction](../media/README.md).
+To regenerate the GIF, screenshot, social preview, and narrated video, see [media reproduction](../media/README.md).
 
 ## Website behavior and accessibility
 
@@ -48,3 +48,9 @@ Open `http://127.0.0.1:8765/`. GitHub Pages deploys `main`, root. Relative asset
 ## Historical assets
 
 The [v2 site](../archive/v2-site.html), [benchmark](../archive/v2-benchmark.md), saved preparation board, and original media are archived. `build_demo.py` and `build_launch_evidence.py` now target the archive, so reproducing historical evidence cannot overwrite the current homepage. The current homepage does not use the archived performance claim.
+
+## Current benchmark and marketing proof
+
+The three-row marketing table is backed by [800-room results](../../examples/v3-benchmark/README.md): +66.226 projected starter points versus disciplined ADP and +104.307 versus the noisy bot, rounded to +66 and +104. V3 had the stronger projected lineup in 793 of 800 rooms. The complete research retains the legacy comparison; it is not included in the marketing table.
+
+The Walker explanation uses 11/800 = 1.375% (shown as 1.4%), 247/800 = 30.875% (shown as 30.9%), and 7.457 points (shown as 7.5). Each probability is conditional on the choice described beside it. Sources, modeling assumptions, and complete results remain in the linked research; shared qualifications are not repeated on each candidate card.

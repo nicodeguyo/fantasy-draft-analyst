@@ -1,0 +1,24 @@
+{
+  "code_commit": "dbcb40d8cea9bec222d5bf813eb3815c3af19d23",
+  "source_sha256": {
+    "examples/v3-live/league.json": "050e2e5e4d6347df4334392d33791dd4596b0f037f5315f4c068ab8e0e200e9a",
+    "examples/v3-live/evidence.json": "39af9aa34fe183a6b3da3f6621b64e3c5b6dd34b2a6354dcbc0a251341b47131",
+    "skills/fantasy-draft-analyst/scripts/draft_sim.py": "da3d01e69f5b28198ca43e223a3d5fb7f4b5267227c9a0f73329b17ebdda0942",
+    "skills/fantasy-draft-analyst/scripts/live_draft.py": "fe724366a3035c0ad41638673b882498352ea5968bb259d56aec67e111349dae",
+    "skills/fantasy-draft-analyst/scripts/fantasy_core/roster_value.py": "169e3502892e78147a85f815650a40705defbce3fbd3170488b3b9653cb31a6d",
+    "skills/fantasy-draft-analyst/scripts/board_policy.py": "32f7d129584d625015c28937005f76f0f6b401c8c8c999bb5fe2bf380f2cd65e"
+  },
+  "harness_sha256": "bc1309c045d1fe483cbd91cdd60ac9425817aeffa0db949c540d0803bbff4dbe",
+  "primary_comparison": "v3 live deterministic policy versus disciplined ADP",
+  "rooms": 800,
+  "seeds": [
+    2026090700,
+    2026091499
+  ],
+  "positions": "cycle seats 1 through 12; 67 rooms in seats 1-8 and 66 in seats 9-12",
+  "training": "No fitted model, horizon probes, or parameter tuning on evaluation outcomes. Twelve-room pilot checked execution; its seeds are included in the 800-room total.",
+  "baseline_rules": "All own-seat policies share positional caps; disciplined ADP fills legal starters, waits until the final two rounds for K/DEF, and avoids second QB/TE. Noisy ADP retains the historical opponent-style selection plus legal-starter completion. Legacy heuristic uses current data, not historical v2 saved-board outputs.",
+  "scope": "Same fixed public forecast snapshot for drafting and projected lineup evaluation. Measures draft-policy gains under that forecast, not out-of-sample projection accuracy. No news or betting inputs in this snapshot. All results reported, including negative differences.",
+  "extra_test": "800 paired next-turn continuations at pick 20 using the fictional public example.",
+  "public_harness_sha256": "9dfcffdd3b6158e5c2bad3877ba8bb5273fd9d30c54a81b7fcd94ec00f4902ef"
+}
