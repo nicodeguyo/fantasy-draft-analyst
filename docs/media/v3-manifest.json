@@ -1,21 +1,33 @@
 {
-  "description": "Captioned editorial walkthrough of reproduced v3 outputs. Silent, four six-second frames. No private league data.",
+  "description": "36-second narrated tour, original upbeat music, 15-second GIF. Stock Kokoro am_michael. Benchmark and next-turn results from public research files.",
   "files": {
     "v3-decision.png": {
-      "bytes": 75860,
-      "sha256": "874065af191c2a1632dbc9c425325b97aefe8e00892f9a37949bc48638f70889"
+      "bytes": 102912,
+      "sha256": "1ba03451d64e65c460c3c0b2a5cba049bf5abba05d23fb77b20e19729c42a49d"
+    },
+    "v3-video-poster.png": {
+      "bytes": 73506,
+      "sha256": "2b9d5357731cbcdb24b0f16ca1bcf39168b338119ff044639db07cde36c5e100"
     },
     "social-preview-v3.png": {
-      "bytes": 55145,
-      "sha256": "84868f64518227e5ed884efb08b4a6cdc866b1185c725708952e3af8612d7b36"
+      "bytes": 65373,
+      "sha256": "4f31340e5f1ea09258b10a5be93819300a8c6937a81b0b4e33a8ba49e156bd70"
+    },
+    "v3-tour.gif": {
+      "bytes": 264750,
+      "sha256": "5fa6656a3234a10e14be50eea6e09e8c0ee30a6b1035eace0e45601f60f9fdb9"
     },
     "v3-walkthrough.mp4": {
-      "bytes": 270214,
-      "sha256": "d80b587522d417e45d561b41c66f202b16df0ce41c55daa547e351cedff7ca03"
+      "bytes": 3735379,
+      "sha256": "93fd401b29f38fe5d424132931571cfb90a4152897f90bcb6ea201703e0a94c6"
+    },
+    "v3-walkthrough-music-only.mp4": {
+      "bytes": 3752860,
+      "sha256": "f0341600de5c832385961518707da3a709bef9e35cb8e70bf6de26ff7967603a"
     },
     "v3-walkthrough.vtt": {
-      "bytes": 504,
-      "sha256": "4c6090b360550863cd0b8ea4f6ec3786815c1261cb407c63b03bfbea4b39a6e4"
+      "bytes": 615,
+      "sha256": "019dba97cb85a57a8bf8477a7d8a7e51dd5d2be203394c9cb20d63bb2d5b6c79"
     }
   }
 }

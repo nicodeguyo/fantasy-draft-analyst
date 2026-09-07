@@ -1,0 +1,44 @@
+[
+  {
+    "segment": 1,
+    "raw_seconds": 4.266666666666667,
+    "tempo": 1,
+    "spoken_start": 0.15,
+    "spoken_end": 4.416666666666667
+  },
+  {
+    "segment": 2,
+    "raw_seconds": 4.565333333333333,
+    "tempo": 1,
+    "spoken_start": 6.15,
+    "spoken_end": 10.715333333333334
+  },
+  {
+    "segment": 3,
+    "raw_seconds": 5.056,
+    "tempo": 1,
+    "spoken_start": 12.15,
+    "spoken_end": 17.206
+  },
+  {
+    "segment": 4,
+    "raw_seconds": 3.776,
+    "tempo": 1,
+    "spoken_start": 18.15,
+    "spoken_end": 21.926
+  },
+  {
+    "segment": 5,
+    "raw_seconds": 5.461333333333333,
+    "tempo": 1,
+    "spoken_start": 24.15,
+    "spoken_end": 29.611333333333334
+  },
+  {
+    "segment": 6,
+    "raw_seconds": 4.736,
+    "tempo": 1,
+    "spoken_start": 30.15,
+    "spoken_end": 34.886
+  }
+]

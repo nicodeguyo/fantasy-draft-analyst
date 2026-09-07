@@ -1,47 +1,41 @@
 #!/usr/bin/env node
-// Optional media build dependency: Playwright Chromium + ffmpeg. Not needed to use the skill.
-const fs = require('node:fs');
-const path = require('node:path');
-const { pathToFileURL } = require('node:url');
-const { execFileSync } = require('node:child_process');
-const { chromium } = require('playwright');
-const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'docs/media');
-const temp = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'fantasy-v3-media-'));
-const css = fs.readFileSync(path.join(root, 'docs/site/site.css'),'utf8') + fs.readFileSync(path.join(root, 'docs/site/v3.css'),'utf8');
-const esc = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-(async () => {
- const browser = await chromium.launch({headless:true});
- try {
-  const page = await browser.newPage({viewport:{width:1100,height:780},deviceScaleFactor:1});
-  await page.goto(pathToFileURL(path.join(root,'index.html')).href);
-  const before = await page.locator('#stage-before .draft-cards').evaluate(e=>e.outerHTML);
-  const after = await page.locator('#stage-after .draft-cards').evaluate(e=>e.outerHTML);
-  const data = JSON.parse(fs.readFileSync(path.join(root,'docs/site/v3-demo.json'),'utf8'));
-  const leader = data.after.candidates[0];
-  const sourceRows = leader.evidence.accepted.map(s=>`<tr><th>${esc(s.source.toUpperCase())}</th><td>${s.league_points.toFixed(1)} points</td></tr>`).join('');
-  const frames = [
-   ['BEFORE PICK 19 · PREVIEW ONLY','Your target is still on the board.',before,'Another manager picks before you. This preview can change.'],
-   ['PICKENS RECORDED AT 19 · YOUR TURN AT 20','Your shortlist updates.',after,'Walker now leads. Rice and Olave are alternatives.'],
-   ['INSPECT THE REASONING','What could change the call?',`<div class="proof"><h3>${esc(leader.name)} · ${leader.projection.toFixed(1)} blended points</h3><table>${sourceRows}</table><p>${esc(leader.sensitivity)}</p><p>Source disagreement measures differences between forecasts. It is not a confidence interval.</p></div>`,'Limited evidence: provider update times are unverified; scoring approximations apply.'],
-   ['FANTASY DRAFT ANALYST · V3','Your league. Your roster. Your next pick.',`<div class="proof"><h3>Choose your setup</h3><p><b>Prepare:</b> researched targets and a saved board. Use an assistant with code execution.</p><p><b>Draft live:</b> record picks and recalculate advice. Requires local Python.</p><p>No automatic platform sync. Free and open source.</p><p><b>nicodeguyo.github.io/fantasy-draft-analyst</b></p></div>`,'Make your next pick with the evidence and the tradeoffs in view.']
-  ];
-  for (let i=0;i<frames.length;i++) {
-   const [label,title,body,caption]=frames[i];
-   await page.setContent(`<html><head><meta charset="utf-8"><style>${css}
-    body{background:#f5f7fa;color:#101c33;padding:32px 34px;height:780px;overflow:hidden}.eyebrow{color:#326714;margin-bottom:12px}h2{font-size:40px;margin-bottom:22px}.draft-card{padding:20px}.draft-card.preferred{padding-top:16px}.draft-card h3{font-size:22px}.draft-card details{display:none}.card-number{margin:20px 0}.proof{padding:22px 28px;background:white;border:1px solid #c5d0da;border-radius:7px;max-width:900px}.proof h3{font-size:26px}.proof p{font-size:21px}.proof table{font-size:21px}.caption-bar{position:absolute;bottom:34px;left:34px;right:34px;background:#0b1b33;color:white;border-radius:6px;padding:17px 20px;font-size:20px;font-weight:600}.foot{position:absolute;bottom:7px;left:34px;font-size:11px;color:#52627a}</style></head><body><p class="eyebrow">${esc(label)}</p><h2>${esc(title)}</h2>${body}<div class="caption-bar">${esc(caption)}</div><p class="foot">Saved v3 engine output · Fictional 12-team half-PPR draft · Public projections fetched September 7, 2026 UTC · Not current advice</p></body></html>`);
-   await page.screenshot({path:path.join(temp,`frame-${i}.png`)});
-   if(i===1) await page.screenshot({path:path.join(out,'v3-decision.png')});
-  }
-  await page.setViewportSize({width:1280,height:640});
-  await page.setContent(`<html><head><style>${css}body{padding:55px 65px;width:1280px;height:640px;overflow:hidden}.eyebrow{font-size:17px;margin-bottom:25px}h1{font-size:81px;line-height:1.02}.social-row{position:absolute;right:65px;top:172px;width:350px;border-top:3px solid #8edb4b;padding-top:20px}.social-row p{font-size:26px;border-bottom:1px solid #43596f;padding-bottom:19px;margin-top:0}.social-footer{position:absolute;bottom:37px;font-size:19px;color:#bccbdd}.social-footer b{color:#8edb4b}</style></head><body><p class="eyebrow">Fantasy Draft Analyst · Free &amp; open source</p><h1>Your league.<br>Your roster.<br><span>Your next pick.</span></h1><div class="social-row"><p>Compare sources.</p><p>See roster tradeoffs.</p><p>Inspect alternatives.</p></div><p class="social-footer"><b>V3</b> · Prepare your plan or run local live advice · nicodeguyo.github.io/fantasy-draft-analyst</p></body></html>`);
-  await page.screenshot({path:path.join(out,'social-preview-v3.png')});
- } finally { await browser.close(); }
- execFileSync('ffmpeg',['-y','-framerate','1/6','-i',path.join(temp,'frame-%d.png'),'-c:v','libx264','-r','25','-pix_fmt','yuv420p','-movflags','+faststart',path.join(out,'v3-walkthrough.mp4')],{stdio:'pipe'});
- fs.writeFileSync(path.join(out,'v3-walkthrough.vtt'),`WEBVTT\n\n00:00.000 --> 00:06.000\nBefore pick 19: Pickens leads the preview. Another manager picks before you.\n\n00:06.000 --> 00:12.000\nAfter Pickens is recorded: Walker leads, with Rice and Olave as alternatives.\n\n00:12.000 --> 00:18.000\nInspect the sources: lowering Walker by observed source disagreement puts Rice first. This is not a confidence interval.\n\n00:18.000 --> 00:24.000\nChoose preparation with an assistant or live advice with local Python. Free and open source. No automatic platform sync.\n`);
- const files=['v3-decision.png','social-preview-v3.png','v3-walkthrough.mp4','v3-walkthrough.vtt'];
- const crypto = require('node:crypto');
- fs.writeFileSync(path.join(out,'v3-manifest.json'),JSON.stringify({description:'Captioned editorial walkthrough of reproduced v3 outputs. Silent, four six-second frames. No private league data.',files:Object.fromEntries(files.map(f=>[f,{bytes:fs.statSync(path.join(out,f)).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(out,f))).digest('hex')}]))},null,2)+'\n');
- fs.rmSync(temp,{recursive:true,force:true});
- console.log('Created v3 screenshot, social preview, and 24-second captioned walkthrough.');
+// Rebuild current media from public evidence + committed original audio.
+// Optional build dependencies: Playwright Chromium and ffmpeg.
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto');
+const {execFileSync}=require('node:child_process');const {chromium}=require('playwright');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'docs/media'),source=path.join(out,'source');
+const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fantasy-benefits-'));
+const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
+const benchmark=read('examples/v3-benchmark/results-800.json');const turns=read('examples/v3-benchmark/next-turn-800.json');const demo=read('docs/site/v3-demo.json');
+const rows=benchmark.summary;const points=p=>Math.round(rows[p].starter_points.mean);const gain=p=>Math.round(rows.v3_live.starter_points.mean-rows[p].starter_points.mean);
+const walker=Object.values(turns).find(p=>p.name==='Kenneth Walker III'),rice=Object.values(turns).find(p=>p.name==='Rashee Rice');
+const wid=Object.keys(turns).find(k=>turns[k]===walker),rid=Object.keys(turns).find(k=>turns[k]===rice);
+const wp=(100*rice.other_candidates_surviving_trials[wid]/rice.trials).toFixed(1),rp=(100*walker.other_candidates_surviving_trials[rid]/walker.trials).toFixed(1);
+const ahead=benchmark.rows.filter(r=>r.policies.v3_live.starter_points>r.policies.disciplined_adp.starter_points).length;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const beats=read('docs/media/source/storyboard.json');
+const players=demo.after.candidates.map((p,i)=>`<div class="player ${i?'':'first'}"><div><small>${i?'ALTERNATIVE':'RECOMMENDED PICK'} · ${esc(p.pos)}</small><h3>${esc(p.name)}</h3></div><b>${p.projection.toFixed(0)}<small>projected pts</small></b></div>`).join('');
+const frames=[
+ ['FREE & OPEN SOURCE','Your next pick<br>shapes your<br><em>whole team.</em>',`<div class="box"><p>Targets. Backups.<br>A plan for your league.</p></div>`,'Fantasy Draft Analyst · V3'],
+ ['YOUR DRAFT DECISIONS ADD UP',`<span class="huge">+${gain('disciplined_adp')}</span><span class="subhead">projected starting-lineup points</span>`,`<div class="box comparison"><div><span>Disciplined ADP</span><b>${points('disciplined_adp').toLocaleString()}</b></div><div class="highlight"><span>Fantasy Draft Analyst</span><b>${points('v3_live').toLocaleString()}</b></div></div>`,'800 simulated drafts · 12-team half-PPR · All 12 draft positions'],
+ ['PICKENS TAKEN AT 19','Your target’s gone.<br><em>Your backup’s ready.</em>',players,'Saved example · Pick 20 · Your roster: Jonathan Taylor'],
+ ['MAKE YOUR NEXT TWO PICKS WORK TOGETHER','Take Walker now.',`<div class="box odds"><div><strong>${wp}%</strong><p>Walker reaches pick 29<br>if you take Rice now.</p></div><div><strong>${rp}%</strong><p>Rice reaches pick 29<br>if you take Walker now.</p></div></div><p class="gain"><b>+${walker.paired_utility_difference.toFixed(1)} projected points</b><br>with the Walker-first path, across two picks.</p>`,'Simulated chances · 800 simulations per path'],
+ ['CONSISTENT ACROSS THE DRAFT ROOM',`<span class="huge">${ahead}<span class="outof"> / 800</span></span><span class="subhead">stronger projected lineups</span>`,`<div class="box"><p>V3 finished ahead of disciplined ADP drafting in ${ahead} of ${benchmark.rooms} simulated drafts.</p></div>`,'Internal simulation · Positive average gain at all 12 draft positions'],
+ ['YOUR LEAGUE. YOUR ROSTER. YOUR NEXT PICK.','Get the<br><em>free skill.</em>',`<div class="box"><h3>Prepare your draft plan</h3><p>Use an assistant with code execution.</p><h3>Update advice as you draft</h3><p>Run live mode with local Python.</p></div><p class="url">nicodeguyo.github.io/<br>fantasy-draft-analyst</p>`,'Free & open source · Choose your setup on the website']
+];
+const css=`*{box-sizing:border-box}body{margin:0;background:#0b1b33;color:#f7fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:65px;width:1080px;height:1350px;overflow:hidden}header{color:#8edb4b;font-size:23px;font-weight:800;letter-spacing:.06em;margin-bottom:48px}h1{font-family:Impact,'Arial Narrow',sans-serif;font-size:106px;font-weight:400;line-height:1.03;margin:0 0 44px}em{font-style:normal;color:#8edb4b}.huge{font-size:235px;display:block;letter-spacing:-.03em;color:#8edb4b}.subhead{display:block;font-family:inherit;font-size:66px;line-height:1.08;margin-top:18px}.outof{font-size:92px;color:#c7d4e3}.box{background:#142d47;border:1px solid #496078;border-radius:12px;padding:32px;margin:25px 0}.box p{font-size:39px;line-height:1.4;margin:10px 0}.box h3{font-size:37px;margin:8px 0}.box h3:not(:first-child){margin-top:28px}.comparison>div{display:flex;justify-content:space-between;gap:12px;padding:25px 0;border-bottom:1px solid #496078;align-items:center;font-size:30px}.comparison b{font-size:57px}.highlight{color:#8edb4b}.player{display:flex;justify-content:space-between;align-items:center;padding:26px 30px;background:#142d47;border:1px solid #496078;border-radius:9px;margin:18px 0;gap:15px}.player.first{border-left:8px solid #8edb4b}.player h3{font-size:43px;margin:8px 0}.player small{font-size:19px;color:#c7d4e3;display:block}.player b{font-size:58px;text-align:right}.player b small{font-size:17px;font-weight:500}.odds>div{display:flex;align-items:center;gap:30px;border-bottom:1px solid #496078;padding:22px 0}.odds strong{font-size:92px;color:#8edb4b;min-width:300px}.odds p{font-size:31px}.gain{font-size:35px;line-height:1.45}.gain b{color:#8edb4b;font-size:47px}.url{font-size:32px;line-height:1.3;color:#8edb4b}footer{position:absolute;left:65px;right:65px;bottom:110px;color:#c7d4e3;font-size:21px;line-height:1.4}.caption{position:absolute;bottom:26px;left:40px;right:40px;padding:18px 22px;border-radius:8px;background:#213c57;color:white;font-size:25px;line-height:1.25;font-weight:650}`;
+(async()=>{const browser=await chromium.launch({headless:true});try{const page=await browser.newPage({viewport:{width:1080,height:1350}});
+ for(let i=0;i<frames.length;i++){const [label,title,body,foot]=frames[i];await page.setContent(`<html><head><meta charset="utf-8"><style>${css}</style></head><body><header>${label}</header><main><h1>${title}</h1>${body}</main><footer>${foot} · September 7, 2026 projections</footer><div class="caption">${esc(beats[i].caption)}</div></body></html>`);
+ const bottom=await page.locator('main').evaluate(e=>e.getBoundingClientRect().bottom);if(bottom>1170)throw Error(`Frame ${i} overflows: ${bottom}`);
+ await page.screenshot({path:path.join(temp,`frame-${i}.png`)});if(i===1)await page.screenshot({path:path.join(out,'v3-video-poster.png')});if(i===2)await page.screenshot({path:path.join(out,'v3-decision.png')});}
+ await page.setViewportSize({width:1280,height:640});await page.setContent(`<html><head><style>${css}body{width:1280px;height:640px;padding:45px 60px}header{font-size:22px;margin-bottom:15px}h1{font-size:170px;color:#8edb4b;margin:0}.socialsub{font-size:42px;margin:0;max-width:650px;line-height:1.15}.socialside{position:absolute;left:790px;right:60px;top:185px;font-size:27px;line-height:1.5;border-top:3px solid #8edb4b;padding-top:20px}footer{bottom:30px;font-size:18px}</style></head><body><header>FANTASY DRAFT ANALYST · FREE & OPEN SOURCE</header><h1>+${gain('disciplined_adp')}</h1><p class="socialsub">projected starting-lineup points<br>versus disciplined ADP drafting.</p><div class="socialside">Your next pick shapes<br>your whole team.<br><b>${ahead} / 800</b> stronger<br>projected lineups.</div><footer>Internal simulation · 800 drafts · 12-team half-PPR · All 12 draft positions · September 7 projections</footer></body></html>`);await page.screenshot({path:path.join(out,'social-preview-v3.png')});
+ }finally{await browser.close()}
+ const ff=args=>execFileSync('ffmpeg',['-v','error','-y',...args],{stdio:'pipe'});
+ const visual=path.join(temp,'visual.mp4');ff(['-framerate','1','-i',path.join(temp,'frame-%d.png'),'-vf',"zoompan=z='1+0.012*mod(on,150)/149':d=150:s=1080x1350:fps=25",'-t','36','-c:v','libx264','-preset','fast','-crf','19','-pix_fmt','yuv420p',visual]);
+ const music=path.join(temp,'music.wav');ff(['-stream_loop','-1','-i',path.join(source,'upbeat-original.flac'),'-t','36','-af','afade=t=in:d=0.5,afade=t=out:st=34:d=2,volume=0.22',music]);
+ const mix=path.join(temp,'mix.wav');ff(['-i',path.join(source,'michael-narration.flac'),'-i',music,'-filter_complex','[0:a][1:a]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=7[a]','-map','[a]',mix]);
+ for(const [audio,name] of [[mix,'v3-walkthrough.mp4'],[music,'v3-walkthrough-music-only.mp4']])ff(['-i',visual,'-i',audio,'-map','0:v:0','-map','1:a:0','-c:v','copy','-c:a','aac','-b:a','192k','-t','36','-movflags','+faststart',path.join(out,name)]);
+ ff(['-framerate','2/5','-i',path.join(temp,'frame-%d.png'),'-vf','scale=480:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer','-loop','0',path.join(out,'v3-tour.gif')]);
+ const time=s=>`00:${String(s).padStart(2,'0')}.000`;fs.writeFileSync(path.join(out,'v3-walkthrough.vtt'),'WEBVTT\n\n'+beats.map(b=>`${time(b.start)} --> ${time(b.end)}\n${b.voice}`).join('\n\n')+'\n');
+ const files=['v3-decision.png','v3-video-poster.png','social-preview-v3.png','v3-tour.gif','v3-walkthrough.mp4','v3-walkthrough-music-only.mp4','v3-walkthrough.vtt'];fs.writeFileSync(path.join(out,'v3-manifest.json'),JSON.stringify({description:'36-second narrated tour, original upbeat music, 15-second GIF. Stock Kokoro am_michael. Benchmark and next-turn results from public research files.',frames_directory_for_local_qa:undefined,files:Object.fromEntries(files.map(f=>[f,{bytes:fs.statSync(path.join(out,f)).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(out,f))).digest('hex')}]))},null,2)+'\n');console.log('Media complete. QA frames:',temp);
 })().catch(e=>{console.error(e);process.exitCode=1});
